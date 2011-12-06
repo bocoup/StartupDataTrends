@@ -206,7 +206,10 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
-
+.single-search-container {
+  float: left;
+  padding-left: 10px;
+}
 
 
 

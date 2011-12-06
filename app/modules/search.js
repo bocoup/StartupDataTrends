@@ -16,6 +16,7 @@
       this.search = options.search;
     },
     url : function() {
+      // TODO: want to have a way to restrict the type of search!
       return "http://api.angel.co/1/search?query=" + this.search.get("query");
     }
   });
@@ -45,16 +46,19 @@
       // TODO: Append 3 search components
       this._searchComponents.location = new Base.Views.SearchComponentView({
         type : "LocationTag",
+        name : "Location",
         collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search()})
       });
       
       this._searchComponents.market = new Base.Views.SearchComponentView({
         type : "MarketTag",
+        name : "Market",
         collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search()})
       });
       
       this._searchComponents.person = new Base.Views.SearchComponentView({
         type : "Follow",
+        name : "Person",
         collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search()})
       });
       
@@ -72,34 +76,37 @@
   Base.Views.SearchComponentView = Backbone.View.extend({
     className : "single-search-container",
     template  : "#single-search-container-tmpl",
-    events : {
-      "keyup input" : "onKeyPress"
-    },
-    initialize: function(attributes) {
-      this.template = _.template($(this.template).html());
-      $(this.el).attr({ "id" : "search-" + attributes.type });
-      
-      // bind to the search change, to fetch the collection.
-      this.collection.search.bind("change:query", function(event) {
 
-        // perform the search.
-        this.collection.fetch();
-      }, this);
+    initialize: function(attributes, options) {
+      
+      // save base information attributes
+      this.type = attributes.type;
+      this.name = attributes.name;
+      
+      this.template = _.template($(this.template).html());
+
+      $(this.el).attr({ "id" : "search-" + attributes.type });
     },
     render : function() {
       
       // Render search component.
-      $(this.el).html(this.template());
+      $(this.el).html(this.template({
+        id : this.type,
+        type : this.name
+      }));
       
+      // enable jquery autocomplete dropdown
+      this.$("input").autocomplete({
+        source : _.bind(function(request, response) {
+          console.log(request, response);
+          this.collection.search.set({ "query" : request.term }, { silent: true });
+          this.collection.fetch({
+            success: response(this.collection.toJSON())
+          });
+        }, this),
+        minLength: 2
+      });
       return this;
-    },
-    
-    onKeyPress : function(e) {
-      // TODO: handle typing here.
-      // do a search
-      // append li's to "ul.search-tags" for selected tags
-      this.collection.search.set({"query" : this.$('input').val()});
-      console.log(e, this.$('input').val(), this.collection.search.attributes);
     }
   });
   
