@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  <title>Backbone Boilerplate</title>
+</head>
+
+<body>
+  <h1>AngelList Trends</h1>
+  <nav>
+    <ul>
+      <li><a href="http://angellist.com">AngelList</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+  
+  <!-- Main container -->
+  <div role="main" id="main">
+    
+    <!-- Contains search interface for entire app -->
+    <div id="search-container">
+    </div>
+    
+    <!-- Contains the three side-by-side panels -->
+    <div id="panel-container">
+      
+      <!-- Contains metadata about the search -->
+      <div id="metadata-container">
+      </div>
+      
+      <!-- Contains the list of startups that matches the search. -->
+      <div id="startup-list-container">
+      </div>
+      
+      <!-- Contains the information about the selected startup -->
+      <div id="startup-info-container">
+      </div>
+      
+    </div>    
+
+  </div>
+
+  <!-- templates -->
+  <script type="text/template" id="search-container-tmpl">
+    <p>
+      Choose your tags from the following options. You can chose as many as you'd like.
+    </p>
+  </script>
+  
+  <script type="text/template" id="single-search-container-tmpl">
+    <p>
+      Search box will go here.
+      <input type="text">Search thing</input>
+      <ul class="search-tags">
+        
+      </ul>
+    </p>
+  </script>
+  
+  <!-- Dependencies -->
+  <script src="/assets/js/libs/jquery.js"></script>
+  <script src="/assets/js/libs/underscore.js"></script>
+  <script src="/assets/js/libs/backbone.js"></script>
+
+  <!-- Application -->
+  <script src="/app/application.js"></script>
+  <script src="/app/modules/search.js"></script>
+  <script src="/app/modules/base.js"></script>
+</body>
+</html>
