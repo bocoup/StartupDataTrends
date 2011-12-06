@@ -206,6 +206,51 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
+.c100 {
+  width: 100%;
+}
+.c50 {
+  width: 50%;
+  display: inline-block;
+}
+.c60 {
+  width: 60%;
+  display: inline-block;
+}
+.c40 {
+  width: 40%;
+  display : inline-block;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul {
+  display: block;
+  float: right;
+}
+
+nav ul li {
+  display: block;
+  float: left;
+}
+
+li.selected-search-item {
+  padding: 5px;
+  color: #2F5D92;
+  font-weight: bold;
+  background-color: #E0EDF5; 
+  margin-top: 2%;
+}
+
+li.selected-search-item a {
+  text-decoration: none;
+  
+}
+
 .single-search-container {
   float: left;
   padding-left: 10px;

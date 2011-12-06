@@ -45,31 +45,20 @@ jQuery(function($) {
 
   var Router = Backbone.Router.extend({
     routes: {
-      "?code=:code" : "authorize",
       "": "index"
     },
 
     index: function() {
       
-      // make initial oauth2 request
-      var url = "https://angel.co/api/oauth/authorize?" +
-        "client_id=7aa609a197a35b1b7de6b6d6584d5d02&" +
-        "response_type=code";
-        
-      window.location = url;
-    },
-    
-    authorize: function(code) {
-      // get session
       var base = ALT.module("base");
-      session = new base.Session({ code : code });
-      // session.fetch({ success : function(model) {
-      //         console.log(model);
-      //       }});
+
+      // initialize list of current tags
+      ALT.app.currentTags = new Backbone.Collection();
 
       var mainView = new base.Views.AppView();
       mainView.render();
     }
+
   });
   
   app.router = new Router();

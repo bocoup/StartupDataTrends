@@ -12,13 +12,15 @@
 </head>
 
 <body>
-  <h1>AngelList Trends</h1>
-  <nav>
-    <ul>
-      <li><a href="http://angellist.com">AngelList</a></li>
-      <li><a href="#">About</a></li>
-    </ul>
-  </nav>
+  <div class="c100">
+    <h1 class="c40">AngelList Trends</h1>
+    <nav class="c50">
+      <ul>
+        <li><a href="http://angellist.com">AngelList</a></li>
+        <li><a href="#">About</a></li>
+      </ul>
+    </nav>
+  </div>
   
   <!-- Main container -->
   <div role="main" id="main">
@@ -49,7 +51,7 @@
   <!-- templates -->
   <script type="text/template" id="search-container-tmpl">
     <p>
-      Choose your tags from the following options. You can chose as many as you'd like.
+      Choose your tags from the following options. You can chose as many as you would like.
     </p>
   </script>
   
@@ -63,6 +65,14 @@
         
       </ul>
     </p>
+  </script>
+
+  <script type="text/template" id="single-search-item-tmpl">
+    <li id="<%= id %>" class="selected-search-item">
+      <div>
+        <a href="#" data-id="<%= id %>" class="close">[x]</a><%= label %>
+      </div>
+    </li>
   </script>
   
   <!-- Dependencies -->
