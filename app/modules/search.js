@@ -27,6 +27,15 @@
           value : model.get("value") 
         }
       });
+    },
+    parse: function(data) {
+      var sub_data = [];
+      _.each(data, function(searchResult) {
+        if (searchResult.type === this.search.get("type")) {
+          sub_data.push(searchResult);
+        }
+      }, this);
+      return sub_data;
     }
   });
   
@@ -54,21 +63,24 @@
       
       // TODO: Append 3 search components
       this._searchComponents.location = new Base.Views.SearchComponentView({
-        type : "LocationTag",
-        name : "Location",
-        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search()})
+        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search({
+          type : "LocationTag",
+          name : "Location"
+        })})
       });
       
       this._searchComponents.market = new Base.Views.SearchComponentView({
-        type : "MarketTag",
-        name : "Market",
-        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search()})
+        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search({
+          type : "MarketTag",
+          name : "Market"
+        })})
       });
       
       this._searchComponents.person = new Base.Views.SearchComponentView({
-        type : "Follow",
-        name : "Person",
-        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search()})
+        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search({
+          type : "User",
+          name : "Person"
+        })})
       });
       
       this.el.append(this._searchComponents.location.render().el);
@@ -122,8 +134,7 @@
     initialize: function(attributes, options) {
       
       // save base information attributes
-      this.type = attributes.type;
-      this.name = attributes.name;
+      this.search = this.collection.search;
       
       this.template = _.template($(this.template).html());
 
@@ -133,8 +144,8 @@
       
       // Render search component.
       $(this.el).html(this.template({
-        id : this.type,
-        type : this.name
+        id : this.search.get("type"),
+        type : this.search.get("name")
       }));
       
       // enable jquery autocomplete dropdown

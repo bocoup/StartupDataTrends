@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <div class="c100">
+  <div id="header" class="c100">
     <h1 class="c40">AngelList Trends</h1>
     <nav class="c50">
       <ul>
@@ -50,9 +50,9 @@
 
   <!-- templates -->
   <script type="text/template" id="search-container-tmpl">
-    <p>
-      Choose your tags from the following options. You can chose as many as you would like.
-    </p>
+    <div>
+      What are you looking for?
+    </div>
   </script>
   
   <script type="text/template" id="single-search-container-tmpl">
@@ -70,7 +70,7 @@
   <script type="text/template" id="single-search-item-tmpl">
     <li id="<%= id %>" class="selected-search-item">
       <div>
-        <a href="#" data-id="<%= id %>" class="close">[x]</a><%= label %>
+        <a href="#" data-id="<%= id %>" class="close">x</a><%= label %>
       </div>
     </li>
   </script>
