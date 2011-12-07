@@ -1,9 +1,9 @@
-(function(Base) {
+(function(B) {
   
   /**
    * The overarching application view manager.
    */
-  Base.Views.AppView = Backbone.View.extend({
+  B.Views.AppView = Backbone.View.extend({
     el : '#main',
     
     initialize: function(attributes) {
@@ -13,7 +13,8 @@
     render : function() {
       
       // Append search view
-      var searchView = new Base.Views.SearchView();
+      var S = ALT.module("search");
+      var searchView = new S.Views.SearchView();
       this.el.append(searchView.render().el);
       
       // TODO: Instantiate Main Panel View

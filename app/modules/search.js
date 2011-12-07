@@ -1,17 +1,17 @@
-(function(Base) {
+(function(S) {
   
-  Base.Models || (Base.Models = {});
-  Base.Collections || (Base.Collections = {});
+  S.Models || (S.Models = {});
+  S.Collections || (S.Collections = {});
 
   // Responsible for holding a single search.
-  Base.Models.Search = Backbone.Model.extend({});
+  S.Models.Search = Backbone.Model.extend({});
     
   // A single search result entry
-  Base.Models.SearchItem = Backbone.Model.extend({});
+  S.Models.SearchItem = Backbone.Model.extend({});
   
   // A container of search results
-  Base.Collections.SearchItems = Backbone.Collection.extend({
-    model : Base.Collections.SearchItem,
+  S.Collections.SearchItems = Backbone.Collection.extend({
+    model : S.Collections.SearchItem,
     initialize: function(collections, options) {
       this.search = options.search;
     },
@@ -42,7 +42,7 @@
   /**
    * Contains all the search boxes.   
    */                                                                                                                                                                                                                                                                                    
-  Base.Views.SearchView = Backbone.View.extend({
+  S.Views.SearchView = Backbone.View.extend({
     id : '#search-container',
     template : '#search-container-tmpl',
         
@@ -62,22 +62,22 @@
       this.el.html(this.template());
       
       // TODO: Append 3 search components
-      this._searchComponents.location = new Base.Views.SearchComponentView({
-        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search({
+      this._searchComponents.location = new S.Views.SearchComponentView({
+        collection : new S.Collections.SearchItems({}, { search : new S.Models.Search({
           type : "LocationTag",
           name : "Location"
         })})
       });
       
-      this._searchComponents.market = new Base.Views.SearchComponentView({
-        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search({
+      this._searchComponents.market = new S.Views.SearchComponentView({
+        collection : new S.Collections.SearchItems({}, { search : new S.Models.Search({
           type : "MarketTag",
           name : "Market"
         })})
       });
       
-      this._searchComponents.person = new Base.Views.SearchComponentView({
-        collection : new Base.Collections.SearchItems({}, { search : new Base.Models.Search({
+      this._searchComponents.person = new S.Views.SearchComponentView({
+        collection : new S.Collections.SearchItems({}, { search : new S.Models.Search({
           type : "User",
           name : "Person"
         })})
@@ -95,7 +95,7 @@
    * A single selected item that gets appended at the end of a
    * autocomplete dropdown
    */
-  Base.Views.SearchSelectedComponentItem = Backbone.View.extend({
+  S.Views.SearchSelectedComponentItem = Backbone.View.extend({
     template : "#single-search-item-tmpl",
     events : {
       "click .close" : "onClose"
@@ -127,13 +127,13 @@
   /**
    * An individual search component.
    */
-  Base.Views.SearchComponentView = Backbone.View.extend({
+  S.Views.SearchComponentView = Backbone.View.extend({
     className : "single-search-container",
     template  : "#single-search-container-tmpl",
 
     initialize: function(attributes, options) {
       
-      // save base information attributes
+      // save Search information attributes
       this.search = this.collection.search;
       
       this.template = _.template($(this.template).html());
@@ -171,7 +171,7 @@
             ALT.app.currentTags.add(tagModel);
 
             // Render a new selected tag list item
-            var tagView = new Base.Views.SearchSelectedComponentItem({ model : tagModel });
+            var tagView = new S.Views.SearchSelectedComponentItem({ model : tagModel });
             
             // Append them to the tag list we're building of all
             // the tags we're watching for this dropdown.
@@ -189,7 +189,4 @@
       return this;
     }
   });
-  
-  
-  
-})(ALT.module("base"));
+})(ALT.module("search"));
