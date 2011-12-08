@@ -43,8 +43,8 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
  * Also: hot pink! (or customize the background color to match your design)
  */
 
-::-moz-selection { background: #fe57a1; color: #fff; text-shadow: none; }
-::selection { background: #fe57a1; color: #fff; text-shadow: none; }
+::-moz-selection { background: orange; color: #fff; text-shadow: none; }
+::selection { background: orange; color: #fff; text-shadow: none; }
 
 
 /* =============================================================================
@@ -302,6 +302,7 @@ nav ul li {
 }
 #startup-list-container .startup-list li {
   width: 100%;
+  border-bottom: 1px solid #eee;
 }
 #startup-list-container .startup-list li:hover {
   color: orange;
@@ -316,6 +317,7 @@ nav ul li {
 #panel-container .startup-list-item .banner {
   width: 100%; 
   min-height: 60px;
+  margin-top: 10px;
 }
 
 #panel-container .banner h4 {

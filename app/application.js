@@ -48,15 +48,27 @@ jQuery(function($) {
       "": "index"
     },
 
+    _init : function() {
+      // initialize list of current tags
+      ALT.app.currentTags = new Backbone.Collection();  
+
+      ALT.app.currentTags.bind("add", function(model) {
+        // redo the search
+        ALT.app.mainView.panelView.render();
+      });
+
+      ALT.app.currentTags.bind("remove", function(model) {
+        // redo the search
+        ALT.app.mainView.panelView.render();
+      });
+    },
+
     index: function() {
-      
+      this._init();
       var base = ALT.module("base");
 
-      // initialize list of current tags
-      ALT.app.currentTags = new Backbone.Collection();
-
-      var mainView = new base.Views.AppView();
-      mainView.render();
+      ALT.app.mainView = new base.Views.AppView();
+      ALT.app.mainView.render();
     }
 
   });

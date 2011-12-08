@@ -16,14 +16,14 @@
     
     render : function() {
       
-      // Append search view
+      // create the search view
+      this.searchView = new S.Views.SearchView();
+      this.searchView.render();
       
-      var searchView = new S.Views.SearchView();
-      searchView.render();
-      
-      // TODO: Instantiate Main Panel View
-      var panelView = new B.Views.PanelsView();
-      panelView.render();
+      // create the three panel view
+      this.panelView = new B.Views.PanelsView();
+      this.panelView.render();
+
       return this;
     }
   });
@@ -42,20 +42,33 @@
 
       // Render metadata panel
       // Render startup list
-      // TODO: remove this canned startup list here.
-      var startups = new ST.Collections.Startups();
-      startups.fetch({
-        success : _.bind(function(collection) {
-          var startupList = new B.Views.Panels.Startups({ collection : collection });    
-          startupList.render();
-          ALT.startuplist = collection;
-        }, this)
+      var tags = ALT.app.currentTags.pluck("id").join(","); 
+      ALT.app.startupCollection = new ST.Collections.Startups({}, { 
+        tags : tags
       });
-      
 
-      // Render startup info panel
-      var startupPanel = new B.Views.Panels.StartupInfo();
-      this.el.append(startupPanel.render().el);
+      if (tags.length) {
+        ALT.app.startupCollection.fetch({
+          success : _.bind(function(collection) {
+            
+            var startupList = new B.Views.Panels.Startups({ 
+              collection : collection 
+            });    
+            
+            startupList.render();
+
+            ALT.app.currentStartup = collection.at(0);
+
+            // Render startup info panel
+            var startupPanel = new B.Views.Panels.StartupInfo({
+              model : ALT.app.currentStartup
+            });
+
+            this.el.append(startupPanel.render().el);
+
+          }, this)
+        });
+      }
 
       return this;
     }
@@ -103,10 +116,11 @@
             "top": to
           }, 500);
       }, this);
+
     },
 
     render : function() {
-      this.el.append(this.template());
+      this.el.html(this.template());
 
       this._startupListItems = {};
       
@@ -116,9 +130,21 @@
           var startupListItem = new ST.Views.Mini({ model : startup });
           this._startupListItems[startup.id] = startupListItem;
           this.$('ul.startup-list').append(startupListItem.render().el);
-          startupListItem.assignHeight();
         }, this)    
       );
+
+      // find the maxHeight of list element
+      var maxHeight = Math.max.apply(null, 
+        $(".startup-list-item").map(function (){
+          return $(this).height();
+        }).get());
+      
+      // Set the height of all list elements to the max. This
+      // is required for happy sorting.
+      _.each(this._startupListItems, function(view) {
+        view.assignHeight(maxHeight);
+      });
+
     }
   });
 
@@ -129,9 +155,10 @@
     id : "#startup-info-container",
 
     render : function() {
-      ALT.app.currentStartup = new ST.Models.Startup({ id : 21312 });
-      ALT.app.currentStartup.fetch({
+      
+      this.model.fetch({
         success : _.bind(function(model) {
+          
           var fullPanel = new ST.Views.Full({
             model : model
           }); 

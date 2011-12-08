@@ -17,10 +17,20 @@
    */
   ST.Collections.Startups = Backbone.Collection.extend({
     model : ST.Models.Startup,
+    initialize : function(attributes, options) {
+      this.tags = options.tags;
+    },
     url : function() {
       // TODO: rewrite this eventually to use our collected search tags
       // for now just return a canned list.
-      return "https://api.angel.co/1/search?query=jobs&type=Startup&callback=?" 
+      // return "https://api.angel.co/1/search?query=jobs&type=Startup&callback=?" 
+      
+      return "http://api.angel.co/1/startups?tag_ids=" + this.tags + "&order=popularity&callback=?"
+    },
+    parse : function(data) {
+      return _.select(data.startups, function(startup) {
+        return startup.hidden === false;
+      });
     }
     
   });
@@ -62,11 +72,11 @@
       return this;
     },
 
-    assignHeight : function() {
+    assignHeight : function(height) {
       
       // this is a separate method because this needs to happen AFTER
       // the item has been appended to a parent.
-      this.height = $(this.el).height();
+      this.height = height || $(this.el).height();
       $(this.el).css({
         "height" : this.height,
         "display" : "block",
@@ -80,6 +90,9 @@
       // On click, we need to rerender the main panel. This will
       // happen because when the currentStartup model changes,
       // that render method will be called.
+      if (!ALT.app.currentStartup) {
+        ALT.app.currentStartup = new ST.Models.Startup();
+      }
       ALT.app.currentStartup.clear({ silent : true });
       ALT.app.currentStartup.set(this.model.toJSON(), { silent : true });
       ALT.app.currentStartup.fetch({
