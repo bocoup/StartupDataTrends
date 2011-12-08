@@ -310,6 +310,7 @@ nav ul li {
   float: left;
   width: 120px;
   margin-left: -100%;
+  margin-top: 20px;
 }
 
 #panel-container #startup-info-container .tag {

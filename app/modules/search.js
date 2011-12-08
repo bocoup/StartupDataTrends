@@ -22,7 +22,7 @@
     autocompleteItems : function() {
       return this.map(function(model) {
         return {
-          id : model.id,
+          id : model.id, 
           label : model.get("name"),
           value : model.get("value") 
         }
