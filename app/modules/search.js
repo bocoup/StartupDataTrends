@@ -17,7 +17,7 @@
     },
     url : function() {
       // TODO: want to have a way to restrict the type of search!
-      return "http://api.angel.co/1/search?query=" + this.search.get("query") + "&callback=?";
+      return "http://api.angel.co/1/search?query=" + this.search.get("query") + "&type=" + this.search.get("type") + "&callback=?";
     },
     autocompleteItems : function() {
       return this.map(function(model) {
@@ -27,15 +27,6 @@
           value : model.get("value") 
         }
       });
-    },
-    parse: function(data) {
-      var sub_data = [];
-      _.each(data, function(searchResult) {
-        if (searchResult.type === this.search.get("type")) {
-          sub_data.push(searchResult);
-        }
-      }, this);
-      return sub_data;
     }
   });
   
@@ -47,7 +38,7 @@
     template : '#search-container-tmpl',
         
     initialize: function(attributes) {
-      this.el = $(this.el);
+      this.el = $(this.id);
       this.template = _.template($(this.template).html());
       this._searchComponents = {
         location : null,
@@ -128,7 +119,7 @@
    * An individual search component.
    */
   S.Views.SearchComponentView = Backbone.View.extend({
-    className : "single-search-container",
+    className : "c30 single-search-container",
     template  : "#single-search-container-tmpl",
 
     initialize: function(attributes, options) {

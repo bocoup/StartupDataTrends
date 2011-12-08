@@ -26,22 +26,25 @@
   <div role="main" id="main">
     
     <!-- Contains search interface for entire app -->
-    <div id="search-container">
+    <div id="search-container" class="c100">
     </div>
     
     <!-- Contains the three side-by-side panels -->
     <div id="panel-container">
       
       <!-- Contains metadata about the search -->
-      <div id="metadata-container">
+      <div class="c30 fleft panel" id="metadata-container">
+        TEst
       </div>
       
       <!-- Contains the list of startups that matches the search. -->
-      <div id="startup-list-container">
+      <div class="c30 fleft panel" id="startup-list-container">
+        TEST
       </div>
       
       <!-- Contains the information about the selected startup -->
-      <div id="startup-info-container">
+      <div class="c30 fleft panel last" id="startup-info-container">
+        TEST
       </div>
       
     </div>    
@@ -49,24 +52,25 @@
   </div>
 
   <!-- templates -->
+  <!-- Search :: Search container -->
   <script type="text/template" id="search-container-tmpl">
     <div>
       What are you looking for?
     </div>
   </script>
   
-  <script type="text/template" id="single-search-container-tmpl">
-    <p>
-      <div class="ui-widget">
-      	<label for="<%= id %>"><%= type %>: </label>
-      	<input id="<%= id %>" />
-      </div>
-      <ul class="search-tags">
-        
-      </ul>
-    </p>
+  <!-- Search :: Actual search box widget -->
+  <script type="text/template" id="single-search-container-tmpl"> 
+    <div class="ui-widget">
+    	<label for="<%= id %>"><%= type %>: </label>
+    	<input id="<%= id %>" />
+    </div>
+    <ul class="search-tags">
+      
+    </ul>
   </script>
 
+  <!-- Search :: A match result search item -->
   <script type="text/template" id="single-search-item-tmpl">
     <li id="<%= id %>" class="selected-search-item">
       <div>
@@ -74,6 +78,64 @@
       </div>
     </li>
   </script>
+
+  <!-- Panels :: Full Startup Metadata -->
+  <script type="text/template" id="panel-startup-full">
+    <div id="tabs">
+      <ul>
+        <li><a href="#tabs-1">About</a></li>
+        <li><a href="#tabs-2">Screenshots</a></li>
+      </ul>
+      <div id="tabs-1">
+        <div class="banner c100"> 
+
+          <div class="infowrapper">
+            <div class="info">
+              <h3><%= startup.name %></h3>
+              <h4><%= startup.high_concept %></h4>
+              
+              <div class="small">
+                <% if (startup.twitter_url) { %>
+                  <a  href=""><img src="/assets/img/follow_twitter_gray.png" /></a>
+                <% } %>
+                <a href="<%= startup.company_url %>">Website</a>
+                <a href="<%= startup.angellist_url %>">Profile</a>
+                <br />
+              </div>
+
+              <div class="c100 smallest">
+                <% _.each(_.union(startup.locations, startup.markets), function(tag) { %>
+                  <div class="tag"><a href="#"><%= tag.name %></a> · </div>
+                <% }); %>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="logowrapper">
+            <img align="left" class="logo" src="<%= startup.logo_url %>" />
+          </div> 
+
+        </div>
+        <hr>
+        <div class="info c100">
+          <%= startup.product_desc %>
+        </div>
+      </div>
+      <div id="tabs-2">
+        <% _.each(startup.screenshots, function(screenshot) { %>
+          <img class="screenshot" src="<%= screenshot.original %>" />
+          <hr>
+        <% }); %>
+      </div>
+    </div>
+  </script>
+
+  <!-- Panels :: Startup list :: Item -->
+  <script type="text/template" id="panel-startup-mini">
+
+  </script>
+
   
   <!-- Dependencies -->
   <script src="/assets/js/libs/jquery.js"></script>
@@ -84,6 +146,7 @@
   <!-- Application -->
   <script src="/app/application.js"></script>
   <script src="/app/modules/search.js"></script>
+  <script src="/app/modules/startup.js"></script>
   <script src="/app/modules/base.js"></script>
 </body>
 </html>
