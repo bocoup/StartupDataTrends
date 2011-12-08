@@ -253,7 +253,6 @@ a:visited {
   float:left;
 }
 .panel {
-  border: 1px solid #eee;
   margin-right: 4%;
 }
 .panel.last {
@@ -289,24 +288,28 @@ nav ul li {
   font-size: 0.8em;
 }
 
-#panel-container #startup-info-container .banner {
+#startup-list-container .startup-list{
+  position: relative;
+}
+
+#panel-container .banner {
   width: 100%; 
   min-height: 100px;
 }
-#panel-container #startup-info-container .banner h4 {
+#panel-container .banner h4 {
   padding: 0;
   margin: 0;
 }
 
-#panel-container #startup-info-container .infowrapper {
+#panel-container .infowrapper {
   float: left;
   width: 100%;  
 }
 
-#panel-container #startup-info-container .infowrapper .info {
+#panel-container  .infowrapper .info {
   margin-left: 120px; 
 }
-#panel-container #startup-info-container .logowrapper {
+#panel-container .logowrapper {
   float: left;
   width: 120px;
   margin-left: -100%;
@@ -322,7 +325,7 @@ nav ul li {
 #panel-container #startup-info-container .tag a {
   color: #bbb;
 }
-#panel-container #startup-info-container .banner img.logo {
+#panel-container .banner img.logo {
   max-width: 100px;
   border: 1px solid #F2F3F4; 
 }

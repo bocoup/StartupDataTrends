@@ -39,12 +39,10 @@
       
       <!-- Contains the list of startups that matches the search. -->
       <div class="c30 fleft panel" id="startup-list-container">
-        TEST
       </div>
       
       <!-- Contains the information about the selected startup -->
       <div class="c30 fleft panel last" id="startup-info-container">
-        TEST
       </div>
       
     </div>    
@@ -77,6 +75,31 @@
         <a href="#" data-id="<%= id %>" class="close">x</a><%= label %>
       </div>
     </li>
+  </script>
+
+  <!-- Panels :: Startu List Container -->
+  <script type="text/template" id="panel-startup-list">
+    <div> sort </div>
+    <ul class="startup-list">
+      
+    </ul>
+  </script>
+
+  <!-- Panels :: Mini Startup Item -->
+  <script type="text/template" id="panel-startup-list-item">
+    <div class="banner c100"> 
+
+      <div class="infowrapper">
+        <div class="info">
+          <h3><%= startup.name %></h3>
+        </div>
+      </div>
+
+      <div class="logowrapper">
+        <img align="left" class="logo" src="<%= startup.pic %>" />
+      </div> 
+
+    </div>
   </script>
 
   <!-- Panels :: Full Startup Metadata -->
@@ -129,11 +152,6 @@
         <% }); %>
       </div>
     </div>
-  </script>
-
-  <!-- Panels :: Startup list :: Item -->
-  <script type="text/template" id="panel-startup-mini">
-
   </script>
 
   
