@@ -20,7 +20,7 @@
     url : function() {
       // TODO: rewrite this eventually to use our collected search tags
       // for now just return a canned list.
-      return "https://api.angel.co/1/search?query=health&type=Startup&callback=?" 
+      return "https://api.angel.co/1/search?query=jobs&type=Startup&callback=?" 
     }
     
   });
