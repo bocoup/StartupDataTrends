@@ -129,10 +129,9 @@
     id : "#startup-info-container",
 
     render : function() {
-      var startup = new ST.Models.Startup({ id : 21312 });
-      startup.fetch({
+      ALT.app.currentStartup = new ST.Models.Startup({ id : 21312 });
+      ALT.app.currentStartup.fetch({
         success : _.bind(function(model) {
-          console.log(model);
           var fullPanel = new ST.Views.Full({
             model : model
           }); 

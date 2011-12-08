@@ -31,6 +31,8 @@
     initialize: function(attributes, options) {
       this.template = _.template($(this.template).html());
       this.el = $(this.el);
+
+      this.model.bind("change", this.render, this);
     },
     
     render : function() {
@@ -47,13 +49,19 @@
     template : "#panel-startup-list-item",
     className : "startup-list-item",
     tagName : "li",
+    events : {
+      "click" : "onClick"
+    },
+
     initialize : function(attributes, options) {
       this.template = _.template($(this.template).html());
     },
+
     render : function() {
       $(this.el).append(this.template({ startup : this.model.toJSON()}));
       return this;
     },
+
     assignHeight : function() {
       
       // this is a separate method because this needs to happen AFTER
@@ -66,6 +74,19 @@
       });
 
       this.top = $(this.el).position().top;
+    },
+
+    onClick : function(e) {
+      // On click, we need to rerender the main panel. This will
+      // happen because when the currentStartup model changes,
+      // that render method will be called.
+      ALT.app.currentStartup.clear({ silent : true });
+      ALT.app.currentStartup.set(this.model.toJSON(), { silent : true });
+      ALT.app.currentStartup.fetch({
+        success : function(model) {
+          model.change();
+        }
+      });
     }
   });
 

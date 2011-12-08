@@ -146,10 +146,14 @@
         </div>
       </div>
       <div id="tabs-2">
-        <% _.each(startup.screenshots, function(screenshot) { %>
+        <% if (startup.screenshots.length) { %>
+          <% _.each(startup.screenshots, function(screenshot) { %>
           <img class="screenshot" src="<%= screenshot.original %>" />
           <hr>
-        <% }); %>
+        <% }); %>  
+        <% } else { %>
+          <h3> This startup has posted no screenshots </h3>
+        <% } %>
       </div>
     </div>
   </script>
