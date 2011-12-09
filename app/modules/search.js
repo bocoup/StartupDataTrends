@@ -78,6 +78,10 @@
       this.el.append(this._searchComponents.market.render().el);
       this.el.append(this._searchComponents.person.render().el);
       
+      // append loader
+      this.el.append("<div class=\"c25 fleft\" id=\"loader\">"+
+          "<img src=\"/assets/img/ajax-loader.gif\" /> Loading..."+
+        "</div>")
       return this;
     }
   });
@@ -119,7 +123,7 @@
    * An individual search component.
    */
   S.Views.SearchComponentView = Backbone.View.extend({
-    className : "c30 single-search-container",
+    className : "c25 single-search-container",
     template  : "#single-search-container-tmpl",
 
     initialize: function(attributes, options) {

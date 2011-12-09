@@ -4,6 +4,14 @@
   var ST = ALT.module("startup");
   var S  = ALT.module("search");
 
+  B.Views.Progressify = function() {
+    $('#loader').show();
+  };
+
+  B.Views.Done = function() {
+    $('#loader').hide();
+  }
+
   /**
    * The overarching application view manager.
    */
@@ -48,6 +56,7 @@
       });
 
       if (tags.length) {
+        B.Views.Progressify();
         ALT.app.startupCollection.fetch({
           success : _.bind(function(collection) {
             
@@ -65,7 +74,7 @@
             });
 
             this.el.append(startupPanel.render().el);
-
+            B.Views.Done();
           }, this)
         });
       }
@@ -172,18 +181,24 @@
     id : "#startup-info-container",
 
     render : function() {
-      
-      this.model.fetch({
-        success : _.bind(function(model) {
-          
-          var fullPanel = new ST.Views.Full({
-            model : model
-          }); 
 
-          this.el.html(fullPanel.render().el);
-             
-        }, this)
-      });
+      B.Views.Progressify();
+      if (this.model) {
+        this.model.fetch({
+          success : _.bind(function(model) {
+            
+            var fullPanel = new ST.Views.Full({
+              model : model
+            }); 
+
+            this.el.html(fullPanel.render().el);
+            B.Views.Done();       
+          }, this)
+        });
+      } else {
+        B.Views.Done();
+        this.el.html("<h3> No Startups Found </h3>");
+      }
       return this;
     }
   });
