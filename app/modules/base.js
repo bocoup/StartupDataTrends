@@ -96,12 +96,26 @@
   B.Views.Panels.Startups = B.Views.Panels.extend({
     id : "#startup-list-container",
     template : "#panel-startup-list",
+
     initialize : function(attributes) {
       this.el = $(this.id);
       this.template = _.template($(this.template).html());
 
       // when the collection resorts, animate the transition.
       this.collection.bind("reset", this.update, this);
+    },
+
+    onSelect : function(event) {
+
+      this.collection.comparator = function(model) {
+        if (event.target.value === "follower_count") {
+          return -model.get(event.target.value);  
+        } else {
+          return model.get(event.target.value).toLowerCase();
+        }
+        
+      }
+      this.collection.sort();
     },
 
     update : function() {
@@ -121,6 +135,9 @@
 
     render : function() {
       this.el.html(this.template());
+      this.delegateEvents({
+        "change select" : "onSelect"
+      });
 
       this._startupListItems = {};
       

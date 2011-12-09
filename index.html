@@ -34,7 +34,7 @@
       
       <!-- Contains metadata about the search -->
       <div class="c30 fleft panel" id="metadata-container">
-        TEst
+        test
       </div>
       
       <!-- Contains the list of startups that matches the search. -->
@@ -79,7 +79,13 @@
 
   <!-- Panels :: Startu List Container -->
   <script type="text/template" id="panel-startup-list">
-    <div> sort </div>
+    <div>
+      Sort by: 
+      <select>
+        <option value="follower_count">Followers</option>
+        <option value="name">Ascending</option>
+      </select>
+    </div>
     <ul class="startup-list">
       
     </ul>
@@ -96,7 +102,7 @@
       </div>
 
       <div class="logowrapper">
-        <img align="left" class="logo" src="<%= startup.logo_url %>" />
+        <img align="left" class="logo" src="<%= startup.thumb_url %>" />
       </div> 
 
     </div>
