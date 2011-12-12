@@ -206,6 +206,12 @@ td { vertical-align: top; }
    Author:
    ========================================================================== */
 
+@font-face {
+  font-family: 'Satisfy';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Satisfy'), url('satisfy.woff') format('woff');
+}
 a {
   color: black;
   font-weight: bold;
