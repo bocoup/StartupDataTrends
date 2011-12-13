@@ -244,6 +244,10 @@ a:visited {
   width: 80%;
   display: inline-block;
 }
+.c75 {
+  width: 75%;
+  display: inline-block;
+}
 .c70 {
   width: 70%;
   display: inline-block;
@@ -338,8 +342,15 @@ nav ul li {
 }
 #startup-list-container #range {
   display:none;  
-  margin-top: 10px; 
-  height: 30px
+  margin-bottom: 15px; 
+  height: 30px;
+}
+#startup-list-container .slider-sparkline {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+#startup-list-container #range #slider-range-right {
+  text-align: right;
 }
 #panel-container .banner {
   width: 100%; 

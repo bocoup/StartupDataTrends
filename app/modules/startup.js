@@ -36,6 +36,35 @@
         return startup.hidden === false;
       });
     },
+    histogram : function(buckets, attribute) {
+      attribute || (attribute = "follower_count");
+      
+
+      // get all numeric values
+      var vals = this.pluck(attribute),
+          min = _.min(vals),
+          max = _.max(vals);
+
+      // compute step
+      var step = Math.ceil(max / buckets);
+
+      // bins
+      var bins = [], bin = 0, range = [min, min + step], val;
+      for (var i = 0; i < vals.length; i++) {
+        bin = Math.floor(vals[i]/step);
+        bins[bin] || (bins[bin] = 0);
+        bins[bin]++;
+      }
+
+      // swap undefined with 0s
+      for (var i = 0; i < bins.length; i++) {
+        if (typeof bins[i] === "undefined") {
+          bins[i] = 0;
+        }
+      }
+
+      return bins;
+    },
     sync : function(method, model, options) {
       var type = methodMap[method];
 

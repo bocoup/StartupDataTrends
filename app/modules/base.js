@@ -97,7 +97,8 @@
             }
 
             // When all things are rendered, adjust the heights
-            if (collection.page === collection.pages+1) {
+            if (collection.page === collection.pages+1 ||
+                collection.pages === 1) {
               startupList.finish();
               B.Views.Done();
             }
@@ -240,6 +241,17 @@
       });
       $('#slider-range-left').html(min);
       $('#slider-range-right').html(max);
+
+      // make a sparkline
+      $('.slider-sparkline').sparkline(
+        this.collection.histogram(30),
+        {
+          type : "bar",
+          width : "100%",
+          barColor: "orange",
+          lineColor: "none"
+        });
+      $('.slider-sparkline canvas').css({ width: "100%" });
 
       this.assignHeights();
 
