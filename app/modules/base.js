@@ -4,13 +4,23 @@
   var ST = ALT.module("startup");
   var S  = ALT.module("search");
 
-  B.Views.Progressify = function() {
-    $('#loader').show();
-  };
-
-  B.Views.Done = function() {
-    $('#loader').hide();
-  }
+  (function() {
+    
+    // Progress viewers are tied to a count. Only when
+    // all operations are done will the progress indicator
+    // actually be removed.    
+    var loadingViews = 0;
+    B.Views.Progressify = function() {
+      loadingViews += 1;
+      $('#loader').show();
+    };
+    B.Views.Done = function() {
+      if (loadingViews === 1) {
+        $('#loader').hide();
+      }
+      loadingViews -= 1;
+    };
+  })();
 
   /**
    * The overarching application view manager.
@@ -51,34 +61,54 @@
       // Render metadata panel
       // Render startup list
       var tags = ALT.app.currentTags.pluck("id").join(","); 
-      ALT.app.startupCollection = new ST.Collections.Startups({}, { 
+     
+      ALT.app.startupCollection = new ST.Collections.Startups([], { 
         tags : tags
+      });
+
+      // Create a new startup list collection view
+      var startupList = new B.Views.Panels.Startups({ 
+        collection : ALT.app.startupCollection
       });
 
       if (tags.length) {
         B.Views.Progressify();
-        ALT.app.startupCollection.fetch({
+        
+        ALT.app.startupCollection.fetch({ 
+          add : true,
+
+          // on the first page, render a side panel
           success : _.bind(function(collection) {
             
-            var startupList = new B.Views.Panels.Startups({ 
-              collection : collection 
-            });    
-            
-            startupList.render();
+            if (collection.page === 1) {
+              // We are cloning the model instead of just referencing it
+              // because the full startup panel is tied to this one
+              // model and we are going to reset it with the proper
+              // model on click (so we don't want to overwrite the first
+              // model in the actual startup list collection.)
+              ALT.app.currentStartup = collection.at(0).clone();
 
-            ALT.app.currentStartup = collection.at(0);
+              // Render startup info panel
+              var startupPanel = new B.Views.Panels.StartupInfo({
+                model : ALT.app.currentStartup
+              });
 
-            // Render startup info panel
-            var startupPanel = new B.Views.Panels.StartupInfo({
-              model : ALT.app.currentStartup
-            });
+              this.el.append(startupPanel.render().el);
+            }
 
-            this.el.append(startupPanel.render().el);
-            B.Views.Done();
+            // When all things are rendered, adjust the heights
+            if (collection.page === collection.pages+1) {
+              startupList.finish();
+              B.Views.Done();
+            }
           }, this)
         });
+        
+        ALT.app.startupCollection.bind("add", function(model, collection) {
+          startupList.append(model);
+        });
+        
       }
-
       return this;
     }
   });
@@ -112,6 +142,11 @@
 
       // when the collection resorts, animate the transition.
       this.collection.bind("reset", this.update, this);
+
+      // Create cache for startup list items
+      this._startupListItems = {};
+
+      this.render();
     },
 
     onSelect : function(event) {
@@ -121,43 +156,103 @@
           return -model.get(event.target.value);  
         } else {
           return model.get(event.target.value).toLowerCase();
-        }
+        }s
         
       }
       this.collection.sort();
     },
 
-    update : function() {
+    update : function(subset) {
+
+      var models = subset || this.collection.models;
+      var pos = 0;
       this.collection.each(function(startup, i) {
 
         var listItem = this._startupListItems[startup.id];
-        var from = listItem.top;
-        var to   = listItem.height * i;
-        $(listItem.el).css({
-          "position": "absolute",
-          "top" : from}).animate({
-            "top": to
-          }, 500);
-      }, this);
+        if (models.indexOf(startup) === -1) {
+        
+          // if startup is not in the subset, hide its element.
+          $(listItem.el).hide();
+        
+        } else {
+          // show the element since we might have hidden it in a previous
+          // situation (like slider movement)
+          $(listItem.el).show();
 
+          // reposition it.
+          var from = listItem.top;
+          var to   = listItem.height * pos;
+          $(listItem.el).css({
+            "position": "absolute",
+            "top" : from}).animate({
+              "top": to
+            }, 500, function() {
+              listItem.top = to;
+            });
+          
+          pos++;
+        }
+      }, this);    
     },
 
-    render : function() {
+    render: function() {
+      // Render initial list
       this.el.html(this.template());
+
+      // disable the sorting until we're done loading everything
+      this.$('select').attr('disabled', 'disabled');
+    },
+
+    append : function(startup) {
+      var startupListItem = new ST.Views.Mini({ model : startup });
+      this._startupListItems[startup.id] = startupListItem;
+      this.$('ul.startup-list').append(startupListItem.render().el);
+    },
+
+    finish : function() {
+
+      // make a range slider
+      $('#range').show();
+      var vals = this.collection.pluck("follower_count"),
+          min = _.min(vals),
+          max = _.max(vals);
+      $('#slider-range').slider({
+        range : true,
+        min : min,
+        max : max,
+        values : [min, max],
+        step: 10,
+        slide : function(event, ui) {
+          $('#slider-range-left').html(ui.values[0]);
+          $('#slider-range-right').html(ui.values[1]);
+        },
+        stop: _.bind(
+            function(event, ui) {
+              // find all startups who's follower counts are between ranges.
+              var subset = this.collection.select(function(startup) {
+                return (startup.get("follower_count") >= ui.values[0] &&
+                        startup.get("follower_count") <= ui.values[1]);
+              });
+
+              // update the layout with subset
+              this.update(subset);
+          }, this)
+      });
+      $('#slider-range-left').html(min);
+      $('#slider-range-right').html(max);
+
+      this.assignHeights();
+
+      // enable select
+      this.$('select').removeAttr('disabled');
+
+      // Bind select change.
       this.delegateEvents({
         "change select" : "onSelect"
       });
+    },
 
-      this._startupListItems = {};
-      
-      // create a list item for each startup
-      this.collection.each(_.bind(
-        function(startup) {
-          var startupListItem = new ST.Views.Mini({ model : startup });
-          this._startupListItems[startup.id] = startupListItem;
-          this.$('ul.startup-list').append(startupListItem.render().el);
-        }, this)    
-      );
+    assignHeights : function() {
 
       // find the maxHeight of list element
       var maxHeight = Math.max.apply(null, 
@@ -170,8 +265,8 @@
       _.each(this._startupListItems, function(view) {
         view.assignHeight(maxHeight);
       });
-
     }
+
   });
 
   /**

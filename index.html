@@ -8,12 +8,15 @@
   <link rel="stylesheet" href="/assets/css/jquery-ui-1.8.16.custom.css">
   <link rel="stylesheet" href="/assets/css/style.css">
 
+  <link rel="dns-prefetch" href="http://api.angel.co/">
+  <meta http-equiv="x-dns-prefetch-control" content="off">
+
   <title>Backbone Boilerplate</title>
 </head>
 
 <body>
   <div id="header" class="c100">
-    <h1 class="c40"><img src="http://angel.co/images/logo_38pt.gif" />Trends</h1>
+    <h1 class="c40"><img src="/assets/img/logo_38pt.gif" />Trends</h1>
     <nav class="c50">
       <ul>
         <li><a href="http://angellist.com">AngelList</a></li>
@@ -86,6 +89,12 @@
         <option value="name">Ascending</option>
       </select>
     </div>
+
+    <div id="range">
+      <div class="c10 fleft" id="slider-range-left">10</div>
+      <div class="c70 fleft" id="slider-range"></div>
+      <div class="c10 fright" id="slider-range-right">100</div>
+    </div>
     <ul class="startup-list">
       
     </ul>
@@ -98,6 +107,7 @@
       <div class="infowrapper">
         <div class="info">
           <h3><%= startup.name %></h3>
+          <div> Followers: <%= startup.follower_count %> </div>
         </div>
       </div>
 
