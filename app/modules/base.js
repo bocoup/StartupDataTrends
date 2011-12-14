@@ -54,20 +54,74 @@
     initialize : function(attributes) {
       this.el = $(this.el);
     },
+    events : {
+      "click #load-more-startups" : "onLoadMore"
+    },
+    
+    onLoadMore : function(event) {
+      // Add a few pages to the collection max pages.
+      var oldPages = ALT.app.startupCollection.pages;
+      ALT.app.startupCollection.pages = Math.min(
+        ALT.app.startupCollection.pages + 10,
+        ALT.app.startupCollection.total_pages
+      );
+
+      console.log("Page increase", oldPages, ALT.app.startupCollection.pages);
+
+      // If we actually increased the page size
+      if (oldPages < ALT.app.startupCollection.pages) {
+        
+        // Fetch parteh!
+        B.Views.Progressify();
+        ALT.app.startupCollection.fetch({ 
+          add : true,
+
+          // on the first page, render a side panel
+          success : _.bind(function(collection) {
+
+            this.$('span#startup-list-counts').html(collection.length);
+
+            // When all things are rendered, adjust the heights
+            if (collection.page === collection.pages+1 ||
+                collection.pages === 1) {
+              this.startupList.finish();
+              B.Views.Done();
+            }
+          }, this)
+        });
+      } 
+    },
 
     render : function() {
       // TODO: render 3 panels.
+      var tags = ALT.app.currentTags.pluck("id").join(",");
 
-      // Render metadata panel
+      if (tags.length) {
+        // Render metadata panel
+        ALT.app.searchMetadata = new S.Models.SearchStats({}, {
+          tags : tags
+        });
+
+        ALT.app.searchMetadata.fetch({
+          success : _.bind(function(model) {
+            
+            this.metaPanel = new B.Views.Panels.Metadata({
+              model : model
+            });
+
+            this.metaPanel.render();
+          }, this)
+        });
+      }
       // Render startup list
-      var tags = ALT.app.currentTags.pluck("id").join(","); 
+       
      
       ALT.app.startupCollection = new ST.Collections.Startups([], { 
         tags : tags
       });
 
       // Create a new startup list collection view
-      var startupList = new B.Views.Panels.Startups({ 
+      this.startupList = new B.Views.Panels.Startups({ 
         collection : ALT.app.startupCollection
       });
 
@@ -94,20 +148,26 @@
               });
 
               this.el.append(startupPanel.render().el);
+
+              this.$('span#startup-total-count').html(collection.total_startups);
             }
+
+            this.$('span#startup-list-counts').html(collection.length);
 
             // When all things are rendered, adjust the heights
             if (collection.page === collection.pages+1 ||
                 collection.pages === 1) {
-              startupList.finish();
+              this.startupList.finish();
               B.Views.Done();
             }
           }, this)
         });
         
-        ALT.app.startupCollection.bind("add", function(model, collection) {
-          startupList.append(model);
-        });
+        ALT.app.startupCollection.bind("add", _.bind(
+          function(model, collection) {
+            this.startupList.append(model);
+          }, this)
+        );
         
       }
       return this;
@@ -127,7 +187,23 @@
    * A container for metadata about the currently searched tags.
    */
   B.Views.Panels.Metadata = B.Views.Panels.extend({
-    id : "#metadata-container"
+    id : "#metadata-container",
+    template : "#panel-search-metadata",
+
+    initialize : function() {
+      this.el = $(this.id);
+      this.model.set({
+        "tags" : ALT.app.currentTags.pluck("label")
+      }, {
+        silent : true
+      });
+      this.template = _.template($(this.template).html());
+    },
+
+    render : function() {
+      this.el.html(this.template({ stats : this.model.toJSON()}));
+      return this;
+    }
   });
 
   /**
@@ -136,7 +212,7 @@
   B.Views.Panels.Startups = B.Views.Panels.extend({
     id : "#startup-list-container",
     template : "#panel-startup-list",
-
+    
     initialize : function(attributes) {
       this.el = $(this.id);
       this.template = _.template($(this.template).html());
@@ -167,7 +243,7 @@
 
       var models = subset || this.collection.models;
       var pos = 0;
-      this.collection.each(function(startup, i) {
+      this.collection.each(function(startup, i, collection) {
 
         var listItem = this._startupListItems[startup.id];
         if (models.indexOf(startup) === -1) {
@@ -183,13 +259,21 @@
           // reposition it.
           var from = listItem.top;
           var to   = listItem.height * pos;
-          $(listItem.el).css({
-            "position": "absolute",
-            "top" : from}).animate({
-              "top": to
-            }, 500, function() {
-              listItem.top = to;
-            });
+          if (collection.length < 100) {
+            $(listItem.el).css({
+              "position": "absolute",
+              "top" : from}).animate({
+                "top": to
+              }, 500, function() {
+                // save the top so that we can animate from it in the future
+                // if it's hidden.
+                listItem.top = to;
+              });
+          } else {
+            $(listItem.el).css({
+              "position": "absolute",
+              "top" : to});
+          }
           
           pos++;
         }
@@ -202,6 +286,9 @@
 
       // disable the sorting until we're done loading everything
       this.$('select').attr('disabled', 'disabled');
+
+      // show details about the startup list.
+      this.$('.details').show();
     },
 
     append : function(startup) {
@@ -257,6 +344,11 @@
 
       // enable select
       this.$('select').removeAttr('disabled');
+
+      // remove the more button if we're all out of pages
+      if (this.collection.pages === this.collection.total_pages) {
+        this.$('#load-more-startups').hide();
+      }
 
       // Bind select change.
       this.delegateEvents({

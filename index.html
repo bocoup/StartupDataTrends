@@ -80,7 +80,26 @@
     </li>
   </script>
 
-  <!-- Panels :: Startu List Container -->
+  <script type="text/template" id="panel-search-metadata">
+
+    <div class="c100 metadata-section">
+      <h2> Average Amount Raised: </h2>
+      <div class="c60 post10 fleft aright">
+        <h1><%= stats.raising.amount %></h1>
+      </div>
+      <small class="small c30 fleft data-points"><i>Based on <b><%= stats.raising.data_points %></b> data points.</i></small>
+    </div>
+    <div class="c100 metadata-section">
+      <h2> Average Valuation: </h2>
+      <div class="c60 post10 fleft aright">
+        <h1><%= stats.pre_money.amount %></h1>
+      </div>
+      <small class="small c30 fleft data-points"><i>Based on <b><%= stats.pre_money.data_points %></b> data points.</i></small>
+    </div>
+
+  </script>
+
+  <!-- Panels :: Startup List Container -->
   <script type="text/template" id="panel-startup-list">
     <div>
       Sort by: 
@@ -100,6 +119,10 @@
         <div class="c75 fleft" id="slider-range"></div>
         <div class="c10 fright" id="slider-range-right">100</div>
       </div>
+    </div>
+    <div class="c100 details">
+      Showing <span id="startup-list-counts">0</span> visible startups out of 
+      <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[More...]</a>
     </div>
     <ul class="startup-list">
       
@@ -186,12 +209,14 @@
   <script type="text/javascript" src="/assets/js/jquery-ui-1.8.16.custom.min.js"></script>
 
   <script type="text/javascript" src="/assets/js/jquery-sparklines.min.js"></script>
+  <script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
 
   <script src="/assets/js/libs/underscore.js"></script>
   <script src="/assets/js/libs/backbone.js"></script>
 
   <!-- Application -->
   <script src="/app/application.js"></script>
+  <script src="/app/modules/utils.js"></script>
   <script src="/app/modules/search.js"></script>
   <script src="/app/modules/startup.js"></script>
   <script src="/app/modules/base.js"></script>

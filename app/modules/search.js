@@ -1,10 +1,26 @@
-(function(S) {
+(function(S, U) {
   
   S.Models || (S.Models = {});
   S.Collections || (S.Collections = {});
 
   // Responsible for holding a single search.
   S.Models.Search = Backbone.Model.extend({});
+
+  // Responsible for search metadata
+  S.Models.SearchStats = Backbone.Model.extend({
+    initialize : function(attributes, options) {
+      this.tags = options.tags;
+    },
+    url : function() {
+      return "http://api.angel.co/1/tags/stats?tag_ids=" + this.tags + 
+        "&callback=?";
+    },
+    parse : function(data) {
+      data.raising.amount = U.formatDollarAmount(data.raising.amount);
+      data.pre_money.amount = U.formatDollarAmount(data.pre_money.amount);
+      return data;
+    }
+  });
     
   // A single search result entry
   S.Models.SearchItem = Backbone.Model.extend({});
@@ -184,4 +200,4 @@
       return this;
     }
   });
-})(ALT.module("search"));
+})(ALT.module("search"), ALT.module("utils"));

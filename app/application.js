@@ -49,6 +49,7 @@ jQuery(function($) {
     },
 
     _init : function() {
+
       // initialize list of current tags
       ALT.app.currentTags = new Backbone.Collection();  
 

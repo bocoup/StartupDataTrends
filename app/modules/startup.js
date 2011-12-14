@@ -112,9 +112,13 @@
       var page_params = _.clone(params);
       var success = function(data) {
           
-        // register number of pages
-        model.pages = data.last_page;
-
+        // register number of pages - max 20.
+        if (model.page === 1) {
+          model.pages = Math.min(10, data.last_page);
+          model.total_pages = data.last_page;
+          model.total_startups = data.total;
+        }
+        
         // process first page
         options.success(data);
 
