@@ -83,16 +83,8 @@
         })})
       });
       
-      this._searchComponents.person = new S.Views.SearchComponentView({
-        collection : new S.Collections.SearchItems({}, { search : new S.Models.Search({
-          type : "User",
-          name : "Person"
-        })})
-      });
-      
       this.el.append(this._searchComponents.location.render().el);
       this.el.append(this._searchComponents.market.render().el);
-      this.el.append(this._searchComponents.person.render().el);
       
       // append loader
       this.el.append("<div class=\"c25 fleft\" id=\"loader\">"+
