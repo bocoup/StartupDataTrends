@@ -324,6 +324,7 @@ nav ul li {
 
 #main {
   margin-left: 20px;
+  margin-top: 10px;
 }
 #header {
   background-color: #EEEFF1;
@@ -475,7 +476,7 @@ nav ul li {
   border: 1px solid #F2F3F4; 
 }
 
-#panel-container #startup-info-container img.screenshot {
+#panel-container #startup-info-container a.screenshot img {
   max-width: 100%;
 }
 

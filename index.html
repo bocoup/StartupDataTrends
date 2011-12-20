@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   
   <link rel="stylesheet" href="/assets/css/jquery-ui-1.8.16.custom.css">
+  <link rel="stylesheet" href="/assets/css/colorbox.css">
   <link rel="stylesheet" href="/assets/css/style.css">
 
   <link rel="dns-prefetch" href="http://api.angel.co/">
@@ -212,7 +213,9 @@
       <div id="tabs-2">
         <% if (startup.screenshots.length) { %>
           <% _.each(startup.screenshots, function(screenshot) { %>
-          <img class="screenshot" src="<%= screenshot.original %>" />
+          <a class="screenshot"  href="<%= screenshot.original%>">
+            <img src="<%= screenshot.original %>" />
+          </a>
           <hr>
         <% }); %>  
         <% } else { %>
@@ -229,6 +232,7 @@
 
   <script type="text/javascript" src="/assets/js/jquery-sparklines.min.js"></script>
 
+  <script type="text/javascript" src="/assets/js/jquery.colorbox-min.js"></script>
   <script src="/assets/js/libs/underscore.js"></script>
   <script src="/assets/js/libs/backbone.js"></script>
 

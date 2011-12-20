@@ -151,7 +151,15 @@
     
     render : function() {
       this.el.html(this.template({ startup : this.model.toJSON() }));
+      // make tabs
       this.$("#tabs").tabs();
+      
+      // render screenshots
+      this.$('a.screenshot').colorbox({ 
+        'rel' : 'screenshots',
+        'maxWidth' : "960px",
+        'maxHeight': "800px"
+      });
       return this;
     }
   });
