@@ -350,7 +350,8 @@
           type : "bar",
           width : "100%",
           barColor: "orange",
-          lineColor: "none"
+          lineColor: "none",
+          zeroColor : "#ddd"
         });
       $('.slider-sparkline canvas').css({ width: "100%" });
 
