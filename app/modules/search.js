@@ -6,6 +6,14 @@
   // Responsible for holding a single search.
   S.Models.Search = Backbone.Model.extend({});
 
+  // Responsible for holding a single tag - particularly useful
+  // when loading from a url with tags in it.
+  S.Models.Tag = Backbone.Model.extend({
+    url : function() {
+      return "http://api.angel.co/1/tags/" + this.id + "?callback=?"; 
+    }
+  });
+
   // Responsible for search metadata
   S.Models.SearchStats = Backbone.Model.extend({
     initialize : function(attributes, options) {
@@ -62,6 +70,14 @@
         person : null
       }
     },
+
+    addTag : function(tag) {
+      var tagView = new S.Views.SearchSelectedComponentItem({ 
+        model : tag 
+      });
+      this.$("#search-" + tag.get("tag_type") + " .search-tags")
+        .append(tagView.render().el);
+    },
     
     render : function() {
       
@@ -110,7 +126,7 @@
     render : function() {
       $(this.el).html(this.template({
         id : this.model.id,
-        label : this.model.get("label")
+        label : this.model.get("label") || this.model.get("display_name")
       }));
       return this;
     },
@@ -141,7 +157,7 @@
       
       this.template = _.template($(this.template).html());
 
-      $(this.el).attr({ "id" : "search-" + attributes.type });
+      $(this.el).attr({ "id" : "search-" + this.search.get("type") });
     },
     render : function() {
       
@@ -170,17 +186,15 @@
             // TODO: clear search
             // Add a tag to the current list of tags
 
-            var tagModel = new Backbone.Model(ui.item);
+            var tagModel = new S.Models.Tag(ui.item);
+            tagModel.set({ 
+              "tag_type" : this.search.get("type")
+            }, { silent:true });
+            
+            // rendering happens on tag add, not here. This is
+            // to support url based searches.
             ALT.app.currentTags.add(tagModel);
-
-            // Render a new selected tag list item
-            var tagView = new S.Views.SearchSelectedComponentItem({ model : tagModel });
-            
-            // Append them to the tag list we're building of all
-            // the tags we're watching for this dropdown.
-            this.$(".search-tags").append(tagView.render().el);
-            
-            
+          
           }, this),
         close : function(event) {
           $(event.target).val(" ").focus();

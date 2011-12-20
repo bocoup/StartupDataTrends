@@ -45,15 +45,22 @@ jQuery(function($) {
 
   var Router = Backbone.Router.extend({
     routes: {
-      "": "index"
+      "": "index",
+      "?tags=:tags" : "search"
     },
 
     _init : function() {
+
+      var S = ALT.module("search");
 
       // initialize list of current tags
       ALT.app.currentTags = new Backbone.Collection();  
 
       ALT.app.currentTags.bind("add", function(model) {
+        
+        // update search view
+        ALT.app.mainView.searchView.addTag(model);
+        
         // redo the search
         ALT.app.mainView.panelView.render();
       });
@@ -62,14 +69,36 @@ jQuery(function($) {
         // redo the search
         ALT.app.mainView.panelView.render();
       });
-    },
 
-    index: function() {
-      this._init();
       var base = ALT.module("base");
 
       ALT.app.mainView = new base.Views.AppView();
       ALT.app.mainView.render();
+    },
+
+    index: function() {
+      this._init();
+    },
+
+    search : function(tags) {
+      this._init();
+
+      var S = ALT.module("search");
+
+      // parse tags
+      var tagIds = tags.split(","),
+          tags = [];
+
+      _.each(tagIds, function(tagId) {
+        var tag = new S.Models.Tag({ id : tagId });
+        tags.push(tag.fetch());
+      });
+
+      // fetch all tags 
+      $.when.apply(this, tags).then(function(tag){
+        console.log(tag);
+        ALT.app.currentTags.add(tag);
+      });
     }
 
   });
