@@ -242,6 +242,10 @@ a:visited {
   width: 100%;
   display: inline-block;
 }
+.c90 {
+  width: 90%;
+  display: inline-block;
+}
 .c80 {
   width: 80%;
   display: inline-block;
@@ -268,6 +272,10 @@ a:visited {
 }
 .c30 {
   width: 30%;
+  display: inline-block;
+}
+.c20 {
+  width: 20%;
   display: inline-block;
 }
 .c10 {
@@ -349,6 +357,22 @@ nav ul li {
 #metadata-container .data-points {
   margin-top: 17px;
 }
+#metadata-container .taglist li {
+  line-height: 1;
+}
+#metadata-container .taglist li .count {
+  color : #2F5D92;
+  font-weight: bold;
+  text-align: right;
+  padding-right: 5%;
+}
+#metadata-container .taglist li a {
+  font-weight: normal;
+  text-decoration: none;
+}
+#metadata-container .taglist li a:hover {
+  color: black;
+}
 #startup-list-container .startup-list {
   position: relative;
 }
@@ -395,6 +419,19 @@ nav ul li {
 #panel-container .infowrapper {
   float: left;
   width: 100%;  
+}
+
+#panel-container .infowrapper h2, #panel-container .infowrapper h3 {
+  margin: 0;
+  padding: 0;
+}
+
+#panel-container .infowrapper .counts h2 {
+  color: #2F5D92;
+  line-height: 1;
+}
+#panel-container .infowrapper .counts {
+  color: #AAA;
 }
 
 #panel-container  .infowrapper .info {

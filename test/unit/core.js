@@ -1,5 +1,48 @@
-module("Core");
+module("Utils");
 
-test("Basic Test", function() {
-  ok(true, "Fake test should pass");
+var U = ALT.module("utils");
+test("Utils Signature Test", function() {
+  ok(typeof U.formatDollarAmount !== "undefined", "formatDollarAmount exists");
+  ok(typeof U.frequencyCount !== "undefined", "frequencyCount exists");
+});
+
+test("Frequency Count Basic", function() {
+  var obj = [
+    { "name" : "a" },
+    { "name" : "a" },
+    { "name" : "a" },
+    { "name" : "a" },
+    { "name" : "b" },
+    { "name" : "b" },
+    { "name" : "c" },
+  ];
+
+  var result = [
+    ["a", 4],
+    ["b", 2],
+    ["c", 1]
+  ];
+  console.log(U.frequencyCount(obj, "name"));
+  ok(_.isEqual(U.frequencyCount(obj, "name"), result), 
+    "frequency counts are correct");
+});
+
+test("Format Dollar Amount", function() {
+  var samples = {
+    0 : "$0",
+    10 : "$10",
+    100 : "$100",
+    1000 : "$1,000",
+    1000000 : "$1,000,000"
+  };
+
+  _.each(samples, function(value, key) {
+    ok(U.formatDollarAmount(key) === value, "dollar amount " + key + " is formatted correctly as " + value);
+  });
+});
+
+test("Remap values", function() {
+  ok(U.remap(1, 0, 10, 0, 100) === 10, "U.remap(1, 0, 10, 0, 100) === 10");
+  ok(U.remap(10, 0, 10, 0, 100) === 100, "U.remap(10, 0, 10, 0, 100) === 100");
+  ok(U.remap(5, 0, 10, 0, 100) === 50, "U.remap(5, 0, 10, 0, 100) === 50");
 });

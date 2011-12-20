@@ -11,7 +11,7 @@
   <link rel="dns-prefetch" href="http://api.angel.co/">
   <meta http-equiv="x-dns-prefetch-control" content="off">
 
-  <title>Backbone Boilerplate</title>
+  <title>AngelList Trends</title>
 </head>
 
 <body>
@@ -53,6 +53,15 @@
   </div>
 
   <!-- templates -->
+
+  <!-- tag -->
+  <script type="text/template" id="single-tag-count">
+    <li class="c100">
+      <div class="c10 fleft count"><%= tag.count %></div>
+      <div class="c80 fleft"><a href="#"><%= tag.name %></a></div>
+    </li>
+  </script>
+
   <!-- Search :: Search container -->
   <script type="text/template" id="search-container-tmpl">
     <div>
@@ -96,7 +105,12 @@
       </div>
       <small class="small c30 fleft data-points"><i>Based on <b><%= stats.pre_money.data_points %></b> data points.</i></small>
     </div>
-
+    <hr>
+    <div class="c100 metadata-section">
+      The following tags also describe startups in your search:
+      <small>(These are made up at the moment... waiting for data)</small>
+    </div>
+    
   </script>
 
   <!-- Panels :: Startup List Container -->
@@ -120,7 +134,7 @@
         <div class="c10 fright" id="slider-range-right">100</div>
       </div>
     </div>
-    <div class="c100 details">
+    <div class="c100 details" style="display:none">
       Showing <span id="startup-list-counts">0</span> visible startups out of 
       <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[More...]</a>
     </div>
@@ -135,8 +149,13 @@
 
       <div class="infowrapper">
         <div class="info">
-          <h3><%= startup.name %></h3>
-          <div> Followers: <%= startup.follower_count %> </div>
+          <h2><%= startup.name %></h2>
+          <div class="counts">
+            <h2><%= startup.follower_count %></h2>
+            <i>   
+              <small class="small">Followers</small>
+            </i>
+          </div>
         </div>
       </div>
 
@@ -209,7 +228,6 @@
   <script type="text/javascript" src="/assets/js/jquery-ui-1.8.16.custom.min.js"></script>
 
   <script type="text/javascript" src="/assets/js/jquery-sparklines.min.js"></script>
-  <script type="text/javascript" src="/assets/js/jquery.tipsy.js"></script>
 
   <script src="/assets/js/libs/underscore.js"></script>
   <script src="/assets/js/libs/backbone.js"></script>

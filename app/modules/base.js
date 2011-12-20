@@ -3,6 +3,7 @@
   // required modules - startup, search.
   var ST = ALT.module("startup");
   var S  = ALT.module("search");
+  var U  = ALT.module("utils");
 
   (function() {
     
@@ -148,7 +149,7 @@
               });
 
               this.el.append(startupPanel.render().el);
-
+              this.$('.details').show();
               this.$('span#startup-total-count').html(collection.total_startups);
             }
 
@@ -202,6 +203,21 @@
 
     render : function() {
       this.el.html(this.template({ stats : this.model.toJSON()}));
+
+      // Create a new tag cloud
+      // TODO: set a better height somehow.
+      // TODO: get actual tags!!!
+      var tags = [
+        ["Mobile Development", 30],
+        ["Hardware", 20],
+        ["Deep Information Technolog", 20],
+        ["Bridging online and offline", 12],
+        ["Parenting", 8]
+      ];
+    
+      var tagList = new U.TagList({}, { tags : tags });
+      this.el.append(tagList.render().el);
+      
       return this;
     }
   });
@@ -287,8 +303,6 @@
       // disable the sorting until we're done loading everything
       this.$('select').attr('disabled', 'disabled');
 
-      // show details about the startup list.
-      this.$('.details').show();
     },
 
     append : function(startup) {
