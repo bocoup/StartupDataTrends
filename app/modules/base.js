@@ -150,6 +150,7 @@
 
               this.el.append(startupPanel.render().el);
               this.$('.details').show();
+              this.$('.sort').show();
               this.$('span#startup-total-count').html(collection.total_startups);
             }
 

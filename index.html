@@ -38,7 +38,7 @@
       
       <!-- Contains metadata about the search -->
       <div class="c30 fleft panel" id="metadata-container">
-        test
+        <h2> &uarr; Start your search by searching for a location, a specific market, or both! </h2>
       </div>
       
       <!-- Contains the list of startups that matches the search. -->
@@ -65,9 +65,9 @@
 
   <!-- Search :: Search container -->
   <script type="text/template" id="search-container-tmpl">
-    <div>
-      What are you looking for?
-    </div>
+    <small style="display:block; margin-bottom:10px;">
+      <i>What are you looking for?</i>
+    </small>
   </script>
   
   <!-- Search :: Actual search box widget -->
@@ -116,7 +116,7 @@
 
   <!-- Panels :: Startup List Container -->
   <script type="text/template" id="panel-startup-list">
-    <div>
+    <div class="sort" style="display:none">
       Sort by: 
       <select>
         <option value="follower_count">Followers</option>
@@ -213,7 +213,7 @@
       <div id="tabs-2">
         <% if (startup.screenshots.length) { %>
           <% _.each(startup.screenshots, function(screenshot) { %>
-          <a class="screenshot"  href="<%= screenshot.original%>">
+          <a class="screenshot" href="<%= screenshot.original%>">
             <img src="<%= screenshot.original %>" />
           </a>
           <hr>
