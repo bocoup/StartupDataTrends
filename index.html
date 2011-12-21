@@ -37,16 +37,16 @@
     <div id="panel-container">
       
       <!-- Contains metadata about the search -->
-      <div class="c30 fleft panel" id="metadata-container">
+      <div class="c30 fleft panel clearfix" id="metadata-container">
         <h2> &uarr; Start your search by searching for a location, a specific market, or both! </h2>
       </div>
       
       <!-- Contains the list of startups that matches the search. -->
-      <div class="c30 fleft panel" id="startup-list-container">
+      <div class="c30 fleft panel clearfix" id="startup-list-container">
       </div>
       
       <!-- Contains the information about the selected startup -->
-      <div class="c30 fleft panel last" id="startup-info-container">
+      <div class="c30 fleft panel last clearfix" id="startup-info-container">
       </div>
       
     </div>    
@@ -59,7 +59,7 @@
   <script type="text/template" id="single-tag-count">
     <li class="c100">
       <div class="c10 fleft count"><%= tag.count %></div>
-      <div class="c80 fleft"><a href="#"><%= tag.name %></a></div>
+      <div class="c80 fleft"><a href="/?tags=<%= tag.id %>"><%= tag.name %></a></div>
     </li>
   </script>
 
@@ -109,7 +109,6 @@
     <hr>
     <div class="c100 metadata-section">
       The following tags also describe startups in your search:
-      <small>(These are made up at the moment... waiting for data)</small>
     </div>
     
   </script>
@@ -139,9 +138,11 @@
       <small>Showing <span id="startup-list-counts">0</span> visible startups out of 
       <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[Load More...]</a></small>
     </div>
-    <ul class="startup-list">
+    <div class="startup-list-container">
+      <ul class="startup-list">
       
-    </ul>
+      </ul>
+    </div>
   </script>
 
   <!-- Panels :: Mini Startup Item -->
@@ -193,7 +194,7 @@
 
               <div class="c100 smallest">
                 <% _.each(_.union(startup.locations, startup.markets), function(tag) { %>
-                  <div class="tag"><a href="#"><%= tag.name %></a> · </div>
+                  <div class="tag"><a href="?tags=<%=tag.id%>"><%= tag.name %></a> · </div>
                 <% }); %>
               </div>
 

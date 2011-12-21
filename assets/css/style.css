@@ -374,8 +374,12 @@ nav ul li {
 #metadata-container .taglist li a:hover {
   color: black;
 }
-#startup-list-container .startup-list {
+#startup-list-container .startup-list-container {
   position: relative;
+}
+#startup-list-container .startup-list {
+  /*position: absolute;*/
+  top: 0;
 }
 #startup-list-container .startup-list li {
   width: 100%;

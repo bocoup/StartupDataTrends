@@ -11,6 +11,9 @@
   S.Models.Tag = Backbone.Model.extend({
     url : function() {
       return "http://api.angel.co/1/tags/" + this.id + "?callback=?"; 
+    },
+    triggerSearch : function() {
+      this.set({ "triggerSearch" : true });
     }
   });
 
@@ -193,6 +196,7 @@
             
             // rendering happens on tag add, not here. This is
             // to support url based searches.
+            tagModel.triggerSearch();
             ALT.app.currentTags.add(tagModel);
           
           }, this),

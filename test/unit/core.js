@@ -22,7 +22,49 @@ test("Frequency Count Basic", function() {
     ["b", 2],
     ["c", 1]
   ];
-  console.log(U.frequencyCount(obj, "name"));
+  ok(_.isEqual(U.frequencyCount(obj, "name"), result), 
+    "frequency counts are correct");
+});
+
+
+test("Frequency Count Basic with id", function() {
+  var obj = [
+    { "name" : "a", "id" : 1 },
+    { "name" : "a", "id" : 1 },
+    { "name" : "a", "id" : 1 },
+    { "name" : "a", "id" : 1 },
+    { "name" : "b", "id" : 2 },
+    { "name" : "b", "id" : 2 },
+    { "name" : "c", "id" : 3 }
+  ];
+
+  var result = [
+    [1, "a", 4],
+    [2, "b", 2],
+    [3, "c", 1]
+  ];
+  console.log(U.frequencyCount(obj, "name", "id"));
+  ok(_.isEqual(U.frequencyCount(obj, "name", "id"), result), 
+    "frequency counts are correct");
+});
+
+test("Frequency Count Out of Order", function() {
+  var obj = [
+    { "name" : "b" },
+    { "name" : "c" },
+    { "name" : "a" },
+    { "name" : "b" },
+    { "name" : "a" },
+    { "name" : "a" },
+    { "name" : "a" }
+  ];
+
+  var result = [
+    ["a", 4],
+    ["b", 2],
+    ["c", 1]
+  ];
+  
   ok(_.isEqual(U.frequencyCount(obj, "name"), result), 
     "frequency counts are correct");
 });

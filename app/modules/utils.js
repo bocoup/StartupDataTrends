@@ -39,15 +39,22 @@
    * @param { String } prop The property inside the array objects to count
    * @returns { Array } [[key, count], [key, count]].
    */ 
-  U.frequencyCount = function(arr, prop) {
+  U.frequencyCount = function(arr, prop, id) {
     var freq = {};
 
     _.each(arr, function(obj) {
-      freq[obj[prop]] || (freq[obj[prop]] = [obj[prop], 0]);
-      freq[obj[prop]][1]++;
+      var key = obj[prop];
+      freq[key] || (freq[key] = [key, 0]);
+      freq[key][freq[key].length-1]++;
+      
+      if (typeof id !== "undefined" && freq[key].length < 3) {
+        freq[key].unshift(obj[id]); 
+      }
     });
 
-    return _.values(freq);
+    return _.sortBy(_.values(freq), function(pair) {
+      return -pair[pair.length-1];
+    });
   };
 
   U.remap = function(value, min, max, start, end) {
@@ -60,10 +67,10 @@
     initialize : function(attributes, options) {
       this.tags = options.tags;
       this.metrics = {
-        maxFontSize : 17,
-        minFontSize : 8,
-        maxCount : this.tags[0][1],
-        minCount : this.tags[this.tags.length-1][1]
+        maxFontSize : 19,
+        minFontSize : 10,
+        maxCount : this.tags[0][2],
+        minCount : this.tags[this.tags.length-1][2]
       };
       this.tag_template = _.template($("#single-tag-count").html());
     },
@@ -73,16 +80,16 @@
       _.each(this.tags, function(tag) {
         
         var fontSize = U.remap(
-          tag[1], 
+          tag[2], 
           this.metrics.minCount, 
           this.metrics.maxCount, 
           this.metrics.minFontSize, 
           this.metrics.maxFontSize);
-        console.log(fontSize, this.metrics);
         var tagEl = $(this.tag_template({
           tag : {
-            name : tag[0],
-            count : tag[1]
+            id : tag[0],
+            name : tag[1],
+            count : tag[2]
           }
         })).css({
           "font-size" : fontSize

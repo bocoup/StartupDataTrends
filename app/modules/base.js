@@ -67,8 +67,6 @@
         ALT.app.startupCollection.total_pages
       );
 
-      console.log("Page increase", oldPages, ALT.app.startupCollection.pages);
-
       // If we actually increased the page size
       if (oldPages < ALT.app.startupCollection.pages) {
         
@@ -160,6 +158,7 @@
             if (collection.page === collection.pages+1 ||
                 collection.pages === 1) {
               this.startupList.finish();
+              collection.trigger("done");
               B.Views.Done();
             }
           }, this)
@@ -200,25 +199,22 @@
         silent : true
       });
       this.template = _.template($(this.template).html());
+
+      // when the collection of startups is done loading,
+      // render the tag cloud
+      ALT.app.startupCollection.bind("done", function(collection) {
+        // Create a new tag cloud
+        // TODO: set a better height somehow.
+        // TODO: get actual tags!!!
+        var tags = ALT.app.startupCollection.markets();
+    
+        var tagList = new U.TagList({}, { tags : tags });
+        this.el.append(tagList.render().el);
+      }, this);
     },
 
     render : function() {
       this.el.html(this.template({ stats : this.model.toJSON()}));
-
-      // Create a new tag cloud
-      // TODO: set a better height somehow.
-      // TODO: get actual tags!!!
-      var tags = [
-        ["Mobile Development", 30],
-        ["Hardware", 20],
-        ["Deep Information Technolog", 20],
-        ["Bridging online and offline", 12],
-        ["Parenting", 8]
-      ];
-    
-      var tagList = new U.TagList({}, { tags : tags });
-      this.el.append(tagList.render().el);
-      
       return this;
     }
   });

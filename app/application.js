@@ -51,28 +51,48 @@ jQuery(function($) {
 
     _init : function() {
 
-      var S = ALT.module("search");
+      var S = ALT.module("search"),
+          B = ALT.module("base");
 
       // initialize list of current tags
       ALT.app.currentTags = new Backbone.Collection();  
 
+      // Pretty much all functionality is routed through this callback.
+      // When a tag is added or removed from the searchable list, all
+      // UIs update, all calls are made etc.
       ALT.app.currentTags.bind("add", function(model) {
         
         // update search view
         ALT.app.mainView.searchView.addTag(model);
-        
-        // redo the search
-        ALT.app.mainView.panelView.render();
-      });
+
+        // Only perform a search on a tag that is market as such. This is
+        // key because if a user comes in via a url with a tag list,
+        // we only want to perform the search on all tags together, not
+        // individually. 
+        // A regular tag search through form will mark each tag
+        // as search-triggering.
+        if (model.get("triggerSearch")) {
+          
+          // redo the search
+          ALT.app.mainView.panelView.render();
+
+          // update url
+          this.navigate("?tags=" + ALT.app.currentTags.pluck("id").join(","), false);
+        }
+
+      }, this);
 
       ALT.app.currentTags.bind("remove", function(model) {
         // redo the search
         ALT.app.mainView.panelView.render();
-      });
 
-      var base = ALT.module("base");
+        // update url
+        this.navigate("?tags=" + ALT.app.currentTags.pluck("id").join(","), false);
+      }, this);
 
-      ALT.app.mainView = new base.Views.AppView();
+      // Render the main view of the application.
+      
+      ALT.app.mainView = new B.Views.AppView();
       ALT.app.mainView.render();
     },
 
@@ -87,17 +107,38 @@ jQuery(function($) {
 
       // parse tags
       var tagIds = tags.split(","),
-          tags = [];
-
+          tagFetches = [],
+          tagModels = [];
+      
+      // Initiate the fecth on each tag's metadata. This is
+      // required to then do a startup search itself and display
+      // what tags we're searching in the UI.
       _.each(tagIds, function(tagId) {
         var tag = new S.Models.Tag({ id : tagId });
-        tags.push(tag.fetch());
+        tagModels.push(tag);
+        
+        // Save the fetch calls so that we can attach a callback to
+        // their successful completion.
+        tagFetches.push(tag.fetch({
+          silent: true
+        }));
       });
 
-      // fetch all tags 
-      $.when.apply(this, tags).then(function(tag){
-        console.log(tag);
-        ALT.app.currentTags.add(tag);
+      // When each tag is fetched, add it to the current tag list
+      // but only peform the startup search at the end when all tags
+      // have been fetched.
+      $.when.apply(null, tagFetches).then(function(tag) {
+        _.each(tagModels, function(tag, i) {
+
+          // only search when all tags are present.
+          if (tagModels.length-1 === i) {
+            tag.triggerSearch();
+          } 
+
+          // when available, add each tag to our list of 
+          // current tags.
+          ALT.app.currentTags.add(tag);
+        });
       });
     }
 

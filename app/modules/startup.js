@@ -1,4 +1,4 @@
-(function(ST) {
+(function(ST, U) {
 
   ST.Models || (ST.Models = {});
   ST.Collections || (ST.Collections = {});
@@ -32,9 +32,16 @@
         "&callback=?"
     },
     parse : function(data) {
-      return _.select(data.startups, function(startup) {
+      var visible_data = _.select(data.startups, function(startup) {
         return startup.hidden === false;
       });
+
+      // cache screenshot count
+      _.each(visible_data, function(startup) {
+        startup.screenshots_count = startup.screenshots.length;
+      });
+
+      return visible_data;
     },
     histogram : function(buckets, attribute) {
       attribute || (attribute = "follower_count");
@@ -65,6 +72,15 @@
 
       return bins;
     },
+
+    markets : function() {
+      return U.frequencyCount(
+        _.flatten(
+          this.pluck("markets")
+        ), 
+      "display_name", "id");
+    },
+
     sync : function(method, model, options) {
       var type = methodMap[method];
 
@@ -222,4 +238,4 @@
     'read'  : 'GET'
   };
 
-})(ALT.module("startup"));
+})(ALT.module("startup"), ALT.module("utils"));
