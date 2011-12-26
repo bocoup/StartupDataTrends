@@ -253,11 +253,13 @@
       this.collection.sort();
     },
 
+    /**
+     * Startup list item click selection
+     */
     onClickStartup : function(event) {
       if (this.clickedStartup) {
         this.clickedStartup.removeClass("selected");
       }
-      console.log(event);
       this.clickedStartup = $(event.currentTarget);  
       this.clickedStartup.addClass("selected");
     },
