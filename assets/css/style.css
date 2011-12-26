@@ -329,6 +329,9 @@ nav ul li {
 #header {
   background-color: #EEEFF1;
   padding-left: 20px;
+  -moz-box-shadow:    0px 1px 2px 2px #ccc;
+  -webkit-box-shadow: 0px 1px 2px 2px #ccc;
+  box-shadow:         0px 1px 2px 2px #ccc;
 }
 #header h1 {
   font-size: 2.7em;
@@ -555,6 +558,21 @@ li.selected-search-item a:hover {
   border: none;
 }
 
+#footer {
+  position: fixed;
+  height: 12px;
+  padding: 10px;
+  font-size: 8pt;
+  color: #999;
+  background-color: #EEEFF1;
+  bottom: 0;
+  left: 0;
+  right: 0; 
+  text-align: right;
+  -moz-box-shadow:    0px -1px 2px 2px #ccc;
+  -webkit-box-shadow: 0px -1px 2px 2px #ccc;
+  box-shadow:         0px -1px 2px 2px #ccc;
+}
 
 /* --- tipsy -----*/
 .tipsy { font-size: 12px; position: absolute; padding: 5px; z-index: 100000; text-align: left;}
