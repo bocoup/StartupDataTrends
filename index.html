@@ -17,11 +17,13 @@
 
 <body>
   <div id="header" class="c100">
-    <h1 class="c40"><img src="/assets/img/logo_38pt.gif" />Trends</h1>
+    <h1 class="c40">
+      <a href="/"><img src="/assets/img/logo_38pt.gif" />Trends</a>
+    </h1>
     <nav class="c50">
       <ul>
         <li><a href="http://angellist.com">AngelList</a></li>
-        <li><a href="#">About</a></li>
+        <li><a href="/">About</a></li>
       </ul>
     </nav>
   </div>
@@ -38,7 +40,9 @@
       
       <!-- Contains metadata about the search -->
       <div class="c30 fleft panel clearfix" id="metadata-container">
-        <h2> &uarr; Start your search by searching for a location, a specific market, or both! </h2>
+        <div class="about">
+          <h3> &uarr; Start your search by searching for a location, a specific market, or both! </h3>
+        </div>
       </div>
       
       <!-- Contains the list of startups that matches the search. -->
@@ -47,6 +51,34 @@
       
       <!-- Contains the information about the selected startup -->
       <div class="c30 fleft panel last clearfix" id="startup-info-container">
+        <div class="about">
+          <h2> What is AngelList Trends? </h2>
+          <p>
+            AngelList trends is a way to browse the publicly visible startups on
+            <a href="http://angel.co">AngelList</a>. Here, you can search for startups
+            in a specific location and/or industry. 
+          </p>
+          <h3> Filtering </h3>
+          <p>
+            The returned startups can be filtered by their follower counts & screenshot
+            counts.
+          </p>
+          <h3> Metadata </h3>
+          <p>
+            Alongside the startups you can see some basic information about the general
+            search, such as the average amount being raised by startups that match it, and
+            the average public valuation.
+          </p>
+          <h3> Try it out! </h3>
+          <p> 
+            Start searching by typing your desired location and/or market above or try one of 
+            the following searches:
+          </p>
+          <p>
+            All Startups in <a href="/?tags=2390">Cambridge, MA</a> <br />
+            All Startups in the <a href="/?tags=52">Analytics</a> Market.
+          </p>
+        </div>
       </div>
       
     </div>    

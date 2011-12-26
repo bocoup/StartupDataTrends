@@ -336,13 +336,23 @@ nav ul li {
 #header h1 {
   font-size: 2.7em;
   font-family: 'Satisfy', cursive;
-  color: orange;
+}
+#header h1 a {
+    color: orange;
+  text-decoration: none;
 }
 #panel-container {
   font-size: 0.8em;
   border-top: 1px solid #eee;
   margin-top: 10px;
   padding-top:10px;
+}
+#panel-container .about {
+  
+}
+
+#panel-container .about h2 {
+  color: orange;
 }
 #metadata-container .metadata-section {
   margin-bottom: 15px;
