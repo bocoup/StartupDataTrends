@@ -293,6 +293,9 @@ a:visited {
 }
 .panel {
   margin-right: 4%;
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
 }
 .panel.last {
   margin-right: 0%;
@@ -348,6 +351,7 @@ nav ul li {
   border-top: 1px solid #eee;
   margin-top: 10px;
   padding-top:10px;
+  position:relative;
 }
 #panel-container .about {
   
@@ -355,6 +359,10 @@ nav ul li {
 
 #panel-container .about h2 {
   color: orange;
+}
+#metadata-container {
+  right: 30%;
+  left: 10px;
 }
 #metadata-container .metadata-section {
   margin-bottom: 15px;
@@ -388,6 +396,9 @@ nav ul li {
 }
 #metadata-container .taglist li a:hover {
   color: black;
+}
+#startup-list-container {
+  margin-left: 34.666666667%;
 }
 #startup-list-container .startup-list-header {
   height: 83px;
@@ -484,6 +495,10 @@ nav ul li {
 
 #panel-container  .startup-list-item  .infowrapper .info {
   margin-left: 80px; 
+}
+
+#startup-info-container  {
+  right: 10px;
 }
 
 #panel-container #startup-info-container .tag {

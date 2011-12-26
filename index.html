@@ -150,34 +150,38 @@
 
   <!-- Panels :: Startup List Container -->
   <script type="text/template" id="panel-startup-list">
-    <div class="sort" style="display:none">
-      Sort by: 
-      <select>
-        <option value="follower_count">Followers</option>
-        <option value="name">Ascending</option>
-        <option value="screenshot_count">Screenshot Count</option>
-      </select>
+    <div class="startup-list-header">
+      <div class="sort" style="display:none">
+        Sort by: 
+        <select>
+          <option value="follower_count">Followers</option>
+          <option value="name">Ascending</option>
+          <option value="screenshot_count">Screenshot Count</option>
+        </select>
+      </div>
+
+      <div id="range">
+        <div class="c100">
+          <div class="c100 slider-sparkline"></div>
+        </div>
+        <div class="c100">
+          <div class="c10 fleft" id="slider-range-left">10</div>
+          <div class="c75 fleft" id="slider-range"></div>
+          <div class="c10 fright" id="slider-range-right">100</div>
+        </div>
+      </div>
+      <div class="c100 details" style="display:none">
+        <small>Showing <span id="startup-list-counts">0</span> visible startups out of 
+        <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[Load More...]</a></small>
+      </div>
     </div>
 
-    <div id="range">
-      
-      <div class="c100">
-        <div class="c100 slider-sparkline"></div>
-      </div>
-      <div class="c100">
-        <div class="c10 fleft" id="slider-range-left">10</div>
-        <div class="c75 fleft" id="slider-range"></div>
-        <div class="c10 fright" id="slider-range-right">100</div>
-      </div>
-    </div>
-    <div class="c100 details" style="display:none">
-      <small>Showing <span id="startup-list-counts">0</span> visible startups out of 
-      <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[Load More...]</a></small>
-    </div>
     <div class="startup-list-container">
-      <ul class="startup-list">
-      
-      </ul>
+      <div class="startup-list-container-inner">
+        <ul class="startup-list">
+        
+        </ul>
+      </div>
     </div>
   </script>
 
