@@ -583,6 +583,12 @@ li.selected-search-item a:hover {
   -webkit-box-shadow: 0px -1px 2px 2px #ccc;
   box-shadow:         0px -1px 2px 2px #ccc;
 }
+#footer a {
+  color: #555;
+}
+#footer a:visited {
+  color: #777;
+}
 
 /* --- tipsy -----*/
 .tipsy { font-size: 12px; position: absolute; padding: 5px; z-index: 100000; text-align: left;}
