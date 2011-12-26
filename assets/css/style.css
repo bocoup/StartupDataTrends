@@ -410,6 +410,10 @@ nav ul li {
   min-height: 100px;
 }
 
+#panel-container .startup-list-item.selected {
+  background-color: #eee;
+}
+
 #panel-container .startup-list-item .banner {
   width: 100%; 
   min-height: 60px;
@@ -424,6 +428,7 @@ nav ul li {
 #panel-container .infowrapper {
   float: left;
   width: 100%;  
+  padding-left: 10px;
 }
 
 #panel-container .infowrapper h2, #panel-container .infowrapper h3 {
@@ -437,6 +442,7 @@ nav ul li {
 }
 #panel-container .infowrapper .counts {
   color: #AAA;
+  display:inline-block;
 }
 
 #panel-container  .infowrapper .info {

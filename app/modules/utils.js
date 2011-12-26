@@ -77,8 +77,10 @@
 
     render : function() {
       
-      _.each(this.tags, function(tag) {
-        
+      var count = Math.min(this.tags.length, 20);
+      for (var i = 0; i < count; i++) {
+        var tag = this.tags[i];
+
         var fontSize = U.remap(
           tag[2], 
           this.metrics.minCount, 
@@ -95,8 +97,7 @@
           "font-size" : fontSize
         });
         $(this.el).append(tagEl);
-      
-      }, this);  
+      } 
       return this;
     }
 

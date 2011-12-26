@@ -242,14 +242,24 @@
     onSelect : function(event) {
 
       this.collection.comparator = function(model) {
-        if (event.target.value === "follower_count") {
-          return -model.get(event.target.value);  
+        if (event.target.value === "follower_count" || 
+            event.target.value === "screenshot_count") {
+          return -model.get(event.target.value);
         } else {
           return model.get(event.target.value).toLowerCase();
         }s
         
       }
       this.collection.sort();
+    },
+
+    onClickStartup : function(event) {
+      if (this.clickedStartup) {
+        this.clickedStartup.removeClass("selected");
+      }
+      console.log(event);
+      this.clickedStartup = $(event.currentTarget);  
+      this.clickedStartup.addClass("selected");
     },
 
     update : function(subset) {
@@ -364,7 +374,8 @@
 
       // Bind select change.
       this.delegateEvents({
-        "change select" : "onSelect"
+        "change select" : "onSelect",
+        "click li.startup-list-item" : "onClickStartup"
       });
     },
 

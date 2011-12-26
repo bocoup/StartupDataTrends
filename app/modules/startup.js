@@ -38,7 +38,7 @@
 
       // cache screenshot count
       _.each(visible_data, function(startup) {
-        startup.screenshots_count = startup.screenshots.length;
+        startup.screenshot_count = startup.screenshots.length;
       });
 
       return visible_data;
