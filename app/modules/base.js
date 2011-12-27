@@ -92,6 +92,12 @@
     },
 
     render : function() {
+      
+      // adjust height + 20 for padding.
+      this.$('#column-container').css({
+        top : (this.$('#search-container').height() + 20)
+      });
+
       // TODO: render 3 panels.
       var tags = ALT.app.currentTags.pluck("id").join(",");
 
@@ -146,7 +152,7 @@
                 model : ALT.app.currentStartup
               });
 
-              this.el.append(startupPanel.render().el);
+              this.$('#column-container').append(startupPanel.render().el);
               this.$('.details').show();
               this.$('.sort').show();
               this.$('span#startup-total-count').html(collection.total_startups);
@@ -321,6 +327,9 @@
     },
 
     finish : function() {
+
+      // added loaded classname
+      this.$('.startup-list-container').addClass("loaded");
 
       // make a range slider
       $('#range').show();

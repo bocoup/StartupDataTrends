@@ -77,7 +77,7 @@
 
     render : function() {
       
-      var count = Math.min(this.tags.length, 20);
+      var count = Math.min(this.tags.length, 15);
       for (var i = 0; i < count; i++) {
         var tag = this.tags[i];
 
