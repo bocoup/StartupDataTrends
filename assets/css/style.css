@@ -332,8 +332,12 @@ nav ul li {
   -moz-box-shadow:    0px 1px 2px 2px #ccc;
   -webkit-box-shadow: 0px 1px 2px 2px #ccc;
   box-shadow:         0px 1px 2px 2px #ccc;
-  position: relative;
+  position: fixed;
   height: 90px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 #header h1 {
   font-size: 2.7em;
@@ -356,7 +360,9 @@ nav ul li {
 }
 /* initial height for search container */
 #panel-container #search-container {
-  position: relative;
+  position: fixed;
+  z-index:100;
+  background-color: white;
   padding-top: 10px;
   padding-left: 10px;
   margin-right: -10px;
@@ -527,6 +533,8 @@ nav ul li {
 
 #startup-info-container  {
   right: 10px;
+  position: fixed;
+  top: 200px;
 }
 
 #panel-container #startup-info-container .tag {

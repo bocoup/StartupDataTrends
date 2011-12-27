@@ -93,6 +93,11 @@
 
     render : function() {
       
+      // fix startup container
+      this.$('#startup-info-container').css({
+        top : (this.$('#search-container').height() + 20 + 100)
+      });
+
       // adjust height + 20 for padding.
       this.$('#column-container').css({
         top : (this.$('#search-container').height() + 20)
@@ -289,7 +294,7 @@
 
           // reposition it.
           var from = listItem.top;
-          var to   = listItem.height * pos;
+          var to   = listItem.height * pos + ($('#search-container').height() + 20);
           if (collection.length < 100) {
             $(listItem.el).css({
               "position": "absolute",
