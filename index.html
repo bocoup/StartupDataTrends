@@ -22,7 +22,9 @@
 
     <div id="header" class="c100">
       <h1 class="c70">
-        <a href="/"><img src="/assets/img/logo_38pt.gif" />Trends</a>
+        <a href="/">
+          <span class="regular">AngelList</span>Trends
+        </a>
       </h1>
       <nav class="c20">
         <ul>
@@ -34,56 +36,80 @@
 
     <!-- Contains the three side-by-side panels -->
     <div id="panel-container">
-
-      <!-- Contains search interface for entire app -->
-      <div id="search-container" class="c100">
-      </div>
       
       <div id="column-container"> 
         
         <!-- Contains metadata about the search -->
-        <div class="c30 fleft panel clearfix" id="metadata-container">
+        <div id="left-container">
           <div class="about">
-            <h3> &uarr; Start your search by searching for a location, a specific market, or both! </h3>
+              <h3> &darr; Start your search by searching for a location, a specific market, or both! </h3>
+          </div>
+          <!-- Contains search interface for entire app -->
+          <div id="search-container" class="c100">
+            
+          </div>
+
+          <!-- Contains tag list -->
+          <div id="tag-container">
+          </div>
+
+        </div>
+
+
+        <div id="right-container">
+          
+          <div class="c100 clearfix" id="metadata-container">
+            <div class="inner">
+              <div id="metadata-startup-container" class="c47 fleft">
+              </div>
+
+              <div id="metadata-valuation-container" class="c50 fright">
+              </div>
+            </div>
+          </div>
+
+          <div class="c100 clearfix" id="startup-data-container">
+            <div class="about">
+              <h2> What is AngelList Trends? </h2>
+              <p>
+                AngelList trends is a way to browse the publicly visible startups on
+                <a href="http://angel.co">AngelList</a>. Here, you can search for startups
+                in a specific location and/or industry. 
+              </p>
+              <h3> Filtering </h3>
+              <p>
+                The returned startups can be filtered by their follower counts & screenshot
+                counts.
+              </p>
+              <h3> Metadata </h3>
+              <p>
+                Alongside the startups you can see some basic information about the general
+                search, such as the average amount being raised by startups that match it, and
+                the average public valuation.
+              </p>
+              <h3> Try it out! </h3>
+              <p> 
+                Start searching by typing your desired location and/or market above or try one of 
+                the following searches:
+              </p>
+              <p>
+                All Startups in <a href="/?tags=2390">Cambridge, MA</a> <br />
+                All Startups in the <a href="/?tags=52">Analytics</a> Market.
+              </p>
+            </div>
+            <!-- Contains the list of startups that matches the search. -->
+            <div class="c50 fleft panel clearfix" id="startup-list-container">
+              
+            </div>
+
+            <!-- Contains the information about the selected startup -->
+            <div class="c30 fleft panel last clearfix" id="startup-info-container">
+              
+            </div>
+
           </div>
         </div>
-        
-        <!-- Contains the list of startups that matches the search. -->
-        <div class="c30 fleft panel clearfix" id="startup-list-container">
-        </div>
-        
-        <!-- Contains the information about the selected startup -->
-        <div class="c30 fleft panel last clearfix" id="startup-info-container">
-          <div class="about">
-            <h2> What is AngelList Trends? </h2>
-            <p>
-              AngelList trends is a way to browse the publicly visible startups on
-              <a href="http://angel.co">AngelList</a>. Here, you can search for startups
-              in a specific location and/or industry. 
-            </p>
-            <h3> Filtering </h3>
-            <p>
-              The returned startups can be filtered by their follower counts & screenshot
-              counts.
-            </p>
-            <h3> Metadata </h3>
-            <p>
-              Alongside the startups you can see some basic information about the general
-              search, such as the average amount being raised by startups that match it, and
-              the average public valuation.
-            </p>
-            <h3> Try it out! </h3>
-            <p> 
-              Start searching by typing your desired location and/or market above or try one of 
-              the following searches:
-            </p>
-            <p>
-              All Startups in <a href="/?tags=2390">Cambridge, MA</a> <br />
-              All Startups in the <a href="/?tags=52">Analytics</a> Market.
-            </p>
-          </div>
-        </div>
-      </div>
+      </div>  
     </div>    
 
   </div>
@@ -93,19 +119,29 @@
 
   <!-- templates -->
 
+  <!-- tag list container -->
+  <script type="text/template" id="tag-count-list">
+    <div>
+      <div>
+        <b>Matching startups also tagged with...</b>
+      </div>
+      <ul class="taglist">
+      </ul>
+    </div>
+  </script>
+
   <!-- tag -->
   <script type="text/template" id="single-tag-count">
     <li class="c100">
       <div class="c10 fleft count"><%= tag.count %></div>
-      <div class="c80 fleft"><a href="/?tags=<%= tag.id %>"><%= tag.name %></a></div>
+      <div class="c80 fleft"><a href="/?tags=<%= tag.url %>"><%= tag.name %></a></div>
     </li>
   </script>
 
   <!-- Search :: Search container -->
   <script type="text/template" id="search-container-tmpl">
-    <small style="display:block; margin-bottom:10px;">
-      <i>What are you looking for?</i>
-    </small>
+    <ul class="c80 pre20 search-tags">  
+    </ul>
   </script>
   
   <!-- Search :: Actual search box widget -->
@@ -114,9 +150,6 @@
     	<label for="<%= id %>"><%= type %>: </label>
     	<input id="<%= id %>" />
     </div>
-    <ul class="search-tags">
-      
-    </ul>
   </script>
 
   <!-- Search :: A match result search item -->
@@ -128,60 +161,85 @@
     </li>
   </script>
 
-  <script type="text/template" id="panel-search-metadata">
+  <!-- Contains evaluation amounts + selectors + range slider. -->
+  <script type="text/template" id="metadata-search">
+    <div class="fleft">
+      <div class="startup-list-header">
+        <div class="sort" style="display:none">
+          Sort by: 
+          <select>
+            <option value="follower_count">Followers</option>
+            <option value="name">Ascending</option>
+            <option value="screenshot_count">Screenshot Count</option>
+          </select>
+        </div>
 
-    <div class="c100 metadata-section">
-      <h2> Average Amount Raised: </h2>
-      <div class="c60 post10 fleft aright">
-        <h1><%= stats.raising.amount %></h1>
+        <div id="range">
+          <div class="c100">
+            <div class="c100 slider-sparkline"></div>
+          </div>
+          <div class="c100">
+            <div class="c10 fleft" id="slider-range-left"></div>
+            <div class="c75 fleft" id="slider-range"></div>
+            <div class="c10 fright" id="slider-range-right"></div>
+          </div>
+        </div>
+        <div class="c100 details" style="display:none">
+          <small>Showing <span id="startup-list-counts">0</span> visible startups out of 
+          <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[Load More...]</a></small>
+        </div>
       </div>
-      <small class="small c30 fleft data-points"><i>Based on <b><%= stats.raising.data_points || 0 %></b> data points.</i></small>
     </div>
-    <div class="c100 metadata-section">
-      <h2> Average Valuation: </h2>
-      <div class="c60 post10 fleft aright">
-        <h1><%= stats.pre_money.amount %></h1>
+  </script>
+
+  <!-- Contains money stats data:
+       data required: 
+       { stats : {
+         raising : {
+           amount : N,
+           data_points : M
+         },
+         pre_money : {
+           amount : N,
+           data_points : M
+         }
+       }}
+  -->
+  <script type="text/template" id="metadata-valuation">
+    <div class="fleft">
+      <div class="c50 fleft metadata-section">
+        <h3> Average Amount Raised: </h3>
       </div>
-      <small class="small c30 fleft data-points"><i>Based on <b><%= stats.pre_money.data_points || 0 %></b> data points.</i></small>
+
+      <div class="c50 fleft metadata-section">
+        <h3> Average Valuation: </h3>
+      </div>
     </div>
-    <hr>
-    <div class="c100 metadata-section">
-      The following tags also describe startups in your search:
+
+    <div class="c50 fleft metadata-section">
+        <div>
+          <h2><%= stats.raising.amount %></h2>
+        </div>
+        <small>
+          <i>Based on <b><%= stats.raising.data_points || 0 %></b> data points.</i>
+        </small>
+      </div>
+
+      <div class="c50 fleft metadata-section">
+        <div>
+          <h2><%= stats.pre_money.amount %></h2>
+        </div>
+        <small>
+          <i>Based on <b><%= stats.pre_money.data_points || 0 %></b> data points.</i>
+        </small>
+      </div>
     </div>
-    
   </script>
 
   <!-- Panels :: Startup List Container -->
   <script type="text/template" id="panel-startup-list">
-    <div class="startup-list-header">
-      <div class="sort" style="display:none">
-        Sort by: 
-        <select>
-          <option value="follower_count">Followers</option>
-          <option value="name">Ascending</option>
-          <option value="screenshot_count">Screenshot Count</option>
-        </select>
-      </div>
-
-      <div id="range">
-        <div class="c100">
-          <div class="c100 slider-sparkline"></div>
-        </div>
-        <div class="c100">
-          <div class="c10 fleft" id="slider-range-left">10</div>
-          <div class="c75 fleft" id="slider-range"></div>
-          <div class="c10 fright" id="slider-range-right">100</div>
-        </div>
-      </div>
-      <div class="c100 details" style="display:none">
-        <small>Showing <span id="startup-list-counts">0</span> visible startups out of 
-        <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[Load More...]</a></small>
-      </div>
-    </div>
-      
     <ul class="startup-list">
     </ul>
-      
   </script>
 
   <!-- Panels :: Mini Startup Item -->

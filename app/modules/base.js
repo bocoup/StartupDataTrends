@@ -27,321 +27,281 @@
    * The overarching application view manager.
    */
   B.Views.AppView = Backbone.View.extend({
-    el : "#main",
+    id : "#main",
     
     initialize: function(attributes) {
-      this.el = $(this.el);
+      this.el = $(this.id);
     },
     
     render : function() {
       
-      // create the search view
+      this.leftView = new B.Views.LeftView();
+      this.leftView.render();
+
+      this.rightView = new B.Views.RightView();
+        
+      // right view rendering left for search!
+      return this;
+    },
+
+    cleanup : function() {
+      this.leftView.cleanup();
+      this.rightView.cleanup();
+    }
+
+  });
+  
+  B.Views.LeftView = Backbone.View.extend({
+    id : '#left-container',
+    
+    initialize : function(attributes) {
+      this.el = $(this.id);
+
+      // when the collection of startups is done loading,
+      // render the tag cloud
+      console.log("binding tags")
+      ALT.app.startupCollection.bind("done", this.addTags, this);
+
+    },
+
+    render : function() {
+      
+      // render search view
       this.searchView = new S.Views.SearchView();
       this.searchView.render();
-      
-      // create the three panel view
-      this.panelView = new B.Views.PanelsView();
-      this.panelView.render();
+    },
 
-      return this;
+    addTags : function() {
+
+      var tagContainer = $('#tag-container');
+      
+      // render a list of tags when were ready.
+      var tags = ALT.app.startupCollection.markets();
+      this.tagListView = new U.TagList({}, { tags : tags });
+      tagContainer.html(this.tagListView.render().el);
+    },
+
+    cleanup : function() {
+      
+      // unbind
+      ALT.app.startupCollection.unbind("done", this.addTags);
+
+      // remove the list of tags
+      this.tagListView.cleanup();
+      
+      // note, no cleanup required on search. we ammend that.
+    }
+  });
+
+  B.Views.RightView = Backbone.View.extend({
+    id : '#right-container',
+
+    initialize : function(attributes) {
+      this.el = $(this.id);
+    },
+
+    render : function() {
+
+      // Create a new startup collection
+      var tags = ALT.app.currentTags.pluck("id").join(",");
+      ALT.app.currentTags.tags = tags;
+
+      // Create a new metadata view.
+      this.metadataView = new B.Views.Panels.Metadata({
+        collection : ALT.app.startupCollection
+      });
+
+      // remove the about info if it's there
+      $('#startup-data-container .about').remove();
+      $('#startup-list-container').show();
+
+      // Create a new startup list collection view
+      // which will also create the startupInfoView
+      this.startupListView = new ST.Views.List({ 
+        collection : ALT.app.startupCollection,
+        tags : tags
+      });
+
+    },
+
+    cleanup : function() {
+      if (this.metadataView) {
+        this.metadataView.cleanup();
+      }
+      if (this.startupListView) {
+        this.startupListView.cleanup();
+      }
+
+    }
+  });
+
+  // Just a container for all our panel views
+
+  B.Views.Panels = {};
+  /**
+   * A container for metadata about the currently searched tags.
+   * contains:
+   *   metadata about search
+   *   metadata about valuation
+   */
+  B.Views.Panels.Metadata = Backbone.View.extend({
+    id : "#metadata-container",
+    template : "#metadata-search",
+
+    initialize : function() {
+      
+      // init housing element & template
+      this.el = $(this.id);
+
+      // add the border. We remove it while things are loading.
+      this.$('.inner').addClass("border");
+
+      // Create new metadata valuation view
+      // it takes care of it's own rendering.
+      this.metadataValuationView = new B.Views.Panels.MetadataValuation();
+      
+      // Create a new metadata search view
+      this.metadataSearchView = new B.Views.Panels.MetadataSearch({
+        collection : this.collection
+      });
+      
+    },
+
+    cleanup : function() {
+      this.metadataValuationView.cleanup();
+      this.metadataSearchView.cleanup();
     }
   });
 
   /**
-   * The main view containing the three info panels.
+   * View for range slider and select dropdown
    */
-  B.Views.PanelsView = Backbone.View.extend({
-    el : "#panel-container",
-    initialize : function(attributes) {
-      this.el = $(this.el);
-    },
-    events : {
-      "click #load-more-startups" : "onLoadMore"
+  B.Views.Panels.MetadataSearch = Backbone.View.extend({
+    template : '#metadata-search',
+    id : "#metadata-startup-container",
+    
+    initialize : function(attributes, options) {
+
+      // this.collection is set to startup list!
+
+      // find element
+      this.el = $(this.id);
+
+      // compile template
+      this.template = _.template($(this.template).html());
+    
+      // render container shell
+      this.render();
+
+      // When the first page of the collection is fetched,
+      // show the control interface (although keep things disabled, like)
+      // the select control.
+      this.collection.bind("start", this.bindStart, this);
+
+      // When a collection fetches a new page, update some counts
+      this.collection.bind("page", this.bindPage, this);
+
+      // When the last page of the collection is loaded, finish
+      // whatever rendering we have left.
+      this.collection.bind("done", this.finish, this);
     },
     
+    bindStart : function() {
+      this.$('.details').show();
+      this.$('.sort').show();
+      this.$('span#startup-total-count').html(this.collection.total_startups);  
+
+    },
+
+    bindPage : function() {
+      this.$('span#startup-list-counts').html(this.collection.length);
+    }, 
+
+    cleanup : function() {
+
+      this.delegateEvents({});
+
+      this.el.html(
+        this.template()
+      );
+
+      this.$('#range').hide();
+
+      this.collection.unbind("start", this.bindStart);
+      this.collection.unbind("page", this.bindPage);
+      this.collection.unbind("done", this.finish);
+
+      // disable the sorting until we're done loading everything
+      this.$('select').attr('disabled', 'disabled');
+
+      this.el.html("<h2>Loading...</h2>");
+    },
+
+    render : function() {
+      
+      this.el.html(
+        this.template()
+      );
+
+      this.delegateEvents({
+        "click #load-more-startups" : "onLoadMore",
+        "change select" : "onSelect"
+      });
+
+      // disable the sorting until we're done loading everything
+      this.$('select').attr('disabled', 'disabled');
+
+      return this;
+    },
+
+    finish : function() {
+      // Enable sorting select
+      this.$('select').removeAttr('disabled');  
+
+      this.makeRangeSlider();
+      this.makeSparkline();
+    },
+
+    onSelect : function() {
+      // When a new sort is selected, tell the list to
+      // handle it
+      this.collection.trigger("alt.resort", event.target.value);
+    },
+
     onLoadMore : function(event) {
+      
       // Add a few pages to the collection max pages.
       var oldPages = ALT.app.startupCollection.pages;
-      ALT.app.startupCollection.pages = Math.min(
-        ALT.app.startupCollection.pages + 10,
-        ALT.app.startupCollection.total_pages
+      this.collection.pages = Math.min(
+        oldPages + 10,
+        this.collection.total_pages
       );
 
       // If we actually increased the page size
-      if (oldPages < ALT.app.startupCollection.pages) {
+      if (oldPages < this.collection.pages) {
         
-        // Fetch parteh!
-        B.Views.Progressify();
-        ALT.app.startupCollection.fetch({ 
+        this.collection.fetch({ 
           add : true,
 
           // on the first page, render a side panel
           success : _.bind(function(collection) {
 
-            this.$('span#startup-list-counts').html(collection.length);
+            // trigger that another page was fetched of the collection
+            collection.trigger("page");
 
-            // When all things are rendered, adjust the heights
-            if (collection.page === collection.pages+1 ||
-                collection.pages === 1) {
-              this.startupList.finish();
-              B.Views.Done();
-            }
           }, this)
         });
       } 
     },
 
-    render : function() {
-      
-      // fix startup container
-      this.$('#startup-info-container').css({
-        top : (this.$('#search-container').height() + 20 + 100)
-      });
-
-      // adjust height + 20 for padding.
-      this.$('#column-container').css({
-        top : (this.$('#search-container').height() + 20)
-      });
-
-      // TODO: render 3 panels.
-      var tags = ALT.app.currentTags.pluck("id").join(",");
-
-      if (tags.length) {
-        // Render metadata panel
-        ALT.app.searchMetadata = new S.Models.SearchStats({}, {
-          tags : tags
-        });
-
-        ALT.app.searchMetadata.fetch({
-          success : _.bind(function(model) {
-            
-            this.metaPanel = new B.Views.Panels.Metadata({
-              model : model
-            });
-
-            this.metaPanel.render();
-          }, this)
-        });
-      }
-      // Render startup list
-       
-     
-      ALT.app.startupCollection = new ST.Collections.Startups([], { 
-        tags : tags
-      });
-
-      // Create a new startup list collection view
-      this.startupList = new B.Views.Panels.Startups({ 
-        collection : ALT.app.startupCollection
-      });
-
-      if (tags.length) {
-        B.Views.Progressify();
-        
-        ALT.app.startupCollection.fetch({ 
-          add : true,
-
-          // on the first page, render a side panel
-          success : _.bind(function(collection) {
-            
-            if (collection.page === 1) {
-              // We are cloning the model instead of just referencing it
-              // because the full startup panel is tied to this one
-              // model and we are going to reset it with the proper
-              // model on click (so we don't want to overwrite the first
-              // model in the actual startup list collection.)
-              ALT.app.currentStartup = collection.at(0).clone();
-
-              // Render startup info panel
-              var startupPanel = new B.Views.Panels.StartupInfo({
-                model : ALT.app.currentStartup
-              });
-
-              this.$('#column-container').append(startupPanel.render().el);
-              this.$('.details').show();
-              this.$('.sort').show();
-              this.$('span#startup-total-count').html(collection.total_startups);
-            }
-
-            this.$('span#startup-list-counts').html(collection.length);
-
-            // When all things are rendered, adjust the heights
-            if (collection.page === collection.pages+1 ||
-                collection.pages === 1) {
-              this.startupList.finish();
-              collection.trigger("done");
-              B.Views.Done();
-            }
-          }, this)
-        });
-        
-        ALT.app.startupCollection.bind("add", _.bind(
-          function(model, collection) {
-            this.startupList.append(model);
-          }, this)
-        );
-        
-      }
-      return this;
-    }
-  });
-
-  /**
-   * A default extension of views for panels.
-   */
-  B.Views.Panels = Backbone.View.extend({
-    initialize: function(attributes) {
-      this.el = $(this.id);
-    }
-  });
-
-  /**
-   * A container for metadata about the currently searched tags.
-   */
-  B.Views.Panels.Metadata = B.Views.Panels.extend({
-    id : "#metadata-container",
-    template : "#panel-search-metadata",
-
-    initialize : function() {
-      this.el = $(this.id);
-      this.model.set({
-        "tags" : ALT.app.currentTags.pluck("label")
-      }, {
-        silent : true
-      });
-      this.template = _.template($(this.template).html());
-
-      // when the collection of startups is done loading,
-      // render the tag cloud
-      ALT.app.startupCollection.bind("done", function(collection) {
-        // Create a new tag cloud
-        // TODO: set a better height somehow.
-        // TODO: get actual tags!!!
-        var tags = ALT.app.startupCollection.markets();
-    
-        var tagList = new U.TagList({}, { tags : tags });
-        this.el.append(tagList.render().el);
-      }, this);
-    },
-
-    render : function() {
-      this.el.html(this.template({ stats : this.model.toJSON()}));
-      return this;
-    }
-  });
-
-  /**
-   * A container for the startup list that matches the searched tags.
-   */
-  B.Views.Panels.Startups = B.Views.Panels.extend({
-    id : "#startup-list-container",
-    template : "#panel-startup-list",
-    
-    initialize : function(attributes) {
-      this.el = $(this.id);
-      this.template = _.template($(this.template).html());
-
-      // when the collection resorts, animate the transition.
-      this.collection.bind("reset", this.update, this);
-
-      // Create cache for startup list items
-      this._startupListItems = {};
-
-      this.render();
-    },
-
-    onSelect : function(event) {
-
-      this.collection.comparator = function(model) {
-        if (event.target.value === "follower_count" || 
-            event.target.value === "screenshot_count") {
-          return -model.get(event.target.value);
-        } else {
-          return model.get(event.target.value).toLowerCase();
-        }s
-        
-      }
-      this.collection.sort();
-    },
-
-    /**
-     * Startup list item click selection
-     */
-    onClickStartup : function(event) {
-      if (this.clickedStartup) {
-        this.clickedStartup.removeClass("selected");
-      }
-      this.clickedStartup = $(event.currentTarget);  
-      this.clickedStartup.addClass("selected");
-    },
-
-    update : function(subset) {
-
-      var models = subset || this.collection.models;
-      var pos = 0;
-      this.collection.each(function(startup, i, collection) {
-
-        var listItem = this._startupListItems[startup.id];
-        if (models.indexOf(startup) === -1) {
-        
-          // if startup is not in the subset, hide its element.
-          $(listItem.el).hide();
-        
-        } else {
-          // show the element since we might have hidden it in a previous
-          // situation (like slider movement)
-          $(listItem.el).show();
-
-          // reposition it.
-          var from = listItem.top;
-          var to   = listItem.height * pos + ($('#search-container').height() + 20);
-          if (collection.length < 100) {
-            $(listItem.el).css({
-              "position": "absolute",
-              "top" : from}).animate({
-                "top": to
-              }, 500, function() {
-                // save the top so that we can animate from it in the future
-                // if it's hidden.
-                listItem.top = to;
-              });
-          } else {
-            $(listItem.el).css({
-              "position": "absolute",
-              "top" : to});
-          }
-          
-          pos++;
-        }
-      }, this);    
-    },
-
-    render: function() {
-      // Render initial list
-      this.el.html(this.template());
-
-      // disable the sorting until we're done loading everything
-      this.$('select').attr('disabled', 'disabled');
-
-    },
-
-    append : function(startup) {
-      var startupListItem = new ST.Views.Mini({ model : startup });
-      this._startupListItems[startup.id] = startupListItem;
-      this.$('ul.startup-list').append(startupListItem.render().el);
-    },
-
-    finish : function() {
-
-      // added loaded classname
-      this.$('.startup-list-container').addClass("loaded");
-
+    makeRangeSlider : function(collection) {
       // make a range slider
-      $('#range').show();
+      this.$('#range').show();
       var vals = this.collection.pluck("follower_count"),
           min = _.min(vals),
           max = _.max(vals);
-      $('#slider-range').slider({
+
+      this.$('#slider-range').slider({
         range : true,
         min : min,
         max : max,
@@ -360,14 +320,17 @@
               });
 
               // update the layout with subset
-              this.update(subset);
+              ALT.app.mainView.rightView.startupListView.update(subset);
           }, this)
       });
       $('#slider-range-left').html(min);
       $('#slider-range-right').html(max);
+    },
 
-      // make a sparkline
-      $('.slider-sparkline').sparkline(
+    makeSparkline : function(collection) {
+      
+      // make a sparkline of follower counts
+      this.$('.slider-sparkline').sparkline(
         this.collection.histogram(30),
         {
           type : "bar",
@@ -376,69 +339,98 @@
           lineColor: "none",
           zeroColor : "#ddd"
         });
-      $('.slider-sparkline canvas').css({ width: "100%" });
+      this.$('.slider-sparkline canvas').css({ width: "100%" });
+    }
+  });
 
-      this.assignHeights();
+  B.Views.Panels.MetadataValuation = Backbone.View.extend({
+    template : '#metadata-valuation',
+    id : "#metadata-valuation-container",
+    
+    initialize : function() {
 
-      // enable select
-      this.$('select').removeAttr('disabled');
+      // find element
+      this.el = $(this.id);
 
-      // remove the more button if we're all out of pages
-      if (this.collection.pages === this.collection.total_pages) {
-        this.$('#load-more-startups').hide();
+      // compile template
+      this.template = _.template($(this.template).html());
+
+      // --- get metadata from server
+      // get current tags
+      var tags = ALT.app.currentTags.pluck("id").join(",");
+      
+      // Fetch stats about the tags if they exist
+      if (tags.length) {
+
+        // Stats model (valuation data)
+        this.model = new S.Models.SearchStats({}, {
+          tags : tags
+        });
+
+        // When data is fetched, render this view.
+        this.model.fetch({
+          success : _.bind(function(model) {
+            this.render();
+          }, this)
+        });
       }
-
-      // Bind select change.
-      this.delegateEvents({
-        "change select" : "onSelect",
-        "click li.startup-list-item" : "onClickStartup"
-      });
     },
 
-    assignHeights : function() {
-
-      // find the maxHeight of list element
-      var maxHeight = Math.max.apply(null, 
-        $(".startup-list-item").map(function (){
-          return $(this).height();
-        }).get());
+    render : function() {
       
-      // Set the height of all list elements to the max. This
-      // is required for happy sorting.
-      _.each(this._startupListItems, function(view) {
-        view.assignHeight(maxHeight);
-      });
-    }
+      // Render valuation data into its container.
+      this.el.html(
+        this.template({
+          stats : this.model.toJSON()
+        })
+      );
 
+      return this;
+    },
+
+    cleanup : function() {
+      this.el.html("");
+    }
   });
+    
 
   /**
    * A container for the metadata about a startup.
    */
-  B.Views.Panels.StartupInfo = B.Views.Panels.extend({
+  B.Views.Panels.StartupInfo = Backbone.View.extend({
     id : "#startup-info-container",
-
-    render : function() {
-
-      B.Views.Progressify();
+    initialize : function(attributes, options) {
+      this.el = $(this.id);
+      
       if (this.model) {
         this.model.fetch({
           success : _.bind(function(model) {
-            
-            var fullPanel = new ST.Views.Full({
-              model : model
-            }); 
-
-            this.el.html(fullPanel.render().el);
-            B.Views.Done();       
-          }, this)
+            this.model = model;
+            this.render();
+          }, this),
+          error : this.renderEmpty
         });
       } else {
-        B.Views.Done();
-        this.el.html("<h3> No Startups Found </h3>");
+        this.renderEmpty();
       }
+    },
+
+    render : function() {      
+      
+      var fullPanel = new ST.Views.Full({
+        model : this.model
+      }); 
+      this.el.html(fullPanel.render().el);
+
+      return this;
+    },
+
+    renderEmpty : function() {
+      this.el.html("<h3> No Startups Found </h3>");
+
       return this;
     }
+
   });
   
   

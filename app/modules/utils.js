@@ -62,10 +62,13 @@
   };
 
   U.TagList = Backbone.View.extend({
-    tagName : "ul",
-    className : "taglist",
+    template : '#tag-count-list',
+
     initialize : function(attributes, options) {
+      this.template = _.template($(this.template).html());
+
       this.tags = options.tags;
+
       this.metrics = {
         maxFontSize : 19,
         minFontSize : 10,
@@ -77,28 +80,41 @@
 
     render : function() {
       
+      this.el = $(this.template());
+
       var count = Math.min(this.tags.length, 15);
+      var otherTagList = ALT.app.currentTags.pluck("id");
+
       for (var i = 0; i < count; i++) {
         var tag = this.tags[i];
 
-        var fontSize = U.remap(
-          tag[2], 
-          this.metrics.minCount, 
-          this.metrics.maxCount, 
-          this.metrics.minFontSize, 
-          this.metrics.maxFontSize);
-        var tagEl = $(this.tag_template({
-          tag : {
-            id : tag[0],
-            name : tag[1],
-            count : tag[2]
-          }
-        })).css({
-          "font-size" : fontSize
-        });
-        $(this.el).append(tagEl);
+        // don't bother painting the selected tag.
+        if (otherTagList.indexOf(tag[0]) === -1) {
+          var fontSize = U.remap(
+            tag[2], 
+            this.metrics.minCount, 
+            this.metrics.maxCount, 
+            this.metrics.minFontSize, 
+            this.metrics.maxFontSize);
+          var tagEl = $(this.tag_template({
+            
+            tag : {
+              id : tag[0],
+              name : tag[1],
+              count : tag[2],
+              url : _.union(otherTagList, tag[0]).join(",")
+            }
+          })).css({
+            "font-size" : fontSize
+          });
+          $(this.$('ul.taglist')).append(tagEl);
+        }
       } 
       return this;
+    },
+
+    cleanup : function() {
+      this.el = $(this.template());
     }
 
   });

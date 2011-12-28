@@ -1,4 +1,4 @@
-(function(ST, U) {
+(function(ST, U, B) {
 
   ST.Models || (ST.Models = {});
   ST.Collections || (ST.Collections = {});
@@ -18,20 +18,33 @@
   ST.Collections.Startups = Backbone.Collection.extend({
     model : ST.Models.Startup,
     initialize : function(attributes, options) {
-      this.tags = options.tags;
       this.page = 1;
       this.pages = 1;
     },
     url : function(page) {
-      // TODO: rewrite this eventually to use our collected search tags
-      // for now just return a canned list.
-      // return "https://api.angel.co/1/search?query=jobs&type=Startup&callback=?" 
-      return "http://api.angel.co/1/startups?tag_ids=" + this.tags + 
+
+      var tags = ALT.app.currentTags.pluck("id").join(",");
+
+      return "http://api.angel.co/1/startups?tag_ids=" + tags + 
         "&order=popularity" +
         "&page=" + (page || this.page) +
         "&callback=?"
     },
+    
+    clear : function() {
+
+      // remove all models
+      this.reset([], { silent : true });
+
+      // reset page counts
+      this.page = 1;
+      this.pages = 1;
+      
+    },
+
     parse : function(data) {
+      // Only show visible startups. Hidden ones have no actual
+      // data.
       var visible_data = _.select(data.startups, function(startup) {
         return startup.hidden === false;
       });
@@ -43,6 +56,7 @@
 
       return visible_data;
     },
+
     histogram : function(buckets, attribute) {
       attribute || (attribute = "follower_count");
       
@@ -74,9 +88,13 @@
     },
 
     markets : function() {
+      var tags = ALT.app.currentTags.pluck("id");
+
       return U.frequencyCount(
         _.flatten(
-          this.pluck("markets")
+          _.select(this.pluck("markets"), function(tag) {
+            return tags.indexOf(tag.id) === -1;
+          })
         ), 
       "display_name", "id");
     },
@@ -155,6 +173,9 @@
     }
   });
 
+  /**
+   * A startup info panel, showing full data.
+   */
   ST.Views.Full = Backbone.View.extend({
     template : "#panel-startup-full",
 
@@ -231,6 +252,230 @@
     }
   });
 
+  /** 
+   * A view of the startup list.
+   */
+  ST.Views.List = Backbone.View.extend({
+
+    id : "#startup-list-container",
+    template : "#panel-startup-list",
+    
+    initialize : function(attributes) {
+      
+      this.el = $(this.id);
+      this.template = _.template($(this.template).html());
+
+      // save incoming tags.
+      this.tags = attributes.tags;
+
+      // Create cache for startup list items
+      this._startupListItems = {};
+
+      // base render, just container
+      this.render();
+
+      // if there are any tags, start the list fetching!
+      if (this.tags.length) {
+        
+        // TODO REPLACE THIS WITH A UTIL THING
+        B.Views.Progressify();
+
+        this.collection.fetch({
+          add : true,
+          success : _.bind(function(collection) {
+            
+            if (collection.page === 1) {
+              // We are cloning the model instead of just referencing it
+              // because the full startup panel is tied to this one
+              // model and we are going to reset it with the proper
+              // model on click (so we don't want to overwrite the first
+              // model in the actual startup list collection.)
+              collection.trigger("start");
+              
+              ALT.app.currentStartup = collection.at(0).clone();
+
+              // Render startup info panel
+              // it takes care of its own rendering and startup
+              // extended info fetching.
+              var startupPanel = new B.Views.Panels.StartupInfo({
+                model : ALT.app.currentStartup
+              });
+            }
+
+            // trigger that another page was fetched of the collection
+            collection.trigger("page");
+
+            // When all things are rendered, trigger that we are
+            // done fetching all pages.
+            if (collection.page === collection.pages+1 ||
+                collection.pages === 1) {
+              
+              collection.trigger("done");
+              B.Views.Done();
+            }
+
+          }, this)
+        });
+      }
+
+
+      // ---- BIND EVENTS -----
+
+      // When a new item is added to the collection, append another
+      // list item to it.
+      this.collection.bind("add", this.bindAdd, this);
+
+      // bind on a resorting of the list operation (from select on metadata panel)
+      this.collection.bind("alt.resort", this.bindResort, this);
+            
+      // when the collection resorts, animate the transition.
+      this.collection.bind("reset", this.update, this);
+
+      // When the collection is done loading the last page, finish
+      // whatever rendering we needed to.
+      this.collection.bind("done", this.finish, this);
+    },
+
+    bindAdd : function(model) {
+      
+      // create a new startup item and append it.
+      var startupListItem = new ST.Views.Mini({ model : model });
+      this._startupListItems[model.id] = startupListItem;
+      this.$('ul.startup-list').append(startupListItem.render().el);
+    },
+
+    bindResort : function(by) {
+      
+      // redefine collection comparator.
+      this.collection.comparator = function(model) {
+        if (by === "follower_count" || by === "screenshot_count") {
+          return -model.get(by);    
+        } else {
+          return model.get(by).toLowerCase();
+        }
+      };
+
+      // Resort the collection.
+      this.collection.sort();
+
+    },
+    
+    /**
+     * Startup list item click selection
+     */
+    onClickStartup : function(event) {
+      if (this.clickedStartup) {
+        this.clickedStartup.removeClass("selected");
+      }
+      this.clickedStartup = $(event.currentTarget);  
+      this.clickedStartup.addClass("selected");
+    },
+
+    /**
+     * Cleans up the view and unbinds all events to the collection
+     */
+    cleanup : function() {
+      
+      // reset to clean slate
+      this.render();
+      
+      console.log("unbinding")
+      
+      // unbind all events!
+      this.collection.unbind("reset", this.update);
+      this.collection.unbind("add", this.bindAdd);
+      this.collection.unbind("done", this.finish);
+      this.collection.unbind("alt.resort", this.bindResort);
+    },
+
+    /**
+     * Reanimates the list sort order
+     */
+    update : function(subset) {
+
+      var models = subset || this.collection.models;
+      var pos = 0;
+      console.log("STARTING SORT");
+      this.collection.each(function(startup, i, collection) {
+
+        var listItem = this._startupListItems[startup.id];
+        if (models.indexOf(startup) === -1) {
+        
+          // if startup is not in the subset, hide its element.
+          $(listItem.el).hide();
+        
+        } else {
+          // show the element since we might have hidden it in a previous
+          // situation (like slider movement)
+          $(listItem.el).show();
+
+          // reposition it.
+          var from = listItem.top;
+          var to   = listItem.height * pos;
+          if (collection.length < 100) {
+            $(listItem.el).css({
+              "position": "absolute",
+              "top" : from}).animate({
+                "top": to
+              }, 500, function() {
+                // save the top so that we can animate from it in the future
+                // if it's hidden.
+                listItem.top = to;
+              });
+          } else {
+            $(listItem.el).css({
+              "position": "absolute",
+              "top" : to});
+          }
+          pos++;
+        }
+      }, this);    
+    },
+
+    render: function() {
+      
+      // Render initial list, empty.
+      this.el.html(this.template());
+    },
+
+    finish : function() {
+
+      // added loaded classname
+      this.$('.startup-list-container').addClass("loaded");
+
+      this.assignHeights();
+
+      // remove the more button if we're all out of pages
+      if (this.collection.pages === this.collection.total_pages) {
+        this.$('#load-more-startups').hide();
+      }
+
+      // Bind select change.
+      // we have to wait until all items are loaded.
+      // TODO look into binding to the ul instead!
+      this.delegateEvents({
+        "click li.startup-list-item" : "onClickStartup"
+      });
+
+    },
+
+    assignHeights : function() {
+
+      // find the maxHeight of list element
+      var maxHeight = Math.max.apply(null, 
+        $(".startup-list-item").map(function (){
+          return $(this).height();
+        }).get());
+      
+      // Set the height of all list elements to the max. This
+      // is required for happy sorting.
+      _.each(this._startupListItems, function(view) {
+        view.assignHeight(maxHeight);
+      });
+    }
+
+  });
+
    var methodMap = {
     'create': 'POST',
     'update': 'PUT',
@@ -238,4 +483,4 @@
     'read'  : 'GET'
   };
 
-})(ALT.module("startup"), ALT.module("utils"));
+})(ALT.module("startup"), ALT.module("utils"), ALT.module("base"));

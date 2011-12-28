@@ -75,17 +75,23 @@
     },
 
     addTag : function(tag) {
+      
+      // hide about
+      $('.about').html("<div class=\"c25 fleft\" id=\"loader\">"+
+          "<img src=\"/assets/img/ajax-loader.gif\" /> Loading..."+
+        "</div>");
+
       var tagView = new S.Views.SearchSelectedComponentItem({ 
         model : tag 
       });
-      this.$("#search-" + tag.get("tag_type") + " .search-tags")
+      this.$(".search-tags")
         .append(tagView.render().el);
     },
     
     render : function() {
       
       // Render template
-      this.el.html(this.template());
+      this.el.append(this.template());
       
       // TODO: Append 3 search components
       this._searchComponents.location = new S.Views.SearchComponentView({
@@ -101,16 +107,13 @@
           name : "Market"
         })})
       });
+        
+      this.el.prepend(this._searchComponents.market.render().el);  
+      this.el.prepend(this._searchComponents.location.render().el);
       
-      this.el.append(this._searchComponents.location.render().el);
-      this.el.append(this._searchComponents.market.render().el);
-      
-      // append loader
-      this.el.append("<div class=\"c25 fleft\" id=\"loader\">"+
-          "<img src=\"/assets/img/ajax-loader.gif\" /> Loading..."+
-        "</div>")
       return this;
     }
+
   });
   
   /**

@@ -52,7 +52,11 @@ jQuery(function($) {
     _init : function() {
 
       var S = ALT.module("search"),
-          B = ALT.module("base");
+          B = ALT.module("base"),
+          ST = ALT.module("startup");
+
+      // create a holder for startups
+      ALT.app.startupCollection = new ST.Collections.Startups([], {});
 
       // initialize list of current tags
       ALT.app.currentTags = new Backbone.Collection();  
@@ -62,8 +66,13 @@ jQuery(function($) {
       // UIs update, all calls are made etc.
       ALT.app.currentTags.bind("add", function(model) {
         
+        // reset collection
+        
+        ALT.app.startupCollection.clear();
+        console.log("callbacks", _.keys(ALT.app.startupCollection._callbacks).length);
+
         // update search view
-        ALT.app.mainView.searchView.addTag(model);
+        ALT.app.mainView.leftView.searchView.addTag(model);
 
         // Only perform a search on a tag that is market as such. This is
         // key because if a user comes in via a url with a tag list,
@@ -74,7 +83,8 @@ jQuery(function($) {
         if (model.get("triggerSearch")) {
           
           // redo the search
-          ALT.app.mainView.panelView.render();
+          ALT.app.mainView.rightView.cleanup();
+          ALT.app.mainView.rightView.render();
 
           // update url
           this.navigate("?tags=" + ALT.app.currentTags.pluck("id").join(","), false);
@@ -83,8 +93,14 @@ jQuery(function($) {
       }, this);
 
       ALT.app.currentTags.bind("remove", function(model) {
+            
+        // reset collection              
+        ALT.app.startupCollection.clear();
+        console.log("callbacks", _.keys(ALT.app.startupCollection._callbacks).length);
+
         // redo the search
-        ALT.app.mainView.panelView.render();
+        ALT.app.mainView.rightView.cleanup();
+        ALT.app.mainView.rightView.render();
 
         // update url
         this.navigate("?tags=" + ALT.app.currentTags.pluck("id").join(","), false);

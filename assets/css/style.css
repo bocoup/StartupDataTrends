@@ -266,6 +266,10 @@ a:visited {
   width: 60%;
   display: inline-block;
 }
+.c47 {
+  width: 47%;
+  display : inline-block;
+}
 .c40 {
   width: 40%;
   display : inline-block;
@@ -323,6 +327,7 @@ nav ul li {
   font-size: 1.2em;
   padding-left: 10px;
   color: orange;
+  margin-bottom: 10px;
 }
 #main {
   margin:0px;
@@ -337,71 +342,195 @@ nav ul li {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 110;
 }
 #header h1 {
   font-size: 2.7em;
   font-family: 'Satisfy', cursive;
   margin-top: 15px;
   margin-bottom: 15px;
+  margin-left: 30px;
 }
+#header h1 span.regular {
+  font-family: Helvetica,Arial,Verdana,sans-serif; 
+  color: black; 
+  font-size: 0.9em;
+}
+
 #header h1 a {
-    color: orange;
+  color: orange;
   text-decoration: none;
 }
+
 #panel-container {
   font-size: 0.8em;
   border-top: 1px solid #eee;
   position: absolute;
-  top: 90px; 
+  top: 0px; 
   bottom: 12px; 
   left: 0px; 
   right: 0px;
 }
+
+  #panel-container #left-container {
+    z-index:100;
+    position: fixed;
+    top: 106px;
+    left: 2%;
+    width: 30.666666667%;
+  }
+
+    /* About search */
+    #panel-container .about h3 {
+      margin-bottom: 15px;
+      margin-left: 15px;
+      margin-right: 15px;
+      margin-top: 0px;
+    }
+
+    /* Search container */
+    #panel-container #left-container #search-container {
+      background-color: #EEEFF1;
+      padding-top: 15px;
+    }
+
+    #panel-container #left-container #search-container .single-search-container {
+      float: left;
+      margin-left: 15px;
+      padding-bottom: 10px;
+    }
+    #panel-container #left-container #search-container .single-search-container label {
+      display: inline-block;
+      float: left;
+      width: 50px;
+      text-align: right;
+      padding-right: 10px;
+    }
+
+    #panel-container #left-container #search-container ul.search-tags {
+      margin-bottom: 5px;
+      margin-left:15px;
+    }
+
+    /* Tag list */
+    #panel-container #left-container #tag-container {
+      margin-top: 15px;  
+    }
+
+      #panel-container #left-container #tag-container .taglist {
+        margin-top: 15px;
+      }
+
+      #panel-container #left-container #tag-container .taglist li {
+        line-height: 1;
+      }
+
+      #panel-container #left-container #tag-container .taglist li .count {
+        color : #2F5D92;
+        font-weight: bold;
+        text-align: right;
+        padding-right: 5%;
+      }
+
+      #panel-container #left-container #tag-container .taglist li a {
+        font-weight: normal;
+        text-decoration: none;
+      }
+
+      #panel-container #left-container #tag-container .taglist li a:hover {
+        color: black;
+      }
+
+    
+
+
+  #panel-container #right-container {
+    position: absolute;
+    margin-left: 34.6666666667%;
+    top: 0px;
+    right: 2%;
+    width: 63.3333333333%;
+  }
+
+    /* metadata section */
+    #panel-container #right-container #metadata-container {
+      position: fixed;
+      width: 65.333333333%;
+      background-color: white;
+      z-index: 100;
+    }
+    #panel-container #right-container #metadata-container .inner {
+      margin-top: 15px;
+      padding:15px;
+      position: relative;
+      display: inline-block;
+      width: 93%;
+    }
+    #panel-container #right-container #metadata-container .inner.border {
+      border: 1px solid #eee;
+    }
+    #panel-container #right-container #metadata-container h2 {
+      margin-bottom: 0;
+      margin-top: 5px;
+      color: orange;
+    }
+
+    #panel-container #right-container #metadata-container h3 {
+      margin-bottom: 0;
+      margin-top: 0;
+    }
+    #panel-container #right-container #metadata-container small {
+      color: #aaa;
+    }
+
+    /* Startup info panel */
+    #panel-container #right-container #startup-data-container {
+      top: 95px;
+    }
+
+    #panel-container #right-container #startup-data-container .about {
+      margin-top: 62px;
+    }
+    #panel-container #right-container #startup-data-container .about h2 {
+      color: orange;
+    }
+    #panel-container #right-container #startup-data-container .about h3 {
+      margin-left: 0px;
+    }
+    #panel-container #right-container .tag {
+      display: inline-block;
+      float:left;
+      padding-right: 3px;
+    }
+
+    #panel-container #right-container .tag a {
+      color: #bbb;
+    }
+
+
+
 /* initial height for search container */
-#panel-container #search-container {
-  position: fixed;
-  z-index:100;
+/*#panel-container #search-container {
+  
   background-color: white;
-  padding-top: 10px;
   padding-left: 10px;
   margin-right: -10px;
   border-bottom: 1px solid #eee;
   padding-bottom: 10px;
-}
+  
+  padding-top: 10px;
+}*/
+
 #panel-container #column-container {
   position: absolute;
-  top: 0;
+  top: 90px;
   bottom: 0;
   left: 0;
   right: 0;
 }
 
-#panel-container .about {
-  
-}
 
-#panel-container .about h2 {
-  color: orange;
-}
-#metadata-container {
-  right: 30%;
-  left: 10px;
-}
-#metadata-container .metadata-section {
-  margin-bottom: 15px;
-}
-#metadata-container h1 {
-  margin-bottom: 0;
-  color: orange;
-}
-#metadata-container h2 {
-  margin-bottom: 0;
-  margin-top: 0;
-}
-#metadata-container small {
-  color: #aaa;
-}
+
 #metadata-container .data-points {
   margin-top: 17px;
 }
@@ -422,8 +551,10 @@ nav ul li {
   color: black;
 }
 #startup-list-container {
-  margin-left: 34.666666667%;
+  top: 140px;
+  display: none;
 }
+
 #startup-list-container .startup-list-header {
   height: 83px;
 }
@@ -458,9 +589,9 @@ nav ul li {
   margin-bottom: 15px; 
   height: 30px;
 }
-#startup-list-container .slider-sparkline {
+.slider-sparkline {
   margin-bottom: 5px;
-  margin-top: 5px;
+  margin-top: 15px;
 }
 #startup-list-container #range #slider-range-right {
   text-align: right;
@@ -534,18 +665,10 @@ nav ul li {
 #startup-info-container  {
   right: 10px;
   position: fixed;
-  top: 200px;
+  top: 240px;
 }
 
-#panel-container #startup-info-container .tag {
-  display: inline-block;
-  float:left;
-  padding-right: 3px;
-}
 
-#panel-container #startup-info-container .tag a {
-  color: #bbb;
-}
 #panel-container .banner img.logo {
   max-width: 100px;
   border: 1px solid #F2F3F4; 
@@ -556,6 +679,10 @@ nav ul li {
   border: 1px solid #F2F3F4; 
 }
 
+#panel-container #startup-info-container a.screenshot {
+  display: inline-block;
+  float: left;
+}
 #panel-container #startup-info-container a.screenshot img {
   max-width: 100%;
 }
@@ -592,6 +719,9 @@ li.selected-search-item {
   font-weight: bold;
   background-color: #E0EDF5; 
   margin-top: 2%;
+  border: 1px solid white;
+  display: inline-block;
+  padding-right: 15px;
 }
 
 li.selected-search-item a {
@@ -608,11 +738,6 @@ li.selected-search-item a:hover {
   background-color: #2F5D92;
   color: white;
   text-decoration: none;
-}
-
-.single-search-container {
-  float: left;
-  padding-left: 10px;
 }
 
 .ui-widget-header {
