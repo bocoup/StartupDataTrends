@@ -214,8 +214,24 @@ function gzip( src ) {
 // Jake Tasks
 
 desc( "Hint & Minify" );
-task( "default", [ "hint", "min" ], function() {
+task( "default", [ "hint", "min", "buildindex" ], function() {
   // Nothing
+});
+
+desc( "Builds Index.html.");
+task( "buildindex", function() {
+  var env = process.env.ENV || "dev";
+  header( "Building index.html for " + env);
+  
+  var headerfile = "build/" + env + "/header.html",
+      bodyfile   = "build/body.html",
+      footerfile = "build/" + env + "/footer.html";
+
+  var indexcontents = readFile(headerfile) + "\n" +
+    readFile(bodyfile) + "\n" +
+    readFile(footerfile);
+  
+  writeFile("index.html", indexcontents, false);
 });
 
 desc( "Validate with JSHint." );

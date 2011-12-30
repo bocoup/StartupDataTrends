@@ -71,7 +71,6 @@ jQuery(function($) {
         // reset collection
         
         ALT.app.startupCollection.clear();
-        console.log("callbacks", _.keys(ALT.app.startupCollection._callbacks).length);
 
         // update search view
         ALT.app.mainView.leftView.searchView.addTag(model);
