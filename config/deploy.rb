@@ -1,11 +1,12 @@
 set :application, "angellist-viz"
-set :deploy_to, "/home/iros/webapps/angellisttrends"
+set :deploy_to, "/apps/angellisttrends"
 set :deploy_via, :copy
+set :user, 'www-data'
 
 set :scm, :git
 set :repository,  "git@github.com:bocoup/angellist-viz.git"
 
-set :location, "angellisttrends.ireneros.com"
+set :location, "66.228.44.217"
 set :use_sudo, false
 
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`

@@ -21,17 +21,27 @@
   <div role="main" id="main">
 
     <div id="header" class="c100">
-      <h1 class="c70">
-        <a href="/">
-          <span class="regular">AngelList</span>Trends
-        </a>
-      </h1>
-      <nav class="c20">
-        <ul>
-          <li><a href="http://angellist.com">AngelList</a></li>
-          <li><a href="/">About</a></li>
-        </ul>
-      </nav>
+      <div class="c100">
+        <h1 class="c70 fleft">
+          <a href="/">
+            <span class="regular">StartupData</span>Trends
+            <br />
+            <div class="subheader">
+              (alpha) A fast way to browse startups on AngelList.
+            </div>
+          </a>
+          <br/>
+          
+        </h1>
+        <nav class="c20">
+          <ul>
+            <li><a href="http://angellist.com">AngelList</a></li>
+            <li><a href="/">About</a></li>
+          </ul>
+        </nav>
+     
+      </div>
+      
     </div>
 
     <!-- Contains the three side-by-side panels -->
@@ -206,34 +216,38 @@
        }}
   -->
   <script type="text/template" id="metadata-valuation">
-    <div class="fleft">
-      <div class="c50 fleft metadata-section">
-        <h3> Average Amount Raised: </h3>
-      </div>
-
-      <div class="c50 fleft metadata-section">
-        <h3> Average Valuation: </h3>
-      </div>
-    </div>
-
-    <div class="c50 fleft metadata-section">
-        <div>
-          <h2><%= stats.raising.amount %></h2>
-        </div>
-        <small>
-          <i>Based on <b><%= stats.raising.data_points || 0 %></b> data points.</i>
-        </small>
-      </div>
-
-      <div class="c50 fleft metadata-section">
-        <div>
-          <h2><%= stats.pre_money.amount %></h2>
-        </div>
-        <small>
-          <i>Based on <b><%= stats.pre_money.data_points || 0 %></b> data points.</i>
-        </small>
-      </div>
-    </div>
+    
+    <table>
+      <tbody>
+        <tr>
+          <td class="metadata-section">
+            <h3> Average Amount Raised: </h3>
+          </td>
+          <td class="metadata-section">
+            <h3> Average Valuation: </h3>
+          </td>
+        </tr>
+        <tr>
+          <td class="metadata-section">
+            <div>
+              <h2><%= stats.raising.amount %></h2>
+            </div>
+            <small>
+              <i>Based on <b><%= stats.raising.data_points || 0 %></b> data points.</i>
+            </small>
+          </td>
+          <td class="metadata-section">
+            <div>
+              <h2><%= stats.pre_money.amount %></h2>
+            </div>
+            <small>
+              <i>Based on <b><%= stats.pre_money.data_points || 0 %></b> data points.</i>
+            </small>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
   </script>
 
   <!-- Panels :: Startup List Container -->

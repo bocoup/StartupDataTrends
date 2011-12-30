@@ -114,6 +114,9 @@
       // remove the about info if it's there
       $('#startup-data-container .about').remove();
       $('#startup-list-container').show();
+      $('#startup-info-container').css({
+        top : $('#metadata-container').height() + 150
+      });
 
       // Create a new startup list collection view
       // which will also create the startupInfoView
