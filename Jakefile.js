@@ -288,16 +288,16 @@ task( "min", function() {
           var body = readFile( path );
 
           // append it to complete content
-          complete_content += body + "\n";
+          complete_content += body + "\n;";
 
           // is it already minified just concat it
           if (file.preminified.indexOf( path ) > -1) {
-            minified_content += body + "\n";  
+            minified_content += body + "\n;";  
           
           } else {
           
             // minify it first
-            minified_content += uglify( body ) + "\n";
+            minified_content += uglify( body ) + "\n;";
           }
         });
 
