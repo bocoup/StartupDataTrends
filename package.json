@@ -27,7 +27,6 @@
     "colors": "*",
     "zlib": "*",
     "dateformat": "*",
-    "jsonlint": "*",
     "stats":"*"
   }
 }
