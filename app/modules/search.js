@@ -77,10 +77,8 @@
     addTag : function(tag) {
       
       // hide about
-      $('.about').html("<div class=\"c25 fleft\" id=\"loader\">"+
-          "<img src=\"/assets/img/ajax-loader.gif\" /> Loading..."+
-        "</div>");
-      
+      $('.about .info').hide();
+      $('.about .loader').slideDown();
 
       var tagView = new S.Views.SearchSelectedComponentItem({ 
         model : tag 

@@ -401,6 +401,12 @@ nav ul li {
       margin-top: 0px;
     }
 
+    #panel-container #left-container .about .loader {
+      display : none;
+      padding-left: 15px;
+      padding-bottom: 10px;
+    }
+
     /* Search container */
     #panel-container #left-container #search-container {
       background-color: #EEEFF1;

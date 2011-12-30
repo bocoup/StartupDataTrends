@@ -13,11 +13,11 @@
     var loadingViews = 0;
     B.Views.Progressify = function() {
       loadingViews += 1;
-      $('#loader').show();
+      $('.about .loader').slideDown();
     };
     B.Views.Done = function() {
       if (loadingViews === 1) {
-        $('#loader').hide();
+        $('.about .loader').slideUp();
       }
       loadingViews -= 1;
     };
@@ -269,6 +269,13 @@
       // When a new sort is selected, tell the list to
       // handle it
       this.collection.trigger("alt.resort", event.target.value);
+
+      // hide the range selectors if it's not followers
+      if (event.target.value !== "follower_count") {
+        $('#range').slideUp();
+      } else {
+        $('#range').slideDown("slow");
+      }
     },
 
     onLoadMore : function(event) {
