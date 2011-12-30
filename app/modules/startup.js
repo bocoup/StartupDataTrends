@@ -225,10 +225,10 @@
    * A startup info panel, showing full data.
    */
   ST.Views.Full = Backbone.View.extend({
-    template : "#panel-startup-full",
+    template : "panel-startup-full",
 
     initialize: function(attributes, options) {
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
       this.el = $(this.el);
 
       this.model.bind("change", this.render, this);
@@ -254,7 +254,7 @@
    * A single startup in the list of startups
    */
   ST.Views.Mini = Backbone.View.extend({
-    template : "#panel-startup-list-item",
+    template : "panel-startup-list-item",
     className : "startup-list-item",
     tagName : "li",
     events : {
@@ -262,7 +262,7 @@
     },
 
     initialize : function(attributes, options) {
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
     },
 
     render : function() {
@@ -307,12 +307,12 @@
   ST.Views.List = Backbone.View.extend({
 
     id : "#startup-list-container",
-    template : "#panel-startup-list",
+    template : "panel-startup-list",
     
     initialize : function(attributes) {
       
       this.el = $(this.id);
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
 
       // save incoming tags.
       this.tags = attributes.tags;

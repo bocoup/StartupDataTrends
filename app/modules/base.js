@@ -183,7 +183,7 @@
    * View for range slider and select dropdown
    */
   B.Views.Panels.MetadataSearch = Backbone.View.extend({
-    template : '#metadata-search',
+    template : 'metadata-search',
     id : "#metadata-startup-container",
     
     initialize : function(attributes, options) {
@@ -194,7 +194,7 @@
       this.el = $(this.id);
 
       // compile template
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
     
       // render container shell
       this.render();
@@ -368,7 +368,7 @@
   });
 
   B.Views.Panels.MetadataValuation = Backbone.View.extend({
-    template : '#metadata-valuation',
+    template : 'metadata-valuation',
     id : "#metadata-valuation-container",
     
     initialize : function() {
@@ -377,7 +377,7 @@
       this.el = $(this.id);
 
       // compile template
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
 
       // --- get metadata from server
       // get current tags

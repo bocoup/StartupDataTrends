@@ -66,11 +66,11 @@
    */                                                                                                                                                                                                                                                                                    
   S.Views.SearchView = Backbone.View.extend({
     id : '#search-container',
-    template : '#search-container-tmpl',
+    template : 'search-container-tmpl',
         
     initialize: function(attributes) {
       this.el = $(this.id);
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
       this._searchComponents = {
         location : null,
         market : null,
@@ -124,12 +124,12 @@
    * autocomplete dropdown
    */
   S.Views.SearchSelectedComponentItem = Backbone.View.extend({
-    template : "#single-search-item-tmpl",
+    template : "single-search-item-tmpl",
     events : {
       "click .close" : "onClose"
     },
     initialize: function(attributes, options) {
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
     },
 
     render : function() {
@@ -157,14 +157,14 @@
    */
   S.Views.SearchComponentView = Backbone.View.extend({
     className : "c25 single-search-container",
-    template  : "#single-search-container-tmpl",
+    template  : "single-search-container-tmpl",
 
     initialize: function(attributes, options) {
       
       // save Search information attributes
       this.search = this.collection.search;
       
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
 
       $(this.el).attr({ "id" : "search-" + this.search.get("type") });
     },

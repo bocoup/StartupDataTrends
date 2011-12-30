@@ -22,6 +22,9 @@ var ALT = {
 jQuery(function($) {
   var app = ALT.app;
 
+  var U = ALT.module("utils");
+  U.precompileTemplates();
+
   // Only need this for pushState enabled browsers
   if (Backbone.history && Backbone.history._hasPushState) {
 

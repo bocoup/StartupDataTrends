@@ -4,6 +4,15 @@
  */
 (function(U) {
   
+  U.precompileTemplates = function() {
+    ALT.app.templates = {};
+
+    // cache all compiled templates
+    $('script[type=text\\/template]').each(function(index, elm) {
+      elm = $(elm);
+      ALT.app.templates[elm.attr('id')] = _.template(elm.html());
+    });
+  };
   /** 
    * Formats a number into an actual dollar amount.
    * @param val The value to convert.
@@ -87,10 +96,10 @@
   };
 
   U.TagList = Backbone.View.extend({
-    template : '#tag-count-list',
+    template : 'tag-count-list',
 
     initialize : function(attributes, options) {
-      this.template = _.template($(this.template).html());
+      this.template = ALT.app.templates[this.template];
 
       this.tags = options.tags;
 
@@ -100,7 +109,7 @@
         maxCount : this.tags[0][2],
         minCount : this.tags[this.tags.length-1][2]
       };
-      this.tag_template = _.template($("#single-tag-count").html());
+      this.tag_template = ALT.app.templates["single-tag-count"];
     },
 
     render : function() {
