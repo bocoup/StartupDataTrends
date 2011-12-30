@@ -588,6 +588,7 @@ nav ul li {
 
 #startup-list-container .startup-list {
   top: 0;
+  padding-bottom: 32px; /* footer space */
 }
 #startup-list-container .startup-list li {
   width: 100%;

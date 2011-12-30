@@ -80,6 +80,7 @@
       $('.about').html("<div class=\"c25 fleft\" id=\"loader\">"+
           "<img src=\"/assets/img/ajax-loader.gif\" /> Loading..."+
         "</div>");
+      
 
       var tagView = new S.Views.SearchSelectedComponentItem({ 
         model : tag 
