@@ -1,14 +1,14 @@
 {
-  "author": "Tim Branyen <tim@tabdeveloper.com> (http://tbranyen.com)",
-  "name": "backbone-boilerplate",
-  "description": "backbone/node.js pushState enabled server",
+  "author": "Irene Ros <irene@bocoup.com> (http://bocoup.com)",
+  "name": "StartupDataTrends",
+  "description": "Startup Data Trends Visualization",
   "version": "0.0.0",
-  "homepage": "https://github.com/tbranyen/backbone-boilerplate",
+  "homepage": "https://github.com/bocoup/angellist-viz",
   "repository": {
     "type": "git",
-    "url": "git://github.com/tbranyen/backbone-boilerplate.git"
+    "url": "git://github.com/bocoup/angellist-viz.git"
   },
-  "main": "index.js",
+  "main": "application.js",
   "engines": {
     "node": "~0.6.3"
   },
@@ -17,5 +17,17 @@
     "express": "2.5.1",
     "request":"*"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jake": "*",
+    "underscore": "*",
+    "jshint": "*",
+    "uglify-js": "*",
+    "express": "*",
+    "vows": "*",
+    "colors": "*",
+    "zlib": "*",
+    "dateformat": "*",
+    "jsonlint": "*",
+    "stats":"*"
+  }
 }

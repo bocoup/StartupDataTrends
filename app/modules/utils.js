@@ -1,3 +1,7 @@
+/**
+ * Startup Data Trends
+ * Author Irene Ros (Bocoup)
+ */
 (function(U) {
   
   /** 
@@ -5,11 +9,11 @@
    * @param val The value to convert.
    */
   U.formatDollarAmount = function(val) {
-    var val = "" + val,
-        delimiter = ",",
+    val = "" + val;
+    var delimiter = ",",
         amountStr = val.split(".", 2),      // remove decimals
         decimals  = amountStr[1] || 0,         // save decimal point
-        amount    = parseInt(amountStr[0]); // parse amount to int
+        amount    = parseInt(amountStr[0], 10); // parse amount to int
         
     if (isNaN(amount)) {
     
@@ -44,7 +48,7 @@
 
     _.each(arr, function(obj) {
       var key = obj[prop];
-      freq[key] || (freq[key] = [key, 0]);
+      freq[key] = (freq[key] || [key, 0]);
       freq[key][freq[key].length-1]++;
       
       if (typeof id !== "undefined" && freq[key].length < 3) {
@@ -65,13 +69,19 @@
     var r = { 
       mean: 0, 
       variance: 0, 
-      deviation: 0}, 
-      t = a.length;
+      deviation: 0
+    }, t = a.length;
     
     // sum up items.
-    for (var m, s = 0, l = t; l--; s += a[l]);
+    for (var m, s = 0, l = t; l--;){
+      s += a[l];
+    }
+    
+    m = r.mean = s / t;
+    for (l = t, s = 0; l--;){
+      s += Math.pow(a[l] - m, 2);
+    }
 
-    for (m = r.mean = s / t, l = t, s = 0; l--; s += Math.pow(a[l] - m, 2));
     r.deviation = Math.sqrt(r.variance = s / t);
     return r;
   };

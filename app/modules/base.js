@@ -1,3 +1,7 @@
+/**
+ * Startup Data Trends
+ * Author Irene Ros (Bocoup)
+ */
 (function(B) {
 
   // required modules - startup, search.
@@ -59,7 +63,6 @@
 
       // when the collection of startups is done loading,
       // render the tag cloud
-      console.log("binding tags")
       ALT.app.startupCollection.bind("done", this.addTags, this);
 
     },

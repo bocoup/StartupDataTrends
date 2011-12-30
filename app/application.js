@@ -1,6 +1,10 @@
+/**
+ * Startup Data Trends
+ * Author Irene Ros (Bocoup)
+ */
 // Namespace: ALT - AngelListTrends.
-this.ALT = {
-  module: function() {
+var ALT = {
+  module: (function() {
     var modules = {};
 
     return function(name) {
@@ -10,13 +14,11 @@ this.ALT = {
 
       return modules[name] = { Views: {} };
     };
-  }(),
+  })(),
 
   app: _.extend({}, Backbone.Events)
 };
 
-
-var session;
 jQuery(function($) {
   var app = ALT.app;
 

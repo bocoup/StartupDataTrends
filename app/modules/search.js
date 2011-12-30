@@ -1,7 +1,11 @@
+/**
+ * Startup Data Trends
+ * Author Irene Ros (Bocoup)
+ */
 (function(S, U) {
   
-  S.Models || (S.Models = {});
-  S.Collections || (S.Collections = {});
+  S.Models = (S.Models || {});
+  S.Collections = (S.Collections || {});
 
   // Responsible for holding a single search.
   S.Models.Search = Backbone.Model.extend({});
@@ -52,7 +56,7 @@
           id : model.id, 
           label : model.get("name"),
           value : model.get("value") 
-        }
+        };
       });
     }
   });
@@ -71,7 +75,7 @@
         location : null,
         market : null,
         person : null
-      }
+      };
     },
 
     addTag : function(tag) {

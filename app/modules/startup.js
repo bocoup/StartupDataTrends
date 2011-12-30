@@ -1,7 +1,19 @@
+/**
+ * Startup Data Trends
+ * Author Irene Ros (Bocoup)
+ */
 (function(ST, U, B) {
 
-  ST.Models || (ST.Models = {});
-  ST.Collections || (ST.Collections = {});
+  ST.Models = (ST.Models || {});
+  ST.Collections = (ST.Collections || {});
+
+  // Stealing from Backbone... because sync needs it and I'm overwriting it.
+  var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'delete': 'DELETE',
+    'read'  : 'GET'
+  };
 
   /**
    * A single representation of a startup.
@@ -28,7 +40,7 @@
       return "http://api.angel.co/1/startups?tag_ids=" + tags + 
         "&order=popularity" +
         "&page=" + (page || this.page) +
-        "&callback=?"
+        "&callback=?";
     },
     
     clear : function() {
@@ -58,7 +70,7 @@
     },
 
     histogram : function(buckets, attribute) {
-      attribute || (attribute = "follower_count");
+      attribute = (attribute || "follower_count");
       
 
       // get all numeric values
@@ -73,12 +85,12 @@
       var bins = [], bin = 0, range = [min, min + step], val;
       for (var i = 0; i < vals.length; i++) {
         bin = Math.floor(vals[i]/step);
-        bins[bin] || (bins[bin] = 0);
+        bins[bin] = (bins[bin] || 0);
         bins[bin]++;
       }
 
       // swap undefined with 0s
-      for (var i = 0; i < bins.length; i++) {
+      for (i = 0; i < bins.length; i++) {
         if (typeof bins[i] === "undefined") {
           bins[i] = 0;
         }
@@ -129,7 +141,9 @@
       // And an `X-HTTP-Method-Override` header.
       if (Backbone.emulateHTTP) {
         if (type === 'PUT' || type === 'DELETE') {
-          if (Backbone.emulateJSON) params.data._method = type;
+          if (Backbone.emulateJSON) {
+            params.data._method = type;
+          }
           params.type = 'POST';
           params.beforeSend = function(xhr) {
             xhr.setRequestHeader('X-HTTP-Method-Override', type);
@@ -162,11 +176,11 @@
           page_params.url = model.url(i);
           page_params.success = function(data) {
             model.page += 1;
-            options.success(data)
-          }
+            options.success(data);
+          };
           $.ajax(page_params);
         } 
-      }
+      };
 
       params.success = success;
       $.ajax(params);
@@ -417,8 +431,6 @@
       // reset to clean slate
       this.render();
       
-      console.log("unbinding")
-      
       // unbind all events!
       this.collection.unbind("reset", this.update);
       this.collection.unbind("add", this.bindAdd);
@@ -433,7 +445,6 @@
 
       var models = subset || this.collection.models;
       var pos = 0;
-      console.log("STARTING SORT");
       this.collection.each(function(startup, i, collection) {
 
         var listItem = this._startupListItems[startup.id];
@@ -498,7 +509,7 @@
               "title" : "Decay Score: " + trend.decayScore().toPrecision(2)
             });
 
-          }, this)
+          }, this);
         }, this)
       });
 
@@ -554,12 +565,5 @@
     }
 
   });
-
-   var methodMap = {
-    'create': 'POST',
-    'update': 'PUT',
-    'delete': 'DELETE',
-    'read'  : 'GET'
-  };
 
 })(ALT.module("startup"), ALT.module("utils"), ALT.module("base"));
