@@ -15,7 +15,8 @@ role :app, location
 role :db,  location, :primary => true
 
 set :build_script, "cd #{copy_cache} && npm install && mkdir dist && ENV=prod jake"
-set :copy_exclude, [".rvmrc", "**/.git", ".git"]
+set :copy_exclude, [".rvmrc", "**/.git", ".git", "app", "build", "config", "Jakefile.js", "build.json", "node_modules", "Capfile", "package.json", "dev.js", "test"]
+
 
 # before "deploy:precompile_assets", "deploy:build_assets"
 
