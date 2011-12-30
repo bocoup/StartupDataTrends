@@ -186,6 +186,7 @@
             <option value="follower_count">Followers</option>
             <option value="name">Ascending</option>
             <option value="screenshot_count">Screenshot Count</option>
+            <option value="followers_over_time">Followers Over Time (Decayed)</option>
           </select>
         </div>
 
@@ -198,6 +199,13 @@
             <div class="c75 fleft" id="slider-range"></div>
             <div class="c10 fright" id="slider-range-right"></div>
           </div>
+        </div>
+
+        <div id="about-decay-over-time" style="display:none">
+          This is an experimental ranking function. It ranks the startups
+          based on how many followers they get over time. The more recent
+          the followers are, the more they contribute to the overall
+          score of a startup. We made this up, so use at your own risk.
         </div>
         <div class="c100 details" style="display:none">
           <small>Showing <span id="startup-list-counts">0</span> visible startups out of 
@@ -269,14 +277,18 @@
         <div class="info">
           <h2><%= startup.name %></h2>
           
-          <div class="counts">
-            <h2><%= startup.follower_count %></h2>
+          <div class="counts follower_count">
+            <h2>
+              <%= startup.follower_count %>
+              <div class="follower_count_trend"></div>
+            </h2>
+            <div class="decay_score"></div>
             <i>   
               <small class="small">Followers</small>
             </i>
           </div>
 
-          <div class="counts">
+          <div class="counts screenshot_count" style="display:none">
             <h2><%= startup.screenshot_count %></h2>
             <i>   
               <small class="small">Screenshots</small>

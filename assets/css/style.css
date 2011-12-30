@@ -660,6 +660,17 @@ nav ul li {
   display:inline-block;
 }
 
+.follower_count_trend {
+  display: inline-block;
+  margin-left: 10px;
+}
+#about-decay-over-time {
+  line-height: 1;
+  margin-top: 5px;
+  width: 100%;
+  font-size: 0.8em;
+}
+
 #panel-container  .infowrapper .info {
   margin-left: 120px; 
 }

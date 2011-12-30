@@ -61,6 +61,21 @@
     return ((value / (max - min)) * (end - start)) + start;
   };
 
+  U.Stats = function(a) {
+    var r = { 
+      mean: 0, 
+      variance: 0, 
+      deviation: 0}, 
+      t = a.length;
+    
+    // sum up items.
+    for (var m, s = 0, l = t; l--; s += a[l]);
+
+    for (m = r.mean = s / t, l = t, s = 0; l--; s += Math.pow(a[l] - m, 2));
+    r.deviation = Math.sqrt(r.variance = s / t);
+    return r;
+  };
+
   U.TagList = Backbone.View.extend({
     template : '#tag-count-list',
 

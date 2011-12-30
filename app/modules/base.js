@@ -270,12 +270,23 @@
       // handle it
       this.collection.trigger("alt.resort", event.target.value);
 
+      // hide the appropriate counts in the startup list
+      ALT.app.mainView.rightView.startupListView.hideCounts(event.target.value);
+      
       // hide the range selectors if it's not followers
       if (event.target.value !== "follower_count") {
         $('#range').slideUp();
       } else {
         $('#range').slideDown("slow");
       }
+
+      // show the about follower trends message
+      if (event.target.value === "followers_over_time") {
+        $('#about-decay-over-time').slideDown();
+      } else {
+        $('#about-decay-over-time').slideUp();
+      }
+
     },
 
     onLoadMore : function(event) {

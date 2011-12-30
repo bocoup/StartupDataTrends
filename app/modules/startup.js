@@ -173,6 +173,40 @@
     }
   });
 
+  ST.Trend = Backbone.Model.extend({
+    
+    decayScore : function() {
+      var sum = 0,
+          arr = this.get("timeseries"),
+          mean = U.Stats(arr).mean;
+      for (var i = 0; i < arr.length; i++) {
+        sum += (arr[i] - (U.Stats(arr.slice(0,i)).mean || 0)) * Math.pow(1, -i/mean);
+      }
+      return sum || 0;
+    }
+  });
+  
+  ST.Trends = Backbone.Collection.extend({
+    model : ST.Trend,
+    initialize : function(attributes, options) {
+      this.ids = options.ids;
+    },
+    url : function() {
+      return "http://api.angel.co/1/follows/trends?startup_ids=" + this.ids.join(",") + "&callback=?";
+    },
+    parse : function(data) {
+      this.dates = data.dates;
+      var trends = [];
+      _.each(data.trends, function(value, key) {
+        trends.push({
+          id : key,
+          timeseries : value
+        });
+      });
+      return trends;
+    }
+  });
+
   /**
    * A startup info panel, showing full data.
    */
@@ -335,6 +369,7 @@
       // When the collection is done loading the last page, finish
       // whatever rendering we needed to.
       this.collection.bind("done", this.finish, this);
+
     },
 
     bindAdd : function(model) {
@@ -348,13 +383,15 @@
     bindResort : function(by) {
       
       // redefine collection comparator.
-      this.collection.comparator = function(model) {
+      this.collection.comparator = _.bind(function(model) {
         if (by === "follower_count" || by === "screenshot_count") {
-          return -model.get(by);    
+          return -model.get(by);
+        } else if (by === "followers_over_time") {
+          return -this.trends.get(model.id).decayScore();   
         } else {
           return model.get(by).toLowerCase();
         }
-      };
+      }, this);
 
       // Resort the collection.
       this.collection.sort();
@@ -439,12 +476,43 @@
       this.el.html(this.template());
     },
 
+    getTrends : function() {
+      var ids = this.collection.pluck("id");
+      this.trends = new ST.Trends([], { ids : ids });
+      this.trends.fetch({
+        success : _.bind(function(collection) {
+          collection.each(function(trend) {
+            
+            // find the list view item for it
+            var startupListViewItem = this._startupListItems[trend.id];
+
+            startupListViewItem.$('.follower_count_trend').sparkline(
+              trend.get("timeseries"),
+              {
+                lineColor: "#222",
+                fillColor: false
+              }
+            );
+
+            startupListViewItem.$('.follower_count_trend').attr({
+              "title" : "Decay Score: " + trend.decayScore().toPrecision(2)
+            });
+
+          }, this)
+        }, this)
+      });
+
+    },
+
     finish : function() {
 
       // added loaded classname
       this.$('.startup-list-container').addClass("loaded");
 
       this.assignHeights();
+
+      //  get time series data
+      this.getTrends();
 
       // remove the more button if we're all out of pages
       if (this.collection.pages === this.collection.total_pages) {
@@ -473,6 +541,16 @@
       _.each(this._startupListItems, function(view) {
         view.assignHeight(maxHeight);
       });
+    },
+
+    hideCounts : function(type) {
+      this.$('.counts').hide();
+      
+      if (type === "followers_over_time") {
+        type = "follower_count";
+      }
+
+      this.$('.counts.' + type).show();
     }
 
   });
