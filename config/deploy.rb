@@ -2,6 +2,7 @@ set :application, "angellist-viz"
 set :deploy_to, "/apps/angellisttrends"
 set :deploy_via, :copy
 set :user, 'www-data'
+set :copy_cache, '/tmp/caches/angellist-viz'
 
 set :scm, :git
 set :repository,  "git@github.com:bocoup/angellist-viz.git"
@@ -13,7 +14,10 @@ role :web, location
 role :app, location                          
 role :db,  location, :primary => true
 
+set :build_script, "cd #{copy_cache} && npm install && mkdir dist && ENV=prod jake"
 set :copy_exclude, [".rvmrc", "**/.git", ".git"]
+
+# before "deploy:precompile_assets", "deploy:build_assets"
 
 # Override default tasks which are not relevant to a non-rails app.
 namespace :deploy do
@@ -33,3 +37,4 @@ namespace :deploy do
     puts "    not doing restart because not a Rails application."
   end
 end
+
