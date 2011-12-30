@@ -93,7 +93,12 @@ jQuery(function($) {
       }, this);
 
       ALT.app.currentTags.bind("remove", function(model) {
-            
+        
+        // if this was the last tag, reset url to root.
+        if (ALT.app.currentTags.length === 0) {
+          window.location = "/";
+        }
+
         // reset collection              
         ALT.app.startupCollection.clear();
         console.log("callbacks", _.keys(ALT.app.startupCollection._callbacks).length);
