@@ -6,14 +6,12 @@ set :user, 'www-data'
 set :scm, :git
 set :repository,  "git@github.com:bocoup/angellist-viz.git"
 
-set :location, "66.228.44.217"
+set :location, "startupdatatrends.com"
 set :use_sudo, false
 
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
-
-role :web, location                          # Your HTTP server, Apache/etc
-role :app, location                          # This may be the same as your `Web` server
-role :db,  location, :primary => true # This is where Rails migrations will run
+role :web, location                          
+role :app, location                          
+role :db,  location, :primary => true
 
 set :copy_exclude, [".rvmrc", "**/.git", ".git"]
 
