@@ -30,8 +30,6 @@
               (alpha) A fast way to browse startups on AngelList.
             </div>
           </a>
-          <br/>
-          
         </h1>
         <nav class="c20">
           <ul>
@@ -333,12 +331,18 @@
       </div>
       <div id="tabs-2">
         <% if (startup.screenshots.length) { %>
-          <% _.each(startup.screenshots, function(screenshot) { %>
-          <a class="screenshot" href="<%= screenshot.original%>">
-            <img src="<%= screenshot.original %>" />
-          </a>
-          <hr>
-        <% }); %>  
+          <strong> Showing <%= startup.screenshots.length %> screenshots: </strong>
+          <br />
+          <small><i>Click an image to see a larger version</i></small>
+          
+          <div id="screenshot-list">
+            <% _.each(startup.screenshots, function(screenshot) { %>
+            <a class="screenshot" href="<%= screenshot.original %>">
+              <img src="<%= screenshot.original %>" />
+            </a>
+            <br>
+            <% }); %>  
+          </div>
         <% } else { %>
           <h3> This startup has posted no screenshots </h3>
         <% } %>
@@ -354,6 +358,9 @@
   <script type="text/javascript" src="/assets/js/jquery-sparklines.min.js"></script>
 
   <script type="text/javascript" src="/assets/js/jquery.colorbox-min.js"></script>
+
+  <script type="text/javascript" src="/assets/js/jquery.rf.slideshow.min.js"></script>
+
   <script src="/assets/js/libs/underscore.js"></script>
   <script src="/assets/js/libs/backbone.js"></script>
 

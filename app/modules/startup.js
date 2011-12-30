@@ -185,12 +185,13 @@
 
       this.model.bind("change", this.render, this);
     },
-    
+
     render : function() {
       this.el.html(this.template({ startup : this.model.toJSON() }));
+
       // make tabs
       this.$("#tabs").tabs();
-      
+
       // render screenshots
       this.$('a.screenshot').colorbox({ 
         'rel' : 'screenshots',

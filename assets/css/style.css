@@ -681,6 +681,9 @@ nav ul li {
   top: 240px;
 }
 
+#startup-info-container > div {
+  height: 100%;
+}
 
 #panel-container .banner img.logo {
   max-width: 100px;
@@ -695,9 +698,13 @@ nav ul li {
 #panel-container #startup-info-container a.screenshot {
 /*  display: inline-block;
   float: left;*/
+  text-decoration:none;
 }
 #panel-container #startup-info-container a.screenshot img {
-  max-width: 100%;
+  max-width: 90%;
+  margin-left: 5%;
+  margin-right: 2%;
+  margin-top: 15px;
 }
 
 .ui-widget {
@@ -761,6 +768,16 @@ li.selected-search-item a:hover {
 
 #tabs.ui-widget-content {
   border: none;
+  height: 100%;
+}
+
+#screenshot-list {
+  height: 83%;
+  position: absolute;
+  overflow-y: auto;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  border-left: 1px solid #eee;
 }
 
 #footer {
