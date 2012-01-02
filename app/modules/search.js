@@ -190,6 +190,12 @@
           });
         }, this),
         minLength: 2,
+        search : _.bind(function(event, ui) {
+          this.$('.search-loader').show();
+        }, this),
+        open : _.bind(function(event, ui) {
+          this.$('.search-loader').hide();
+        }, this),
         select : _.bind(function(event, ui) {
             // TODO: append item to list
             // TODO: clear search
