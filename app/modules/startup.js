@@ -129,8 +129,8 @@
               options.done(model);
             }
 
-          }
-          $.ajax(page_params)
+          };
+          $.ajax(page_params);
         }
       };
 
@@ -160,7 +160,7 @@
             }
 
             fetch_pages(model.page, model.pages);
-          }
+          };
         }(fetch_pages);
 
         params.success = success;
