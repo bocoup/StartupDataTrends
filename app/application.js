@@ -61,7 +61,10 @@ jQuery(function($) {
           ST = ALT.module("startup");
 
       // create a holder for startups
-      ALT.app.startupCollection = new ST.Collections.Startups([], {});
+      ALT.app.startupCollection = new ST.Collections.Startups([], {
+        page_max : 10,
+        pages_attribute : "last_page"
+      });
 
       // initialize list of current tags
       ALT.app.currentTags = new Backbone.Collection();  
