@@ -305,7 +305,6 @@
       if (oldPages < this.collection.pages) {
         
         this.collection.fetch({ 
-          add : true,
 
           // on the first page, render a side panel
           success : _.bind(function(collection) {
