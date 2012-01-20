@@ -8,7 +8,17 @@ See the Bocoup blog for more information about the application (http://weblog.bo
 
 If you have any questions or comments, contact @iros here or: irene at bocoup dot com.
 
+Setting up dev environment
+--------------------------
+
+Run `npm install` from your application root.
+
+Build
+-----
+
+The application is built using jake. You can start the build from the `build` folder. Just call `jake` on the command line. 
+
 Server
 ------
 
-To start install the dependencies `npm install` then run with `node dev`
+Run with `node dev`
