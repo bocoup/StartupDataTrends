@@ -5,7 +5,7 @@ set :user, 'www-data'
 set :copy_cache, '/tmp/caches/angellist-viz'
 
 set :scm, :git
-set :repository,  "git@github.com:bocoup/angellist-viz.git"
+set :repository,  "git@github.com:bocoup/StartupDataTrends.git"
 
 set :location, "startupdatatrends.com"
 set :use_sudo, false
