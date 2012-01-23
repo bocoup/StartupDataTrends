@@ -7,6 +7,8 @@
   S.Models = (S.Models || {});
   S.Collections = (S.Collections || {});
 
+  _.extend(S, Backbone.Events);
+
   // Responsible for holding a single search.
   S.Models.Search = Backbone.Model.extend({});
 
@@ -76,13 +78,20 @@
         market : null,
         person : null
       };
+      this.blocker = this.$(".search-blocker");
+      S.bind("searchStart", function() {
+        this.blocker.fadeTo(500, 0.8);
+      },this)
+      .bind("searchStop", function() {
+        this.blocker.fadeOut(500);
+      },this);
     },
 
     addTag : function(tag) {
       
       // hide about
-      $('.about .info').hide();
-      $('.about .loader').slideDown();
+      $(".about .info").slideUp(500);
+      S.trigger("searchStart");
 
       var tagView = new S.Views.SearchSelectedComponentItem({ 
         model : tag 
@@ -177,25 +186,22 @@
       }));
       
       // enable jquery autocomplete dropdown
-      this.$("input").autocomplete({
+      var input = this.$("input");
+      input.autocomplete({
         source : _.bind(function(request, response) {
           this.collection.search.set(
             { "query" : request.term }, 
             { silent: true }
           );
+          this.$(".search-loader").addClass("searching");
           this.collection.fetch({
-            success: function(collection) {
+            success: _.bind(function(collection) {
+              this.$(".search-loader").removeClass("searching");
               response(collection.autocompleteItems());
-            }
+            },this)
           });
         }, this),
         minLength: 2,
-        search : _.bind(function(event, ui) {
-          this.$('.search-loader').show();
-        }, this),
-        open : _.bind(function(event, ui) {
-          this.$('.search-loader').hide();
-        }, this),
         select : _.bind(function(event, ui) {
             // TODO: append item to list
             // TODO: clear search
@@ -210,14 +216,9 @@
             // to support url based searches.
             tagModel.triggerSearch();
             ALT.app.currentTags.add(tagModel);
-          
-          }, this),
-        close : function(event) {
-          $(event.target).val(" ").focus();
-        },
-        blur : function(event) {
-          $(event.target).val(" ").focus();
-        }
+            event.preventDefault();
+            input.val("").focus();
+          }, this)
       });
       return this;
     }
