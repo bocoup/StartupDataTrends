@@ -426,6 +426,14 @@ nav ul li {
       padding-right: 10px;
     }
 
+    #panel-container #left-container #search-container .single-search-container img.search-loader {
+      visibility: hidden;
+    }
+
+    #panel-container #left-container #search-container .single-search-container img.search-loader.searching {
+      visibility: visible;
+    }
+
     #panel-container #left-container #search-container ul.search-tags {
       margin-bottom: 5px;
       margin-left:15px;

@@ -183,19 +183,15 @@
             { "query" : request.term }, 
             { silent: true }
           );
+          this.$('.search-loader').addClass("searching");
           this.collection.fetch({
-            success: function(collection) {
+            success: _.bind(function(collection) {
+              this.$('.search-loader').removeClass("searching");
               response(collection.autocompleteItems());
-            }
+            },this)
           });
         }, this),
         minLength: 2,
-        search : _.bind(function(event, ui) {
-          this.$('.search-loader').show();
-        }, this),
-        open : _.bind(function(event, ui) {
-          this.$('.search-loader').hide();
-        }, this),
         select : _.bind(function(event, ui) {
             // TODO: append item to list
             // TODO: clear search
