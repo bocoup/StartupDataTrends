@@ -292,6 +292,7 @@
     template: "panel-startup-full",
 
     initialize: function(attributes, options) {
+			// Get compile template from cache
       this.template = ALT.app.templates[this.template];
       this.el = $(this.el);
 
@@ -326,6 +327,7 @@
     },
 
     initialize: function(attributes, options) {
+			// Get compile template from cache
       this.template = ALT.app.templates[this.template];
     },
 
@@ -376,6 +378,8 @@
     initialize: function(attributes) {
 
       this.el = $(this.id);
+
+			// Get compile template from cache
       this.template = ALT.app.templates[this.template];
 
       // save incoming tags.

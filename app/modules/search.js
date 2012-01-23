@@ -70,7 +70,10 @@
 
     initialize: function(attributes) {
       this.el = $(this.id);
+
+			// Get compile templated from cache
       this.template = ALT.app.templates[this.template];
+
       this._searchComponents = {
         location: null,
         market: null,

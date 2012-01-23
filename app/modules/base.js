@@ -1,4 +1,4 @@
-/**
+Get compile template from cache/**
  * Startup Data Trends
  * Author Irene Ros (Bocoup)
  */
