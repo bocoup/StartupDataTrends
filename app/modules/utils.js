@@ -7,10 +7,11 @@
   U.precompileTemplates = function() {
     ALT.app.templates = {};
 
-    // cache all compiled templates
-    $("script[type='text/template']").each(function(index, elm) {
-      elm = $(elm);
-      ALT.app.templates[elm.attr("id")] = _.template(elm.html());
+    // Select, compile and cache all templates
+    // Provides significant performance benefits when rendering views
+    $("script[type='text/template']").each(function() {
+      var $this = $(this);
+      ALT.app.templates[$this.attr("id")] = _.template($this.html());
     });
   };
   /**
@@ -20,20 +21,26 @@
   U.formatDollarAmount = function(val) {
     val = "" + val;
     var delimiter = ",",
-        amountStr = val.split(".", 2),      // remove decimals
-        decimals  = amountStr[1] || 0,         // save decimal point
-        amount    = parseInt(amountStr[0], 10); // parse amount to int
+        // remove decimals
+        amountStr = val.split(".", 2),
+        // save decimal point
+        decimals = amountStr[1] || 0,
+        // parse amount to int
+        amount = parseInt(amountStr[0], 10),
+        // Initialize, no assign
+        clone, parts, sub;
 
     if (isNaN(amount)) {
 
       return "$0";
 
     } else {
-      var clone = "" + amount;
-      var parts = [];
+      clone = "" + amount;
+      parts = [];
+
       // break string into threes.
       while (clone.length > 3) {
-        var sub = clone.substr(clone.length-3);
+        sub = clone.substr(clone.length-3);
         parts.unshift(sub);
         clone = clone.substr(0, clone.length-3);
       }
@@ -53,14 +60,16 @@
    * @returns { Array } [[key, count], [key, count]].
    */
   U.frequencyCount = function(arr, prop, id) {
-    var freq = {};
+    var freq = {},
+        key;
 
     _.each(arr, function(obj) {
-      var key = obj[prop];
+      key = obj[prop];
+
       freq[key] = (freq[key] || [key, 0]);
       freq[key][freq[key].length-1]++;
 
-      if (typeof id !== "undefined" && freq[key].length < 3) {
+      if (id != null && freq[key].length < 3) {
         freq[key].unshift(obj[id]);
       }
     });
@@ -79,19 +88,23 @@
       mean: 0,
       variance: 0,
       deviation: 0
-    }, t = a.length;
+    },
+    t = a.length,
+    len = t,
+    sum = 0,
+    m;
 
     // sum up items.
-    for (var m, s = 0, l = t; l--;){
-      s += a[l];
+    for (; len--;){
+      sum += a[len];
     }
 
-    m = r.mean = s / t;
-    for (l = t, s = 0; l--;){
-      s += Math.pow(a[l] - m, 2);
+    m = r.mean = sum / t;
+    for (len = t, sum = 0; len--;){
+      sum += Math.pow(a[len] - m, 2);
     }
 
-    r.deviation = Math.sqrt(r.variance = s / t);
+    r.deviation = Math.sqrt(r.variance = sum / t);
     return r;
   };
 
@@ -99,6 +112,7 @@
     template: "tag-count-list",
 
     initialize: function(attributes, options) {
+      // Get compiled template from cache
       this.template = ALT.app.templates[this.template];
 
       this.tags = options.tags;
@@ -116,31 +130,37 @@
 
       this.el = $(this.template());
 
-      var count = Math.min(this.tags.length, 15);
-      var otherTagList = ALT.app.currentTags.pluck("id");
+      var count = Math.min(this.tags.length, 15),
+          otherTagList = ALT.app.currentTags.pluck("id"),
+          i = 0,
+          tag, tagEl, fontSize;
 
-      for (var i = 0; i < count; i++) {
-        var tag = this.tags[i];
+      for ( ; i < count; i++) {
+        tag = this.tags[i];
 
         // don't bother painting the selected tag.
         if (otherTagList.indexOf(tag[0]) === -1) {
-          var fontSize = U.remap(
+          fontSize = U.remap(
             tag[2],
             this.metrics.minCount,
             this.metrics.maxCount,
             this.metrics.minFontSize,
-            this.metrics.maxFontSize);
-          var tagEl = $(this.tag_template({
+            this.metrics.maxFontSize
+					);
 
-            tag: {
-              id: tag[0],
-              name: tag[1],
-              count: tag[2],
-              url: _.union(otherTagList, tag[0]).join(",")
-            }
-          })).css({
-            "font-size": fontSize
+          tagEl = $(
+            this.tag_template({
+              tag: {
+                id: tag[0],
+                name: tag[1],
+                count: tag[2],
+                url: _.union(otherTagList, tag[0]).join(",")
+              }
+            })
+          ).css({
+            fontSize: fontSize
           });
+
           $(this.$("ul.taglist")).append(tagEl);
         }
       }
@@ -150,7 +170,6 @@
     cleanup: function() {
       this.el = $(this.template());
     }
-
   });
 
 })(ALT.module("utils"));
