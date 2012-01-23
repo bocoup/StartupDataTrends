@@ -420,12 +420,14 @@ nav ul li {
       text-align:center;
       color: #000;
       display: none;
-      background:#ccc
+      background:#ebebeb;
+      border: 1px solid #ddd;
     }
 
     #panel-container #left-container #search-container .search-blocker span {
-      margin: 5% auto;
+      margin: 15% auto;
       display: block;
+      font-size: 1.2em;
       font-weight:bold;
     }
 
