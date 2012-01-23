@@ -7,6 +7,8 @@
   S.Models = (S.Models || {});
   S.Collections = (S.Collections || {});
 
+  _.extend(S, Backbone.Events);
+
   // Responsible for holding a single search.
   S.Models.Search = Backbone.Model.extend({});
 
@@ -76,13 +78,20 @@
         market : null,
         person : null
       };
+      this.blocker = this.$(".search-blocker");
+      S.bind("searchStart", function() {
+        this.blocker.fadeTo(500, 0.8);
+      },this)
+      .bind("searchStop", function() {
+        this.blocker.fadeOut(500);
+      },this);
     },
 
     addTag : function(tag) {
       
       // hide about
-      $('.about .info').hide();
-      $('.about .loader').slideDown();
+      $('.about .info').slideUp(500);
+      S.trigger("searchStart");
 
       var tagView = new S.Views.SearchSelectedComponentItem({ 
         model : tag 
