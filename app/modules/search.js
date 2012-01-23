@@ -177,7 +177,8 @@
       }));
       
       // enable jquery autocomplete dropdown
-      this.$("input").autocomplete({
+      var input = this.$("input");
+      input.autocomplete({
         source : _.bind(function(request, response) {
           this.collection.search.set(
             { "query" : request.term }, 
@@ -206,14 +207,9 @@
             // to support url based searches.
             tagModel.triggerSearch();
             ALT.app.currentTags.add(tagModel);
-          
-          }, this),
-        close : function(event) {
-          $(event.target).val("").focus();
-        },
-        blur : function(event) {
-          $(event.target).val("").focus();
-        }
+            event.preventDefault();
+            input.val("").focus();
+          }, this)
       });
       return this;
     }
