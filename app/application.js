@@ -159,7 +159,7 @@ jQuery(function($) {
         _.each(tagModels, function(tag, i) {
 
           // only search when all tags are present.
-          if (tagModels.length - 1 === i) {
+          if (tagModels.length-1 === i) {
             tag.triggerSearch();
           }
 
