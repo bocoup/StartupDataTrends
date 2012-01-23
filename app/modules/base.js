@@ -17,11 +17,11 @@
     var loadingViews = 0;
     B.Views.Progressify = function() {
       loadingViews += 1;
-      $('.about .loader').slideDown();
+      S.trigger("searchStart");
     };
     B.Views.Done = function() {
       if (loadingViews === 1) {
-        $('.about .loader').slideUp();
+        S.trigger("searchStop");
       }
       loadingViews -= 1;
     };
