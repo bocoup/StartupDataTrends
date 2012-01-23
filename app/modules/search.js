@@ -142,8 +142,10 @@
 
     onClose: function(event) {
       event.preventDefault();
-      var value = this.$("a").attr("data-id");
-      var model = ALT.app.currentTags.get(value);
+
+      var value = this.$("a").attr("data-id"),
+					model = ALT.app.currentTags.get(value);
+
       // delete current tag model
       ALT.app.currentTags.remove(model);
 
@@ -152,12 +154,17 @@
     }
   });
 
+	// Declare handler for: clear, blur
+	function clearFocus(event) {
+		$(event.target).val(" ").focus();
+	}
+
   /**
    * An individual search component.
    */
   S.Views.SearchComponentView = Backbone.View.extend({
     className: "c25 single-search-container",
-    template : "single-search-container-tmpl",
+    template: "single-search-container-tmpl",
 
     initialize: function(attributes, options) {
 
@@ -197,27 +204,23 @@
           this.$(".search-loader").hide();
         }, this),
         select: _.bind(function(event, ui) {
-            // TODO: append item to list
-            // TODO: clear search
-            // Add a tag to the current list of tags
+          // TODO: append item to list
+          // TODO: clear search
+          // Add a tag to the current list of tags
+          var tagModel = new S.Models.Tag(ui.item);
 
-            var tagModel = new S.Models.Tag(ui.item);
-            tagModel.set({
-              "tag_type": this.search.get("type")
-            }, { silent:true });
+          tagModel.set({
+            "tag_type": this.search.get("type")
+          }, { silent:true });
 
-            // rendering happens on tag add, not here. This is
-            // to support url based searches.
-            tagModel.triggerSearch();
-            ALT.app.currentTags.add(tagModel);
+          // rendering happens on tag add, not here. This is
+          // to support url based searches.
+          tagModel.triggerSearch();
+          ALT.app.currentTags.add(tagModel);
 
-          }, this),
-        close: function(event) {
-          $(event.target).val(" ").focus();
-        },
-        blur: function(event) {
-          $(event.target).val(" ").focus();
-        }
+        }, this),
+        close: clearFocus,
+        blur: clearFocus
       });
       return this;
     }
