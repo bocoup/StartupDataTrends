@@ -29,27 +29,30 @@ jQuery(function($) {
 
   U.precompileTemplates();
 
-  // All navigation that is relative should be passed through the navigate
-  // method, to be processed by the router.  If the link has a data-bypass
-  // attribute, bypass the delegation completely.
-  $(document).on("click", "a:not([data-bypass])", function(evt) {
-    // Get the anchor href and protcol
-    var href = $(this).attr("href"),
-        protocol = this.protocol + "//";
+  // Only need this for pushState enabled browsers
+  if (Backbone.history && Backbone.history._hasPushState) {
+    // All navigation that is relative should be passed through the navigate
+    // method, to be processed by the router.  If the link has a data-bypass
+    // attribute, bypass the delegation completely.
+    $(document).on("click", "a:not([data-bypass])", function(evt) {
+      // Get the anchor href and protcol
+      var href = $(this).attr("href");
+      var protocol = this.protocol + "//";
 
-    // Ensure the protocol is not part of URL, meaning its relative.
-    if (href && href.slice(0, protocol.length) !== protocol) {
-      // Stop the default event to ensure the link will not cause a page
-      // refresh.
-      evt.preventDefault();
+      // Ensure the protocol is not part of URL, meaning its relative.
+      if (href && href.slice(0, protocol.length) !== protocol) {
+        // Stop the default event to ensure the link will not cause a page
+        // refresh.
+        evt.preventDefault();
 
-      // This uses the default router defined above, and not any routers
-      // that may be placed in modules.  To have this work globally (at the
-      // cost of losing all route events) you can change the following line
-      // to: Backbone.history.navigate(href, true);
-      app.router.navigate(href, true);
-    }
-  });
+        // This uses the default router defined above, and not any routers
+        // that may be placed in modules.  To have this work globally (at the
+        // cost of losing all route events) you can change the following line
+        // to: Backbone.history.navigate(href, true);
+        app.router.navigate(href, true);
+      }
+    });
+  }
 
   Router = Backbone.Router.extend({
     routes: {
