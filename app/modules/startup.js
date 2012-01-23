@@ -7,13 +7,12 @@
   ST.Models = (ST.Models || {});
   ST.Collections = (ST.Collections || {});
 
-  // Stealing from Backbone... because sync needs it and I'm overwriting it.
-  var methodMap = {
-    'create': 'POST',
-    'update': 'PUT',
-    'delete': 'DELETE',
-    'read'  : 'GET'
-  };
+  // Create a prefilter to attach the options onto the jqXHR
+  $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+    if (!jqXHR.originalOptions) {
+      jqXHR.originalOptions = originalOptions;
+    }
+  });
 
   /**
    * A single representation of a startup.
@@ -31,144 +30,41 @@
    *   2. Those whose number of pages is known in advance.
    * Used by startup Collection and Trends collection.
    */
-  ST.Collections.PaginatedCollection = Backbone.Collection.extend({
+  ST.Collections.PaginatedCollection = U.LiveCollection.extend({
 
     initialize : function(attributes, options) {
-      options = (options || {});
-      
-      options.page  = options.page || 1;
-      options.pages = options.pages || 1;
-      options.total_pages = options.pages;
-      
-      // If fetching total page number from data, what's the attribute
-      // name
-      options.pages_attribute = options.pages_attribute || null;
-      
-      // max number of pages we'll fetch. Null will fetch all.
-      options.page_max = options.page_max || null;
-      
-      // by default append to collection
-      options.append = options.append || true;
+      options = options || {};
 
+      // Assign default options to the options object.
+      _.defaults(options, {
+        page: 1,
+        pages: 1,
+        total_pages: options.pages,
+      
+        // If fetching total page number from data, what's the attribute
+        // name
+        pages_attribute: null,
+      
+        // max number of pages we'll fetch. Null will fetch all.
+        page_max: null,
+      
+        // by default append to collection
+        append: true
+      });
+
+      // Mix the options into the LiveCollection instance
       _.extend(this, options);
     },
 
     clear : function() {
-
       // remove all models
       this.reset([], { silent : true });
 
       // reset page counts
       this.page = 1;
       this.pages = 1;
-      
-    }, 
-
-    sync : function(method, model, options) {
-      var type = methodMap[method];
-
-      if (this.append) {
-        options.add = true;
-      }
-
-      // Default JSON-request options.
-      var params = _.extend({
-        type:         type,
-        dataType:     'json'
-      }, options);
-
-      // Ensure that we have a URL.
-      if (!params.url) {
-        params.url = model.url();
-      }
-
-      // Ensure that we have the appropriate request data.
-      if (!params.data && model && (method == 'create' || method == 'update')) {
-        params.contentType = 'application/json';
-        params.data = JSON.stringify(model.toJSON());
-      }
-
-      // For older servers, emulate JSON by encoding the request into an HTML-form.
-      if (Backbone.emulateJSON) {
-        params.contentType = 'application/x-www-form-urlencoded';
-        params.data        = params.data ? {model : params.data} : {};
-      }
-
-      // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
-      // And an `X-HTTP-Method-Override` header.
-      if (Backbone.emulateHTTP) {
-        if (type === 'PUT' || type === 'DELETE') {
-          if (Backbone.emulateJSON) {
-            params.data._method = type;
-          }
-          params.type = 'POST';
-          params.beforeSend = function(xhr) {
-            xhr.setRequestHeader('X-HTTP-Method-Override', type);
-          };
-        }
-      }
-
-      // Don't process data on a non-GET request.
-      if (params.type !== 'GET' && !Backbone.emulateJSON) {
-        params.processData = false;
-      }
-
-      // make first request, then on success, make all subsequent requests
-      var page_params = _.clone(params);
-      var fetch_pages = function(start, end) {
-        for (var i = start; i <= end; i++) {
-          page_params.url = model.url(i);
-          page_params.success = function(data) {
-            model.page += 1;
-            if (options.success) {
-              options.success(data);
-            }
-
-            // if this is the last page, call the done callback if we have one
-            if ((model.page - 1) == model.pages && options.done) {
-              options.done(model);
-            }
-
-          };
-          $.ajax(page_params);
-        }
-      };
-
-      // do we know how many pages we are already fetching? If so
-      // just make N simultanious requests.
-      if (model.pages_attribute === null) {
-        fetch_pages(model.page, model.pages);
-      } else {
-        // we are getting total number of pages from the first call
-        // and then going to fetch everything
-
-        var success = function(fetch_pages) {
-          return function(data) {
-            
-            if (model.page === 1) {
-              model.pages = Math.min(model.page_max, data[model.pages_attribute]);  
-              model.total_pages = data[model.pages_attribute];
-            }
-            
-            // process first page
-            options.success(data);
-            model.page += 1;
-
-            // if this is the last page, call the done callback if we have one
-            if ((model.page - 1) == model.pages && options.done) {
-              options.done(model);
-            }
-
-            fetch_pages(model.page, model.pages);
-          };
-        }(fetch_pages);
-
-        params.success = success;
-        $.ajax(params);
-      }
-    }
-
-
+    } 
+    
   });
 
   /** 

@@ -153,4 +153,93 @@
 
   });
 
+  // Create a prefilter to attach the options onto the jqXHR.
+  // This is required so the LiveCollection can access the originalOptions
+  // passed by Backbone.sync.
+  $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+    if (!jqXHR.originalOptions) {
+      jqXHR.originalOptions = originalOptions;
+    }
+  });
+
+  // Requires the ajaxPrefilter
+  U.LiveCollection = Backbone.Collection.extend({
+    sync: function(method, model, options) {
+      if (this.append) {
+        options.add = true;
+      }
+      
+      var jqXHR;
+      var pageParams = _.clone(options);
+
+      // make first request, then on success, make all subsequent requests
+      function fetchPages(start, end) {
+        var i, jqXHR, params;
+        var defs = [];
+
+        for (i = start; i <= end; i++) {
+          // Augment the pageParams object with each new page
+          params = _.extend(pageParams, {
+            url: model.url(i),
+            success: function(data) {
+              model.page += 1;
+
+              if (options.success) {
+                options.success(data);
+              }
+
+              // if this is the last page, call the done callback if we have one
+              if ((model.page - 1 == model.pages) && options.done) {
+                options.done(model);
+              }
+            }
+          });
+
+          // Create a new Backbone.sync jqXHR instance.
+          jqXHR = Backbone.sync("read", model, params);
+
+          // Push this to the list of deferreds.
+          defs.push(jqXHR);
+        }
+
+        // Mimics the Backbone.sync behavior, by returning a promise.
+        return $.when.apply(null, defs);
+      }
+
+      // we are getting total number of pages from the first call
+      // and then going to fetch everything
+      function success(data) {
+        if (model.page === 1) {
+          model.pages = Math.min(model.page_max, data[model.pages_attribute]);  
+          model.total_pages = data[model.pages_attribute];
+        }
+        
+        // process first page
+        options.success(data);
+        model.page += 1;
+
+        // if this is the last page, call the done callback if we have one
+        if ((model.page - 1 == model.pages) && options.done) {
+          options.done(model);
+        }
+
+        return fetchPages(model.page, model.pages);
+      }
+
+      // do we know how many pages we are already fetching? If so
+      // just make N simultaneous requests.
+      if (model.pages_attribute == null) {
+        // Invoke the native Backbone.sync and re-assign the passed options.
+        jqXHR = fetchPages(model.page, model.pages);
+        pageParams = jqXHR.originalOptions;
+        
+        return jqXHR;
+      }
+
+      pageParams.success = success;
+
+      return Backbone.sync("read", model, pageParams);
+    }
+  });
+
 })(ALT.module("utils"));
