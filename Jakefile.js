@@ -52,13 +52,13 @@ var // Program References
         curly: true,
         browser: true,
         loopfunc: true,
-        predef: [ "_", "$", "Backbone", "jQuery", "ALT" ]
-        // onevar: true,
+        predef: [ "_", "$", "Backbone", "jQuery", "ALT" ],
+        onevar: true,
         // "eqnull": true,
         // "immed": true,
         // "newcap": true,
         // "noarg": true,
-        // "undef": true,
+        undef: true
         // "browser": true,
       },
 
@@ -222,7 +222,7 @@ desc( "Builds Index.html.");
 task( "buildindex", function() {
   var env = process.env.ENV || "dev";
   header( "Building index.html for " + env);
-  
+
   var headerfile = "build/" + env + "/header.html",
       bodyfile   = "build/body.html",
       footerfile = "build/" + env + "/footer.html";
@@ -230,7 +230,7 @@ task( "buildindex", function() {
   var indexcontents = readFile(headerfile) + "\n" +
     readFile(bodyfile) + "\n" +
     readFile(footerfile);
-  
+
   writeFile("index.html", indexcontents, false);
 });
 
@@ -286,11 +286,11 @@ task( "min", function() {
     var fullpath = minpath + ".js",
         minifiedpath = minpath + ".min.js",
         file = config.files[ minpath ];
-    
+
         // Generate intro block with banner template,
         // Inject meta build data
     var intro = banner( _.extend( file.meta, config.meta ) );
-    
+
     // Without a newline, the min source code will run on the same
     // Line as the intro lic/banner block
     if ( intro ) {
@@ -306,7 +306,7 @@ task( "min", function() {
     var complete_content = "",
         minified_content = "",
         concat = file.src.forEach( function( path ) {
-          
+
           // read initial file
           var body = readFile( path );
 
@@ -315,10 +315,10 @@ task( "min", function() {
 
           // is it already minified just concat it
           if (file.preminified.indexOf( path ) > -1) {
-            minified_content += body + "\n;";  
-          
+            minified_content += body + "\n;";
+
           } else {
-          
+
             // minify it first
             minified_content += uglify( body ) + "\n;";
           }

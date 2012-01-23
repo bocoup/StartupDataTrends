@@ -20,7 +20,8 @@ var ALT = {
 };
 
 jQuery(function($) {
-  var app = ALT.app;
+  var app = ALT.app,
+      Router;
 
   var U = ALT.module("utils"),
       S = ALT.module("search"),
@@ -38,7 +39,7 @@ jQuery(function($) {
     var protocol = this.protocol + "//";
 
     // Ensure the protocol is not part of URL, meaning its relative.
-    if (href.slice(0, protocol.length) !== protocol) {
+    if (href && href.slice(0, protocol.length) !== protocol) {
       // Stop the default event to ensure the link will not cause a page
       // refresh.
       evt.preventDefault();
@@ -51,30 +52,30 @@ jQuery(function($) {
     }
   });
 
-  var Router = Backbone.Router.extend({
+  Router = Backbone.Router.extend({
     routes: {
       "": "index",
-      "?tags=:tags" : "search"
+      "?tags=:tags": "search"
     },
 
-    _init : function() {
+    _init: function() {
 
       // create a holder for startups
       ALT.app.startupCollection = new ST.Collections.Startups([], {
-        page_max : 10,
-        pages_attribute : "last_page"
+        page_max: 10,
+        pages_attribute: "last_page"
       });
 
       // initialize list of current tags
-      ALT.app.currentTags = new Backbone.Collection();  
+      ALT.app.currentTags = new Backbone.Collection();
 
       // Pretty much all functionality is routed through this callback.
       // When a tag is added or removed from the searchable list, all
       // UIs update, all calls are made etc.
       ALT.app.currentTags.bind("add", function(model) {
-        
+
         // reset collection
-        
+
         ALT.app.startupCollection.clear();
 
         // update search view
@@ -83,11 +84,11 @@ jQuery(function($) {
         // Only perform a search on a tag that is market as such. This is
         // key because if a user comes in via a url with a tag list,
         // we only want to perform the search on all tags together, not
-        // individually. 
+        // individually.
         // A regular tag search through form will mark each tag
         // as search-triggering.
         if (model.get("triggerSearch")) {
-          
+
           // redo the search
           ALT.app.mainView.rightView.cleanup();
           ALT.app.mainView.rightView.render();
@@ -99,13 +100,13 @@ jQuery(function($) {
       }, this);
 
       ALT.app.currentTags.bind("remove", function(model) {
-        
+
         // if this was the last tag, reset url to root.
         if (ALT.app.currentTags.length === 0) {
           window.location = "/";
         }
 
-        // reset collection              
+        // reset collection
         ALT.app.startupCollection.clear();
         console.log("callbacks", _.keys(ALT.app.startupCollection._callbacks).length);
 
@@ -118,7 +119,6 @@ jQuery(function($) {
       }, this);
 
       // Render the main view of the application.
-      
       ALT.app.mainView = new B.Views.AppView();
       ALT.app.mainView.render();
     },
@@ -127,23 +127,22 @@ jQuery(function($) {
       this._init();
     },
 
-    search : function(tags) {
+    search: function(tags) {
       this._init();
 
-      var S = ALT.module("search");
-
-      // parse tags
-      var tagIds = tags.split(","),
+      var S = ALT.module("search"),
+          // parse tags
+          tagIds = tags.split(","),
           tagFetches = [],
           tagModels = [];
-      
+
       // Initiate the fecth on each tag's metadata. This is
       // required to then do a startup search itself and display
       // what tags we're searching in the UI.
       _.each(tagIds, function(tagId) {
-        var tag = new S.Models.Tag({ id : tagId });
+        var tag = new S.Models.Tag({ id: tagId });
         tagModels.push(tag);
-        
+
         // Save the fetch calls so that we can attach a callback to
         // their successful completion.
         tagFetches.push(tag.fetch({
@@ -160,9 +159,9 @@ jQuery(function($) {
           // only search when all tags are present.
           if (tagModels.length-1 === i) {
             tag.triggerSearch();
-          } 
+          }
 
-          // when available, add each tag to our list of 
+          // when available, add each tag to our list of
           // current tags.
           ALT.app.currentTags.add(tag);
         });
@@ -170,7 +169,7 @@ jQuery(function($) {
     }
 
   });
-  
+
   app.router = new Router();
   Backbone.history.start({ pushState: true });
 });

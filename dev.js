@@ -2,7 +2,7 @@
 var fs = require("fs");
 var express = require("express");
 var site = express.createServer();
-var request = require('request');
+var request = require("request");
 
 // Serve static files
 site.use("/assets", express.static("./assets"));
