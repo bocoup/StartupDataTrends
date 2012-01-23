@@ -213,10 +213,10 @@
           
           }, this),
         close : function(event) {
-          $(event.target).val(" ").focus();
+          $(event.target).val("").focus();
         },
         blur : function(event) {
-          $(event.target).val(" ").focus();
+          $(event.target).val("").focus();
         }
       });
       return this;
