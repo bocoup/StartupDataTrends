@@ -5,23 +5,26 @@
 (function(B) {
 
   // required modules - startup, search.
-  var ST = ALT.module("startup");
-  var S  = ALT.module("search");
-  var U  = ALT.module("utils");
+  var ST = ALT.module("startup"),
+      S  = ALT.module("search"),
+      U  = ALT.module("utils");
 
   (function() {
 
     // Progress viewers are tied to a count. Only when
     // all operations are done will the progress indicator
     // actually be removed.
-    var loadingViews = 0;
+    var loadingViews = 0,
+        $loader = $(".about .loader");
+
     B.Views.Progressify = function() {
       loadingViews += 1;
-      $(".about .loader").slideDown();
+      $loader.slideDown();
     };
+
     B.Views.Done = function() {
       if (loadingViews === 1) {
-        $(".about .loader").slideUp();
+        $loader.slideUp();
       }
       loadingViews -= 1;
     };
@@ -52,7 +55,6 @@
       this.leftView.cleanup();
       this.rightView.cleanup();
     }
-
   });
 
   B.Views.LeftView = Backbone.View.extend({
@@ -64,7 +66,6 @@
       // when the collection of startups is done loading,
       // render the tag cloud
       ALT.app.startupCollection.bind("done", this.addTags, this);
-
     },
 
     render: function() {
@@ -76,10 +77,10 @@
 
     addTags: function() {
 
-      var tagContainer = $("#tag-container");
+      var tagContainer = $("#tag-container"),
+          // render a list of tags when were ready.
+          tags = ALT.app.startupCollection.markets();
 
-      // render a list of tags when were ready.
-      var tags = ALT.app.startupCollection.markets();
       this.tagListView = new U.TagList({}, { tags: tags });
       tagContainer.html(this.tagListView.render().el);
     },
@@ -127,7 +128,6 @@
         collection: ALT.app.startupCollection,
         tags: tags
       });
-
     },
 
     cleanup: function() {
@@ -137,7 +137,6 @@
       if (this.startupListView) {
         this.startupListView.cleanup();
       }
-
     }
   });
 
@@ -170,7 +169,6 @@
       this.metadataSearchView = new B.Views.Panels.MetadataSearch({
         collection: this.collection
       });
-
     },
 
     cleanup: function() {
@@ -193,7 +191,7 @@
       // find element
       this.el = $(this.id);
 
-      // compile template
+      // Get compile templated from cache
       this.template = ALT.app.templates[this.template];
 
       // render container shell
@@ -268,28 +266,33 @@
       this.makeSparkline();
     },
 
-    onSelect: function() {
+    onSelect: function(event) {
+
+      var value = event.target.value,
+          // Cache Selection match references
+          $range = $("#range"),
+          $decay = $("#about-decay-over-time");
+
       // When a new sort is selected, tell the list to
       // handle it
-      this.collection.trigger("alt.resort", event.target.value);
+      this.collection.trigger("alt.resort", value);
 
       // hide the appropriate counts in the startup list
-      ALT.app.mainView.rightView.startupListView.hideCounts(event.target.value);
+      ALT.app.mainView.rightView.startupListView.hideCounts(value);
 
       // hide the range selectors if it's not followers
-      if (event.target.value !== "follower_count") {
-        $("#range").slideUp();
+      if (value !== "follower_count") {
+        $range.slideUp();
       } else {
-        $("#range").slideDown("slow");
+        $range.slideDown("slow");
       }
 
       // show the about follower trends message
-      if (event.target.value === "followers_over_time") {
-        $("#about-decay-over-time").slideDown();
+      if (value === "followers_over_time") {
+        $decay.slideDown();
       } else {
-        $("#about-decay-over-time").slideUp();
+        $decay.slideUp();
       }
-
     },
 
     onLoadMore: function(event) {
@@ -375,7 +378,7 @@
       // find element
       this.el = $(this.id);
 
-      // compile template
+      // Get compile templated from cache
       this.template = ALT.app.templates[this.template];
 
       // --- get metadata from server
@@ -453,7 +456,6 @@
 
       return this;
     }
-
   });
 
 
