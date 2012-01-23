@@ -51,10 +51,10 @@ jQuery(function($) {
   var Router = Backbone.Router.extend({
     routes: {
       "": "index",
-      "?tags=:tags" : "search"
+      "?tags=:tags": "search"
     },
 
-    _init : function() {
+    _init: function() {
 
       var S = ALT.module("search"),
           B = ALT.module("base"),
@@ -62,8 +62,8 @@ jQuery(function($) {
 
       // create a holder for startups
       ALT.app.startupCollection = new ST.Collections.Startups([], {
-        page_max : 10,
-        pages_attribute : "last_page"
+        page_max: 10,
+        pages_attribute: "last_page"
       });
 
       // initialize list of current tags
@@ -128,7 +128,7 @@ jQuery(function($) {
       this._init();
     },
 
-    search : function(tags) {
+    search: function(tags) {
       this._init();
 
       var S = ALT.module("search");
@@ -142,7 +142,7 @@ jQuery(function($) {
       // required to then do a startup search itself and display
       // what tags we're searching in the UI.
       _.each(tagIds, function(tagId) {
-        var tag = new S.Models.Tag({ id : tagId });
+        var tag = new S.Models.Tag({ id: tagId });
         tagModels.push(tag);
         
         // Save the fetch calls so that we can attach a callback to
