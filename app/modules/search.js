@@ -144,7 +144,7 @@
       event.preventDefault();
 
       var value = this.$("a").attr("data-id"),
-					model = ALT.app.currentTags.get(value);
+          model = ALT.app.currentTags.get(value);
 
       // delete current tag model
       ALT.app.currentTags.remove(model);
@@ -154,10 +154,10 @@
     }
   });
 
-	// Declare handler for: clear, blur
-	function clearFocus(event) {
-		$(event.target).val(" ").focus();
-	}
+  // Declare handler for: clear, blur
+  function clearFocus(event) {
+    $(event.target).val(" ").focus();
+  }
 
   /**
    * An individual search component.
