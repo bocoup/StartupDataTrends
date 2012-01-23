@@ -90,7 +90,7 @@
     addTag : function(tag) {
       
       // hide about
-      $('.about .info').slideUp(500);
+      $(".about .info").slideUp(500);
       S.trigger("searchStart");
 
       var tagView = new S.Views.SearchSelectedComponentItem({ 
@@ -193,10 +193,10 @@
             { "query" : request.term }, 
             { silent: true }
           );
-          this.$('.search-loader').addClass("searching");
+          this.$(".search-loader").addClass("searching");
           this.collection.fetch({
             success: _.bind(function(collection) {
-              this.$('.search-loader').removeClass("searching");
+              this.$(".search-loader").removeClass("searching");
               response(collection.autocompleteItems());
             },this)
           });
