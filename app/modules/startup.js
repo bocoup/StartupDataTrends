@@ -9,10 +9,10 @@
 
   // Stealing from Backbone... because sync needs it and I'm overwriting it.
   var methodMap = {
-    'create': 'POST',
-    'update': 'PUT',
-    'delete': 'DELETE',
-    'read': 'GET'
+    "create": "POST",
+    "update": "PUT",
+    "delete": "DELETE",
+    "read": "GET"
   };
 
   /**
@@ -74,7 +74,7 @@
       // Default JSON-request options.
       var params = _.extend({
         type:         type,
-        dataType:     'json'
+        dataType:     "json"
       }, options);
 
       // Ensure that we have a URL.
@@ -83,33 +83,33 @@
       }
 
       // Ensure that we have the appropriate request data.
-      if (!params.data && model && (method == 'create' || method == 'update')) {
-        params.contentType = 'application/json';
+      if (!params.data && model && (method == "create" || method == "update")) {
+        params.contentType = "application/json";
         params.data = JSON.stringify(model.toJSON());
       }
 
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (Backbone.emulateJSON) {
-        params.contentType = 'application/x-www-form-urlencoded';
+        params.contentType = "application/x-www-form-urlencoded";
         params.data        = params.data ? {model: params.data}: {};
       }
 
       // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
       // And an `X-HTTP-Method-Override` header.
       if (Backbone.emulateHTTP) {
-        if (type === 'PUT' || type === 'DELETE') {
+        if (type === "PUT" || type === "DELETE") {
           if (Backbone.emulateJSON) {
             params.data._method = type;
           }
-          params.type = 'POST';
+          params.type = "POST";
           params.beforeSend = function(xhr) {
-            xhr.setRequestHeader('X-HTTP-Method-Override', type);
+            xhr.setRequestHeader("X-HTTP-Method-Override", type);
           };
         }
       }
 
       // Don't process data on a non-GET request.
-      if (params.type !== 'GET' && !Backbone.emulateJSON) {
+      if (params.type !== "GET" && !Backbone.emulateJSON) {
         params.processData = false;
       }
 
@@ -302,10 +302,10 @@
       this.$("#tabs").tabs();
 
       // render screenshots
-      this.$('a.screenshot').colorbox({
-        'rel': 'screenshots',
-        'maxWidth': "960px",
-        'maxHeight': "800px"
+      this.$("a.screenshot").colorbox({
+        "rel": "screenshots",
+        "maxWidth": "960px",
+        "maxHeight": "800px"
       });
       return this;
     }
@@ -452,7 +452,7 @@
       // create a new startup item and append it.
       var startupListItem = new ST.Views.Mini({ model: model });
       this._startupListItems[model.id] = startupListItem;
-      this.$('ul.startup-list').append(startupListItem.render().el);
+      this.$("ul.startup-list").append(startupListItem.render().el);
     },
 
     bindResort: function(by) {
@@ -562,7 +562,7 @@
             // find the list view item for it
             var startupListViewItem = this._startupListItems[trend.id];
 
-            startupListViewItem.$('.follower_count_trend').sparkline(
+            startupListViewItem.$(".follower_count_trend").sparkline(
               trend.get("timeseries"),
               {
                 lineColor: "#222",
@@ -570,7 +570,7 @@
               }
             );
 
-            startupListViewItem.$('.follower_count_trend').attr({
+            startupListViewItem.$(".follower_count_trend").attr({
               "title": "Decay Score: " + trend.decayScore().toPrecision(2)
             });
 
@@ -583,7 +583,7 @@
     finish: function() {
 
       // added loaded classname
-      this.$('.startup-list-container').addClass("loaded");
+      this.$(".startup-list-container").addClass("loaded");
 
       this.assignHeights();
 
@@ -592,7 +592,7 @@
 
       // remove the more button if we're all out of pages
       if (this.collection.pages === this.collection.total_pages) {
-        this.$('#load-more-startups').hide();
+        this.$("#load-more-startups").hide();
       }
 
       // Bind select change.
@@ -620,13 +620,13 @@
     },
 
     hideCounts: function(type) {
-      this.$('.counts').hide();
+      this.$(".counts").hide();
 
       if (type === "followers_over_time") {
         type = "follower_count";
       }
 
-      this.$('.counts.' + type).show();
+      this.$(".counts." + type).show();
     }
 
   });

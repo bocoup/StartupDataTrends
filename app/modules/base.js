@@ -17,11 +17,11 @@
     var loadingViews = 0;
     B.Views.Progressify = function() {
       loadingViews += 1;
-      $('.about .loader').slideDown();
+      $(".about .loader").slideDown();
     };
     B.Views.Done = function() {
       if (loadingViews === 1) {
-        $('.about .loader').slideUp();
+        $(".about .loader").slideUp();
       }
       loadingViews -= 1;
     };
@@ -56,7 +56,7 @@
   });
 
   B.Views.LeftView = Backbone.View.extend({
-    id: '#left-container',
+    id: "#left-container",
 
     initialize: function(attributes) {
       this.el = $(this.id);
@@ -76,7 +76,7 @@
 
     addTags: function() {
 
-      var tagContainer = $('#tag-container');
+      var tagContainer = $("#tag-container");
 
       // render a list of tags when were ready.
       var tags = ALT.app.startupCollection.markets();
@@ -97,7 +97,7 @@
   });
 
   B.Views.RightView = Backbone.View.extend({
-    id: '#right-container',
+    id: "#right-container",
 
     initialize: function(attributes) {
       this.el = $(this.id);
@@ -115,10 +115,10 @@
       });
 
       // remove the about info if it's there
-      $('#startup-data-container .about').remove();
-      $('#startup-list-container').show();
-      $('#startup-info-container').css({
-        top: $('#metadata-container').height() + 150
+      $("#startup-data-container .about").remove();
+      $("#startup-list-container").show();
+      $("#startup-info-container").css({
+        top: $("#metadata-container").height() + 150
       });
 
       // Create a new startup list collection view
@@ -160,7 +160,7 @@
       this.el = $(this.id);
 
       // add the border. We remove it while things are loading.
-      this.$('.inner').addClass("border");
+      this.$(".inner").addClass("border");
 
       // Create new metadata valuation view
       // it takes care of it's own rendering.
@@ -183,7 +183,7 @@
    * View for range slider and select dropdown
    */
   B.Views.Panels.MetadataSearch = Backbone.View.extend({
-    template: 'metadata-search',
+    template: "metadata-search",
     id: "#metadata-startup-container",
 
     initialize: function(attributes, options) {
@@ -213,14 +213,14 @@
     },
 
     bindStart: function() {
-      this.$('.details').show();
-      this.$('.sort').show();
-      this.$('span#startup-total-count').html(this.collection.total_startups);
+      this.$(".details").show();
+      this.$(".sort").show();
+      this.$("span#startup-total-count").html(this.collection.total_startups);
 
     },
 
     bindPage: function() {
-      this.$('span#startup-list-counts').html(this.collection.length);
+      this.$("span#startup-list-counts").html(this.collection.length);
     },
 
     cleanup: function() {
@@ -231,14 +231,14 @@
         this.template()
       );
 
-      this.$('#range').hide();
+      this.$("#range").hide();
 
       this.collection.unbind("start", this.bindStart);
       this.collection.unbind("page", this.bindPage);
       this.collection.unbind("done", this.finish);
 
       // disable the sorting until we're done loading everything
-      this.$('select').attr('disabled', 'disabled');
+      this.$("select").attr("disabled", "disabled");
 
       this.el.html("<h2>Loading...</h2>");
     },
@@ -255,14 +255,14 @@
       });
 
       // disable the sorting until we're done loading everything
-      this.$('select').attr('disabled', 'disabled');
+      this.$("select").attr("disabled", "disabled");
 
       return this;
     },
 
     finish: function() {
       // Enable sorting select
-      this.$('select').removeAttr('disabled');
+      this.$("select").removeAttr("disabled");
 
       this.makeRangeSlider();
       this.makeSparkline();
@@ -278,16 +278,16 @@
 
       // hide the range selectors if it's not followers
       if (event.target.value !== "follower_count") {
-        $('#range').slideUp();
+        $("#range").slideUp();
       } else {
-        $('#range').slideDown("slow");
+        $("#range").slideDown("slow");
       }
 
       // show the about follower trends message
       if (event.target.value === "followers_over_time") {
-        $('#about-decay-over-time').slideDown();
+        $("#about-decay-over-time").slideDown();
       } else {
-        $('#about-decay-over-time').slideUp();
+        $("#about-decay-over-time").slideUp();
       }
 
     },
@@ -319,20 +319,20 @@
 
     makeRangeSlider: function(collection) {
       // make a range slider
-      this.$('#range').show();
+      this.$("#range").show();
       var vals = this.collection.pluck("follower_count"),
           min = _.min(vals),
           max = _.max(vals);
 
-      this.$('#slider-range').slider({
+      this.$("#slider-range").slider({
         range: true,
         min: min,
         max: max,
         values: [min, max],
         step: 10,
         slide: function(event, ui) {
-          $('#slider-range-left').html(ui.values[0]);
-          $('#slider-range-right').html(ui.values[1]);
+          $("#slider-range-left").html(ui.values[0]);
+          $("#slider-range-right").html(ui.values[1]);
         },
         stop: _.bind(
             function(event, ui) {
@@ -346,14 +346,14 @@
               ALT.app.mainView.rightView.startupListView.update(subset);
           }, this)
       });
-      $('#slider-range-left').html(min);
-      $('#slider-range-right').html(max);
+      $("#slider-range-left").html(min);
+      $("#slider-range-right").html(max);
     },
 
     makeSparkline: function(collection) {
 
       // make a sparkline of follower counts
-      this.$('.slider-sparkline').sparkline(
+      this.$(".slider-sparkline").sparkline(
         this.collection.histogram(30),
         {
           type: "bar",
@@ -362,12 +362,12 @@
           lineColor: "none",
           zeroColor: "#ddd"
         });
-      this.$('.slider-sparkline canvas').css({ width: "100%" });
+      this.$(".slider-sparkline canvas").css({ width: "100%" });
     }
   });
 
   B.Views.Panels.MetadataValuation = Backbone.View.extend({
-    template: 'metadata-valuation',
+    template: "metadata-valuation",
     id: "#metadata-valuation-container",
 
     initialize: function() {

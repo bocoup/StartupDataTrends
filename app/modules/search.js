@@ -65,8 +65,8 @@
    * Contains all the search boxes.
    */
   S.Views.SearchView = Backbone.View.extend({
-    id: '#search-container',
-    template: 'search-container-tmpl',
+    id: "#search-container",
+    template: "search-container-tmpl",
 
     initialize: function(attributes) {
       this.el = $(this.id);
@@ -81,8 +81,8 @@
     addTag: function(tag) {
 
       // hide about
-      $('.about .info').hide();
-      $('.about .loader').slideDown();
+      $(".about .info").hide();
+      $(".about .loader").slideDown();
 
       var tagView = new S.Views.SearchSelectedComponentItem({
         model: tag
@@ -142,7 +142,7 @@
 
     onClose: function(event) {
       event.preventDefault();
-      var value = this.$('a').attr('data-id');
+      var value = this.$("a").attr("data-id");
       var model = ALT.app.currentTags.get(value);
       // delete current tag model
       ALT.app.currentTags.remove(model);
@@ -191,10 +191,10 @@
         }, this),
         minLength: 2,
         search: _.bind(function(event, ui) {
-          this.$('.search-loader').show();
+          this.$(".search-loader").show();
         }, this),
         open: _.bind(function(event, ui) {
-          this.$('.search-loader').hide();
+          this.$(".search-loader").hide();
         }, this),
         select: _.bind(function(event, ui) {
             // TODO: append item to list

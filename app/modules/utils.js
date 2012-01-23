@@ -8,9 +8,9 @@
     ALT.app.templates = {};
 
     // cache all compiled templates
-    $('script[type=text\\/template]').each(function(index, elm) {
+    $("script[type='text/template']").each(function(index, elm) {
       elm = $(elm);
-      ALT.app.templates[elm.attr('id')] = _.template(elm.html());
+      ALT.app.templates[elm.attr("id")] = _.template(elm.html());
     });
   };
   /**
@@ -96,7 +96,7 @@
   };
 
   U.TagList = Backbone.View.extend({
-    template: 'tag-count-list',
+    template: "tag-count-list",
 
     initialize: function(attributes, options) {
       this.template = ALT.app.templates[this.template];
@@ -141,7 +141,7 @@
           })).css({
             "font-size": fontSize
           });
-          $(this.$('ul.taglist')).append(tagEl);
+          $(this.$("ul.taglist")).append(tagEl);
         }
       }
       return this;
