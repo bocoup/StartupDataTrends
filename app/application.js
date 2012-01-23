@@ -22,7 +22,11 @@ var ALT = {
 jQuery(function($) {
   var app = ALT.app;
 
-  var U = ALT.module("utils");
+  var U = ALT.module("utils"),
+      S = ALT.module("search"),
+      B = ALT.module("base"),
+      ST = ALT.module("startup");
+
   U.precompileTemplates();
 
   // All navigation that is relative should be passed through the navigate
@@ -54,10 +58,6 @@ jQuery(function($) {
     },
 
     _init : function() {
-
-      var S = ALT.module("search"),
-          B = ALT.module("base"),
-          ST = ALT.module("startup");
 
       // create a holder for startups
       ALT.app.startupCollection = new ST.Collections.Startups([], {
