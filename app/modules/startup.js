@@ -573,9 +573,9 @@
 
             // find the list view item for it
             var startupListViewItem = this._startupListItems[trend.id],
-								$trend = startupListViewItem.$(".follower_count_trend");
+                $trend = startupListViewItem.$(".follower_count_trend");
 
-						$trend.sparkline(
+            $trend.sparkline(
               trend.get("timeseries"),
               {
                 lineColor: "#222",
