@@ -10,12 +10,12 @@
   },
   "main": "application.js",
   "engines": {
-    "node": "~0.6.3"
+    "node": "~0.6"
   },
   "dependencies": {
     "backbone": "0.5.3",
     "express": "2.5.1",
-    "request":"*"
+    "request": "2.9.100"
   },
   "devDependencies": {
     "jake": "*",
@@ -27,6 +27,6 @@
     "colors": "*",
     "zlib": "*",
     "dateformat": "*",
-    "stats":"*"
+    "stats": "*"
   }
 }
