@@ -36,7 +36,7 @@
     initialize: function(attributes, options) {
       options = (options || {});
 
-      options.page  = options.page || 1;
+      options.page = options.page || 1;
       options.pages = options.pages || 1;
       options.total_pages = options.pages;
 
@@ -61,20 +61,20 @@
       // reset page counts
       this.page = 1;
       this.pages = 1;
-
     },
 
     sync: function(method, model, options) {
-      var type = methodMap[method];
+      var type = methodMap[method],
+          params, extended, fetch, success, i;
 
       if (this.append) {
         options.add = true;
       }
 
       // Default JSON-request options.
-      var params = _.extend({
-        type:         type,
-        dataType:     "json"
+      params = _.extend({
+        type: type,
+        dataType: "json"
       }, options);
 
       // Ensure that we have a URL.
@@ -83,7 +83,7 @@
       }
 
       // Ensure that we have the appropriate request data.
-      if (!params.data && model && (method == "create" || method == "update")) {
+      if (!params.data && model && (method === "create" || method === "update")) {
         params.contentType = "application/json";
         params.data = JSON.stringify(model.toJSON());
       }
@@ -91,7 +91,7 @@
       // For older servers, emulate JSON by encoding the request into an HTML-form.
       if (Backbone.emulateJSON) {
         params.contentType = "application/x-www-form-urlencoded";
-        params.data        = params.data ? {model: params.data}: {};
+        params.data = params.data ? {model: params.data}: {};
       }
 
       // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
@@ -114,11 +114,11 @@
       }
 
       // make first request, then on success, make all subsequent requests
-      var page_params = _.clone(params);
-      var fetch_pages = function(start, end) {
-        for (var i = start; i <= end; i++) {
-          page_params.url = model.url(i);
-          page_params.success = function(data) {
+      extended = _.clone(params);
+      fetch = function(start, end) {
+        for (i = start; i <= end; i++) {
+          extended.url = model.url(i);
+          extended.success = function(data) {
             model.page += 1;
             if (options.success) {
               options.success(data);
@@ -130,19 +130,19 @@
             }
 
           };
-          $.ajax(page_params);
+          $.ajax(extended);
         }
       };
 
       // do we know how many pages we are already fetching? If so
       // just make N simultanious requests.
       if (model.pages_attribute === null) {
-        fetch_pages(model.page, model.pages);
+        fetch(model.page, model.pages);
       } else {
         // we are getting total number of pages from the first call
         // and then going to fetch everything
 
-        var success = function(fetch_pages) {
+        success = function(fetch) {
           return function(data) {
 
             if (model.page === 1) {
@@ -159,9 +159,9 @@
               options.done(model);
             }
 
-            fetch_pages(model.page, model.pages);
+            fetch(model.page, model.pages);
           };
-        }(fetch_pages);
+        }(fetch);
 
         params.success = success;
         $.ajax(params);
@@ -208,18 +208,19 @@
     histogram: function(buckets, attribute) {
       attribute = (attribute || "follower_count");
 
-
       // get all numeric values
       var vals = this.pluck(attribute),
           min = _.min(vals),
-          max = _.max(vals);
+          max = _.max(vals),
+          // compute step
+          step = Math.ceil(max / buckets),
+          // bins
+          bins = [],
+          bin = 0,
+          range = [min, min + step],
+          val, i;
 
-      // compute step
-      var step = Math.ceil(max / buckets);
-
-      // bins
-      var bins = [], bin = 0, range = [min, min + step], val;
-      for (var i = 0; i < vals.length; i++) {
+      for (i = 0; i < vals.length; i++) {
         bin = Math.floor(vals[i]/step);
         bins[bin] = (bins[bin] || 0);
         bins[bin]++;
@@ -227,7 +228,7 @@
 
       // swap undefined with 0s
       for (i = 0; i < bins.length; i++) {
-        if (typeof bins[i] === "undefined") {
+        if (bins[i] == null) {
           bins[i] = 0;
         }
       }
@@ -253,8 +254,10 @@
     decayScore: function() {
       var sum = 0,
           arr = this.get("timeseries"),
-          mean = U.Stats(arr).mean;
-      for (var i = 0; i < arr.length; i++) {
+          mean = U.Stats(arr).mean,
+          i = 0;
+
+      for (; i < arr.length; i++) {
         sum += (arr[i] - (U.Stats(arr.slice(0,i)).mean || 0)) * Math.pow(1, -i/mean);
       }
       return sum || 0;
@@ -504,38 +507,45 @@
      */
     update: function(subset) {
 
-      var models = subset || this.collection.models;
-      var pos = 0;
+      var models = subset || this.collection.models,
+          pos = 0;
+
       this.collection.each(function(startup, i, collection) {
 
-        var listItem = this._startupListItems[startup.id];
+        var listItem = this._startupListItems[startup.id],
+            $listItem = $(listItem.el),
+            from, to;
+
         if (models.indexOf(startup) === -1) {
 
           // if startup is not in the subset, hide its element.
-          $(listItem.el).hide();
+          $listItem.hide();
 
         } else {
           // show the element since we might have hidden it in a previous
           // situation (like slider movement)
-          $(listItem.el).show();
+          $listItem.show();
 
           // reposition it.
-          var from = listItem.top;
-          var to   = listItem.height * pos;
+          from = listItem.top;
+          to = listItem.height * pos;
+
           if (collection.length < 100) {
-            $(listItem.el).css({
-              "position": "absolute",
-              "top": from}).animate({
-                "top": to
-              }, 500, function() {
-                // save the top so that we can animate from it in the future
-                // if it's hidden.
-                listItem.top = to;
-              });
+            $listItem.css({
+              position: "absolute",
+              top: from
+            }).animate({
+              top: to
+            }, 500, function() {
+              // save the top so that we can animate from it in the future
+              // if it's hidden.
+              listItem.top = to;
+            });
           } else {
-            $(listItem.el).css({
-              "position": "absolute",
-              "top": to});
+            $listItem.css({
+              position: "absolute",
+              top: to
+            });
           }
           pos++;
         }
@@ -550,19 +560,22 @@
 
     getTrends: function() {
       var ids = this.collection.pluck("id");
+
       this.trends = new ST.Trends([], {
         ids: ids,
         per_page: 50,
         pages: Math.ceil(ids.length / 50)
       });
+
       this.trends.fetch({
         done: _.bind(function(collection) {
           collection.each(function(trend) {
 
             // find the list view item for it
-            var startupListViewItem = this._startupListItems[trend.id];
+            var startupListViewItem = this._startupListItems[trend.id],
+								$trend = startupListViewItem.$(".follower_count_trend");
 
-            startupListViewItem.$(".follower_count_trend").sparkline(
+						$trend.sparkline(
               trend.get("timeseries"),
               {
                 lineColor: "#222",
@@ -570,14 +583,13 @@
               }
             );
 
-            startupListViewItem.$(".follower_count_trend").attr({
-              "title": "Decay Score: " + trend.decayScore().toPrecision(2)
+            $trend.attr({
+              title: "Decay Score: " + trend.decayScore().toPrecision(2)
             });
 
           }, this);
         }, this)
       });
-
     },
 
     finish: function() {
