@@ -393,7 +393,10 @@
         this.collection.fetch({
 
           success : _.bind(function(collection) {
-            
+            // If there are no startups, exit gracefully
+            if (!collection.length) {
+              return B.Views.Done();
+            }
             if (collection.page === 1) {
               // We are cloning the model instead of just referencing it
               // because the full startup panel is tied to this one
