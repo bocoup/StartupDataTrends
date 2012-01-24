@@ -146,7 +146,7 @@
             this.metrics.maxCount,
             this.metrics.minFontSize,
             this.metrics.maxFontSize
-					);
+          );
 
           tagEl = $(
             this.tag_template({
