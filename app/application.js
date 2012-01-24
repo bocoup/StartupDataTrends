@@ -172,6 +172,26 @@ jQuery(function($) {
 
   });
 
+  // A dead-simple caching mechanisms to prevent doing multiple requests during a single session.
+  // Todo: Integrate localStorage for a fixed period of time
+  var cache = {};
+  $.ajaxTransport( function(options, originalOptions, jqXHR) {
+    if ( cache[originalOptions.url] ) {
+      console.log("cache hit!!!", cache[originalOptions.url])
+      return {
+        send: function( headers, completeCallback ) {
+          completeCallback( 200, "success", cache[originalOptions.url] );
+        },
+        abort: jqXHR.abort
+      }
+    } else {
+      console.log("no cache!!")
+      jqXHR.done(function(data) {
+        cache[originalOptions.url] = data;
+      });
+    }
+  });
+
   app.router = new Router();
   Backbone.history.start({ pushState: true });
 });
