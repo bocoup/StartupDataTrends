@@ -21,33 +21,37 @@ var ALT = {
 
 jQuery(function($) {
   var app = ALT.app,
+      Router,
       U = ALT.module("utils"),
-      Router;
+      S = ALT.module("search"),
+      B = ALT.module("base"),
+      ST = ALT.module("startup");
 
-  // Select, compile and cache templates
   U.precompileTemplates();
 
   // Only need this for pushState enabled browsers
   if (Backbone.history && Backbone.history._hasPushState) {
-
-    // Use delegation to avoid initial DOM selection and allow all matching elements to bubble
-    $(document).delegate("a", "click", function(evt) {
+    // All navigation that is relative should be passed through the navigate
+    // method, to be processed by the router.  If the link has a data-bypass
+    // attribute, bypass the delegation completely.
+    $(document).on("click", "a:not([data-bypass])", function(evt) {
       // Get the anchor href and protcol
       var href = $(this).attr("href"),
           protocol = this.protocol + "//";
 
       // Ensure the protocol is not part of URL, meaning its relative.
-      // Stop the event bubbling to ensure the link will not cause a page refresh.
-      if (href.slice(protocol.length) !== protocol) {
+      if (href && href.slice(0, protocol.length) !== protocol) {
+        // Stop the default event to ensure the link will not cause a page
+        // refresh.
         evt.preventDefault();
 
-        // Note by using Backbone.history.navigate, router events will not be
-        // triggered.  If this is a problem, change this to navigate on your
-        // router.
+        // This uses the default router defined above, and not any routers
+        // that may be placed in modules.  To have this work globally (at the
+        // cost of losing all route events) you can change the following line
+        // to: Backbone.history.navigate(href, true);
         app.router.navigate(href, true);
       }
     });
-
   }
 
   Router = Backbone.Router.extend({
@@ -57,10 +61,6 @@ jQuery(function($) {
     },
 
     _init: function() {
-
-      var S = ALT.module("search"),
-          B = ALT.module("base"),
-          ST = ALT.module("startup");
 
       // create a holder for startups
       ALT.app.startupCollection = new ST.Collections.Startups([], {

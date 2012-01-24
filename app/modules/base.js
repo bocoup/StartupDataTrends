@@ -7,28 +7,25 @@
   // required modules - startup, search.
   var ST = ALT.module("startup"),
       S  = ALT.module("search"),
-      U  = ALT.module("utils");
+      U  = ALT.module("utils"),
 
-  (function() {
+      // Progress viewers are tied to a count. Only when
+      // all operations are done will the progress indicator
+      // actually be removed.
+      loadingViews = 0,
+      $loader = $(".about .loader");
 
-    // Progress viewers are tied to a count. Only when
-    // all operations are done will the progress indicator
-    // actually be removed.
-    var loadingViews = 0,
-        $loader = $(".about .loader");
+  B.Views.Progressify = function() {
+    loadingViews += 1;
+    S.trigger("searchStart");
+  };
 
-    B.Views.Progressify = function() {
-      loadingViews += 1;
-      S.trigger("searchStart");
-    };
-
-    B.Views.Done = function() {
-      if (loadingViews === 1) {
-        S.trigger("searchStop");
-      }
-      loadingViews -= 1;
-    };
-  })();
+  B.Views.Done = function() {
+    if (loadingViews === 1) {
+      S.trigger("searchStop");
+    }
+    loadingViews -= 1;
+  };
 
   /**
    * The overarching application view manager.
@@ -457,6 +454,5 @@
       return this;
     }
   });
-
 
 })(ALT.module("base"));
