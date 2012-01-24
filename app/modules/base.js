@@ -19,12 +19,12 @@
 
     B.Views.Progressify = function() {
       loadingViews += 1;
-      $loader.slideDown();
+      S.trigger("searchStart");
     };
 
     B.Views.Done = function() {
       if (loadingViews === 1) {
-        $loader.slideUp();
+        S.trigger("searchStop");
       }
       loadingViews -= 1;
     };
