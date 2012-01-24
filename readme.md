@@ -13,6 +13,8 @@ Setting up dev environment
 
 Run `npm install` from your application root.
 
+**In the case that `npm install` fails on `stats` module.  Use `npm install -f` instead.  This command will force "incompatible" modules to still install.**
+
 Build
 -----
 
@@ -22,3 +24,12 @@ Server
 ------
 
 Run with `node dev`
+
+The development server runs on a privileged port `80` which needs superuser privileges to run correctly.  The easiest work-around is to run the development
+server under a `sudo` (elevated) user.  The command may look something like this:
+
+``` bash
+sudo node dev
+```
+
+Alternatively you may investigate running the server using something similar to [authbind](http://en.wikipedia.org/wiki/Authbind)

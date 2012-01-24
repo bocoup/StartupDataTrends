@@ -22,31 +22,34 @@ var ALT = {
 jQuery(function($) {
   var app = ALT.app;
 
-  var U = ALT.module("utils");
+  var U = ALT.module("utils"),
+      S = ALT.module("search"),
+      B = ALT.module("base"),
+      ST = ALT.module("startup");
+
   U.precompileTemplates();
 
-  // Only need this for pushState enabled browsers
-  if (Backbone.history && Backbone.history._hasPushState) {
+  // All navigation that is relative should be passed through the navigate
+  // method, to be processed by the router.  If the link has a data-bypass
+  // attribute, bypass the delegation completely.
+  $(document).on("click", "a:not([data-bypass])", function(evt) {
+    // Get the anchor href and protcol
+    var href = $(this).attr("href");
+    var protocol = this.protocol + "//";
 
-    // Use delegation to avoid initial DOM selection and allow all matching elements to bubble
-    $(document).delegate("a", "click", function(evt) {
-      // Get the anchor href and protcol
-      var href = $(this).attr("href");
-      var protocol = this.protocol + "//";
+    // Ensure the protocol is not part of URL, meaning its relative.
+    if (href.slice(0, protocol.length) !== protocol) {
+      // Stop the default event to ensure the link will not cause a page
+      // refresh.
+      evt.preventDefault();
 
-      // Ensure the protocol is not part of URL, meaning its relative.
-      // Stop the event bubbling to ensure the link will not cause a page refresh.
-      if (href.slice(protocol.length) !== protocol) {
-        evt.preventDefault();
-
-        // Note by using Backbone.history.navigate, router events will not be
-        // triggered.  If this is a problem, change this to navigate on your
-        // router.
-        app.router.navigate(href, true);
-      }
-    });
-
-  }
+      // This uses the default router defined above, and not any routers
+      // that may be placed in modules.  To have this work globally (at the
+      // cost of losing all route events) you can change the following line
+      // to: Backbone.history.navigate(href, true);
+      app.router.navigate(href, true);
+    }
+  });
 
   var Router = Backbone.Router.extend({
     routes: {
@@ -55,10 +58,6 @@ jQuery(function($) {
     },
 
     _init : function() {
-
-      var S = ALT.module("search"),
-          B = ALT.module("base"),
-          ST = ALT.module("startup");
 
       // create a holder for startups
       ALT.app.startupCollection = new ST.Collections.Startups([], {

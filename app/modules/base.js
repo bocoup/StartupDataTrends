@@ -9,23 +9,20 @@
   var S  = ALT.module("search");
   var U  = ALT.module("utils");
 
-  (function() {
-    
-    // Progress viewers are tied to a count. Only when
-    // all operations are done will the progress indicator
-    // actually be removed.    
-    var loadingViews = 0;
-    B.Views.Progressify = function() {
-      loadingViews += 1;
-      S.trigger("searchStart");
-    };
-    B.Views.Done = function() {
-      if (loadingViews === 1) {
-        S.trigger("searchStop");
-      }
-      loadingViews -= 1;
-    };
-  })();
+  // Progress viewers are tied to a count. Only when
+  // all operations are done will the progress indicator
+  // actually be removed.    
+  var loadingViews = 0;
+  B.Views.Progressify = function() {
+    loadingViews += 1;
+    S.trigger("searchStart");
+  };
+  B.Views.Done = function() {
+    if (loadingViews === 1) {
+      S.trigger("searchStop");
+    }
+    loadingViews -= 1;
+  };
 
   /**
    * The overarching application view manager.
