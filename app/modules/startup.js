@@ -130,7 +130,7 @@
             }
 
           };
-          $.ajax(extended);
+          return $.ajax(extended);
         }
       };
 
@@ -164,7 +164,7 @@
         }(fetch);
 
         params.success = success;
-        $.ajax(params);
+        return $.ajax(params);
       }
     }
 
