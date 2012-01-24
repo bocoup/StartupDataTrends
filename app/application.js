@@ -3,21 +3,40 @@
  * Author Irene Ros (Bocoup)
  */
 // Namespace: ALT - AngelListTrends.
-var ALT = {
-  module: (function() {
-    var modules = {};
+(function(){
+  var cache = {};
 
-    return function(name) {
-      if (modules[name]) {
-        return modules[name];
+  window.ALT = {
+    module: (function() {
+      var modules = {};
+
+      return function(name) {
+        if (modules[name]) {
+          return modules[name];
+        }
+
+        return modules[name] = { Views: {} };
+      };
+    })(),
+
+    app: _.extend({}, Backbone.Events),
+    request: function(options) {
+      if ( cache[options.url] ) {
+        console.log("cache hit for", options.url, cache[options.url]);
+        var dfd = $.Deferred();
+        dfd.done( options.success );
+        dfd.resolve( cache[options.url] );
+        return dfd.promise();
+      } else {
+        console.log("no cache, requesting!");
+        return $.ajax( options ).done( function(data) {
+          console.log("storing cache item for", options.url, data)
+          cache[options.url] = data;
+        });
       }
-
-      return modules[name] = { Views: {} };
-    };
-  })(),
-
-  app: _.extend({}, Backbone.Events)
-};
+    }
+  };
+})();
 
 jQuery(function($) {
   var app = ALT.app,

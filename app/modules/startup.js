@@ -130,7 +130,7 @@
             }
 
           };
-          return $.ajax(extended);
+          return ALT.request(extended);
         }
       };
 
@@ -164,7 +164,7 @@
         }(fetch);
 
         params.success = success;
-        return $.ajax(params);
+        return ALT.request(params);
       }
     }
 
