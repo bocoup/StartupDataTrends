@@ -21,9 +21,8 @@ var ALT = {
 
 jQuery(function($) {
   var app = ALT.app,
-      Router;
-
-  var U = ALT.module("utils"),
+      Router,
+      U = ALT.module("utils"),
       S = ALT.module("search"),
       B = ALT.module("base"),
       ST = ALT.module("startup");
@@ -35,8 +34,8 @@ jQuery(function($) {
   // attribute, bypass the delegation completely.
   $(document).on("click", "a:not([data-bypass])", function(evt) {
     // Get the anchor href and protcol
-    var href = $(this).attr("href");
-    var protocol = this.protocol + "//";
+    var href = $(this).attr("href"),
+        protocol = this.protocol + "//";
 
     // Ensure the protocol is not part of URL, meaning its relative.
     if (href && href.slice(0, protocol.length) !== protocol) {
