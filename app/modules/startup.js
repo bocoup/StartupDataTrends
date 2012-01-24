@@ -292,7 +292,7 @@
     template: "panel-startup-full",
 
     initialize: function(attributes, options) {
-			// Get compile template from cache
+      // Get compile template from cache
       this.template = ALT.app.templates[this.template];
       this.el = $(this.el);
 
@@ -327,7 +327,7 @@
     },
 
     initialize: function(attributes, options) {
-			// Get compile template from cache
+      // Get compile template from cache
       this.template = ALT.app.templates[this.template];
     },
 
@@ -379,7 +379,7 @@
 
       this.el = $(this.id);
 
-			// Get compile template from cache
+      // Get compile template from cache
       this.template = ALT.app.templates[this.template];
 
       // save incoming tags.
@@ -399,7 +399,7 @@
 
         this.collection.fetch({
           success : _.bind(function(collection) {
-            
+
             // If there are no startups, exit gracefully
             if (!collection.length) {
               return B.Views.Done();

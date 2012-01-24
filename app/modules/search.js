@@ -73,7 +73,7 @@
     initialize: function(attributes) {
       this.el = $(this.id);
 
-			// Get compile templated from cache
+      // Get compile templated from cache
       this.template = ALT.app.templates[this.template];
 
       this._searchComponents = {
@@ -213,22 +213,22 @@
         }, this),
         minLength: 2,
         select : _.bind(function(event, ui) {
-            // TODO: append item to list
-            // TODO: clear search
-            // Add a tag to the current list of tags
+          // TODO: append item to list
+          // TODO: clear search
+          // Add a tag to the current list of tags
 
-            var tagModel = new S.Models.Tag(ui.item);
-            tagModel.set({ 
-              "tag_type" : this.search.get("type")
-            }, { silent:true });
-            
-            // rendering happens on tag add, not here. This is
-            // to support url based searches.
-            tagModel.triggerSearch();
-            ALT.app.currentTags.add(tagModel);
-            event.preventDefault();
-            input.val("").focus();
-          }, this)
+          var tagModel = new S.Models.Tag(ui.item);
+          tagModel.set({
+            "tag_type" : this.search.get("type")
+          }, { silent:true });
+
+          // rendering happens on tag add, not here. This is
+          // to support url based searches.
+          tagModel.triggerSearch();
+          ALT.app.currentTags.add(tagModel);
+          event.preventDefault();
+          input.val("").focus();
+        }, this)
       });
       return this;
     }
