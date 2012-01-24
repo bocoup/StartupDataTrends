@@ -271,6 +271,13 @@ task( "hint", function() {
 desc( "Minify with Uglify-js." );
 task( "min", function() {
 
+  // Ensure dist directory exists
+  try {
+    fs.statSync( "./dist" );
+  } catch ( ex ) {
+    fs.mkdirSync( "./dist" );
+  }
+
   header( "Minifying with Uglify-js" );
 
   _.keys( config.files ).forEach(function( minpath ) {
