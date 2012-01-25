@@ -64,7 +64,7 @@ jQuery(function($) {
 
       // create a holder for startups
       ALT.app.startupCollection = new ST.Collections.Startups([], {
-        page_max: 10,
+        page_max: 5,
         pages_attribute: "last_page"
       });
 
