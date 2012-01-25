@@ -12,7 +12,7 @@ var ALT = {
         return modules[name];
       }
 
-      return modules[name] = { Views: {} };
+      return (modules[name] = { Views: {} });
     };
   })(),
 
