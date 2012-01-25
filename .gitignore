@@ -1,4 +1,3 @@
-node_modules
 .rvmrc*
 .DS_Store
 dist/
