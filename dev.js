@@ -16,3 +16,5 @@ site.get("*", function(req, res) {
 
 // Actually listen
 site.listen(80);
+
+console.log("Server running on port 80");
