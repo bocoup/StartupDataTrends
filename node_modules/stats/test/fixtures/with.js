@@ -1,0 +1,5 @@
+
+with (foo) {
+  bar();
+  baz();
+}
