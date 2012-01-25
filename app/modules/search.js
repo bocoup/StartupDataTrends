@@ -33,8 +33,18 @@
         "&callback=?";
     },
     parse: function(data) {
-      data.raising.amount = U.formatDollarAmount(data.raising.amount);
-      data.pre_money.amount = U.formatDollarAmount(data.pre_money.amount);
+      if (data.raising.amount) {
+        data.raising.amount = U.formatDollarAmount(data.raising.amount);
+      } else {
+        data.raising.amount = "Not Enough Data";
+      }
+      
+      if (data.pre_money.amount) {
+        data.pre_money.amount = U.formatDollarAmount(data.pre_money.amount);
+      } else {
+        data.pre_money.amount = "Not Enough Data";
+      }
+      
       return data;
     }
   });

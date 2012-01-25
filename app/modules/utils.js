@@ -116,19 +116,24 @@
       this.template = ALT.app.templates[this.template];
 
       this.tags = options.tags;
-
-      this.metrics = {
-        maxFontSize: 19,
-        minFontSize: 10,
-        maxCount: this.tags[0][2],
-        minCount: this.tags[this.tags.length-1][2]
-      };
-      this.tag_template = ALT.app.templates["single-tag-count"];
+      if (this.tags.length) {
+        this.metrics = {
+          maxFontSize: 19,
+          minFontSize: 10,
+          maxCount: this.tags[0][2],
+          minCount: this.tags[this.tags.length-1][2]
+        };
+        this.tag_template = ALT.app.templates["single-tag-count"];
+      }
     },
 
     render: function() {
 
-      this.el = $(this.template());
+      this.el = $(this.template({
+        message : this.tags.length ? 
+          "Matching startups also tagged with..." : 
+          "No startups found"
+      }));
 
       var count = Math.min(this.tags.length, 15),
           otherTagList = ALT.app.currentTags.pluck("id"),

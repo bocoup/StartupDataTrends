@@ -256,11 +256,13 @@
     },
 
     finish: function() {
-      // Enable sorting select
-      this.$("select").removeAttr("disabled");
+      if (this.collection.length) {
+        // Enable sorting select
+        this.$("select").removeAttr("disabled");
 
-      this.makeRangeSlider();
-      this.makeSparkline();
+        this.makeRangeSlider();
+        this.makeSparkline();
+      }
     },
 
     onSelect: function(event) {
@@ -448,9 +450,9 @@
       return this;
     },
 
-    renderEmpty: function() {
-      this.el.html("<h3> No Startups Found </h3>");
-
+    renderEmpty: function(message) {
+      message = message || "<h3> No Startups Found </h3>";
+      this.el.html("");
       return this;
     }
   });

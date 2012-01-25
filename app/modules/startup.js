@@ -402,6 +402,7 @@
 
             // If there are no startups, exit gracefully
             if (!collection.length) {
+              collection.trigger("done");
               return B.Views.Done();
             }
 
@@ -412,15 +413,6 @@
               // model on click (so we don't want to overwrite the first
               // model in the actual startup list collection.)
               collection.trigger("start");
-
-              ALT.app.currentStartup = collection.at(0).clone();
-
-              // Render startup info panel
-              // it takes care of its own rendering and startup
-              // extended info fetching.
-              var startupPanel = new B.Views.Panels.StartupInfo({
-                model: ALT.app.currentStartup
-              });
             }
 
             // trigger that another page was fetched of the collection
@@ -605,6 +597,20 @@
       // added loaded classname
       this.$(".startup-list-container").addClass("loaded");
 
+      // Render startup info panel
+      // it takes care of its own rendering and startup
+      // extended info fetching.
+      if (this.collection.length) {
+        ALT.app.currentStartup = this.collection.at(0).clone();
+        ALT.app.startupPanel = new B.Views.Panels.StartupInfo({
+          model: ALT.app.currentStartup
+        });
+      } else {
+        if (ALT.app.startupPanel) {
+          ALT.app.startupPanel.renderEmpty();
+        }
+      }
+      
       this.assignHeights();
 
       //  get time series data
