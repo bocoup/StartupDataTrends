@@ -534,6 +534,7 @@ nav ul li {
     }
 
     #panel-container #right-container #startup-data-container .about {
+      width: 500px;
       margin-top: 62px;
     }
     #panel-container #right-container #startup-data-container .about h2 {
