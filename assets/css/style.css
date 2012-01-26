@@ -404,6 +404,7 @@ nav ul li {
 #header a {
   color: #404040;
   text-shadow: -1px 1px 0px #FFEDCC;
+  text-decoration: none;
 }
 
 .lobster {
