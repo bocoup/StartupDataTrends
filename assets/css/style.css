@@ -386,6 +386,7 @@ nav ul li {
   margin-left: 60px;
   color: #555;
   font-weight: normal;
+  text-shadow: none;
 }
 #header h1 span.regular {
   font-family: Helvetica,Arial,Verdana,sans-serif; 
@@ -603,17 +604,8 @@ nav ul li {
     #panel-container #right-container #startup-data-container .about {
       width: 500px;
       z-index: 120;
-      position: absolute;
-      background: #eee;
       padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #ededed), color-stop(100%, #c8c8c8));
-      background-image: -webkit-linear-gradient(top, #ebebeb 20%, #d9d9d9);
-      background-image: -moz-linear-gradient(top, #ebebeb 20%, #d9d9d9);
-      background-image: -ms-linear-gradient(top, #ebebeb 20%, #d9d9d9);
-      background-image: -o-linear-gradient(top, #ebebeb 20%, #d9d9d9);
-      background-image: linear-gradient(top, #ebebeb 20%, #d9d9d9);
+      position: absolute;
     }
     #panel-container #right-container #startup-data-container .about h2 {
       margin: 0px;
@@ -621,12 +613,14 @@ nav ul li {
     #panel-container #right-container #startup-data-container .about h3 {
       margin-left: 0px;
     }
+    #panel-container #right-container #startup-data-container .about a{
+      text-decoration: underline;
+    }
     #panel-container #right-container .tag {
       display: inline-block;
       float:left;
       padding-right: 3px;
     }
-
     #panel-container #right-container .tag a {
       color: #bbb;
     }
