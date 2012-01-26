@@ -572,7 +572,10 @@ nav ul li {
       padding:15px;
       position: relative;
       display: inline-block;
-      width: 93%;
+      width: 95%;
+    }
+    #tabs {
+      width: 99%;
     }
     #panel-container #right-container #metadata-container .inner.border {
       border: 1px solid #eee;
