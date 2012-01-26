@@ -857,19 +857,15 @@ li.selected-search-item {
 
   background-color: #0064CD;
   background-repeat: repeat-x;
-  background-image: -khtml-gradient(linear, left top, left bottom, from(#049cdb), to(#0064cd));
-  background-image: -moz-linear-gradient(top, #049cdb, #0064cd);
-  background-image: -ms-linear-gradient(top, #049cdb, #0064cd);
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #049cdb), color-stop(100%, #0064cd));
-  background-image: -webkit-linear-gradient(top, #049cdb, #0064cd);
-  background-image: -o-linear-gradient(top, #049cdb, #0064cd);
-  background-image: linear-gradient(top, #049cdb, #0064cd);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#0064cd', GradientType=0);
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  border-color: #0064CD #0064CD #003F81;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#fc7822), to(#ffa500));
+  background-image: -moz-linear-gradient(top, #fc7822, #ffa500);
+  background-image: -ms-linear-gradient(top, #fc7822, #ffa500);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fc7822), color-stop(100%, #ffa500));
+  background-image: -webkit-linear-gradient(top, #fc7822, #ffa500);
+  background-image: -o-linear-gradient(top, #fc7822, #ffa500);
+  background-image: linear-gradient(top, #fc7822, #ffa500);
   border-radius: 4px;
-  border: 1px solid #111;
+  border: 1px solid #eb6711;
 }
 
 li.selected-search-item a {
@@ -882,8 +878,8 @@ li.selected-search-item a {
   margin-right: 10px;
 
   border-radius: 10px;
-  box-shadow: inset 1px 1px 1px #333;
-  padding: 0 0 0 1px;
+  box-shadow: inset 1px 1px 1px #C94500;
+  padding: 0 0 0 2px;
   font-size: 11px;
 }
 
