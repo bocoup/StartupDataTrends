@@ -838,6 +838,10 @@ nav ul li {
   padding: 0.3em;
 }
 
+.ui-menu .ui-menu-item a.ui-state-hover, .ui-menu .ui-menu-item a.ui-state-active {
+  color: #444;
+  font-weight: bold;
+}
 
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited, .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited {
   color: #2F5D92;
