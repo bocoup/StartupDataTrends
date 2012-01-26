@@ -359,10 +359,8 @@ nav ul li {
   background-image: -webkit-linear-gradient(top, #fceec1, #eedc94);
   background-image: -o-linear-gradient(top, #fceec1, #eedc94);
   background-image: linear-gradient(top, #fceec1, #eedc94);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fceec1', endColorstr='#eedc94', GradientType=0);
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  border-color: #EEDC94 #EEDC94 #E4C652;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid #aaa;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   border-width: 1px;
   border-style: solid;
@@ -475,6 +473,7 @@ nav ul li {
       border: 1px solid #111;
       box-shadow: inset 0px 0px 2px #000;;
       border-radius: 2px;
+      padding: 2px;
     }
 
     #panel-container #left-container #search-container .search-blocker {
@@ -512,6 +511,7 @@ nav ul li {
 
       #panel-container #left-container #search-container .single-search-container img.search-loader {
         visibility: hidden;
+        margin: -3px 27px 0 -27px;
       }
 
       #panel-container #left-container #search-container .single-search-container img.search-loader.searching {
@@ -601,10 +601,21 @@ nav ul li {
 
     #panel-container #right-container #startup-data-container .about {
       width: 500px;
-      margin-top: 62px;
+      z-index: 120;
+      position: absolute;
+      background: #eee;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #ededed), color-stop(100%, #c8c8c8));
+      background-image: -webkit-linear-gradient(top, #ebebeb 20%, #d9d9d9);
+      background-image: -moz-linear-gradient(top, #ebebeb 20%, #d9d9d9);
+      background-image: -ms-linear-gradient(top, #ebebeb 20%, #d9d9d9);
+      background-image: -o-linear-gradient(top, #ebebeb 20%, #d9d9d9);
+      background-image: linear-gradient(top, #ebebeb 20%, #d9d9d9);
     }
     #panel-container #right-container #startup-data-container .about h2 {
-/*      color: orange;*/
+      margin: 0px;
     }
     #panel-container #right-container #startup-data-container .about h3 {
       margin-left: 0px;
@@ -765,7 +776,7 @@ nav ul li {
 }
 
 #panel-container  .infowrapper .info {
-  margin-left: 120px; 
+  margin-left: 130px; 
 }
 
 #panel-container .logowrapper {
@@ -827,6 +838,9 @@ nav ul li {
 }
 .ui-tabs .ui-tabs-panel {
   padding: 0.7em;
+}
+.ui-tabs-nav {
+  background: none;
 }
 .ui-tabs .ui-tabs-nav li a {
   padding: 0.3em;
@@ -893,6 +907,7 @@ li.selected-search-item a:hover {
 
 #footer {
   position: fixed;
+  z-index: 120;
   height: 12px;
   padding: 10px;
   font-size: 8pt;
@@ -902,9 +917,7 @@ li.selected-search-item a:hover {
   left: 0;
   right: 0; 
   text-align: right;
-  -moz-box-shadow:    0px -1px 2px 2px #ccc;
-  -webkit-box-shadow: 0px -1px 2px 2px #ccc;
-  box-shadow:         0px -1px 2px 2px #ccc;
+  border-top: 1px solid #aaa;
 }
 #footer a {
   color: #555;
