@@ -1,0 +1,22 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": "vars",
+  "boss": true,
+  "eqnull": true,
+  "browser": true,
+  "globals": {
+    "module": true,
+    "ALT": true,
+    "ok": true,
+    "_": true,
+    "console": true,
+    "test": true
+  }
+}

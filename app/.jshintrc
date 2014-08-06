@@ -1,0 +1,23 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
+  "latedef": "nofunc",
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": "vars",
+  "boss": true,
+  "eqnull": true,
+  "browser": true,
+  "loopfunc": true,
+  "globals": {
+    "_": true,
+    "$": true,
+    "Backbone": true,
+    "jQuery": true,
+    "ALT": true,
+    "console": true
+  }
+}

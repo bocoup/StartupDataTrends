@@ -1,0 +1,35 @@
+<div class="fleft">
+  <div class="startup-list-header">
+    <div class="sort" style="display:none">
+      Sort by:
+      <select>
+        <option value="follower_count">Followers</option>
+        <option value="name">Ascending</option>
+        <option value="screenshot_count">Screenshot Count</option>
+        <option value="followers_over_time">Followers Over Time (Decayed)</option>
+      </select>
+    </div>
+
+    <div id="range">
+      <div class="c100">
+        <div class="c100 slider-sparkline"></div>
+      </div>
+      <div class="c100">
+        <div class="c10 fleft" id="slider-range-left"></div>
+        <div class="c75 fleft" id="slider-range"></div>
+        <div class="c10 fright" id="slider-range-right"></div>
+      </div>
+    </div>
+
+    <div id="about-decay-over-time" style="display:none">
+      This is an experimental ranking function. It ranks the startups
+      based on how many followers they get over time. The more recent
+      the followers are, the more they contribute to the overall
+      score of a startup. We made this up, so use at your own risk.
+    </div>
+    <div class="c100 details" style="display:none">
+      <small>Showing <span id="startup-list-counts">0</span> visible startups out of
+      <span id="startup-total-count">?</span> <a id="load-more-startups" href="#">[Load More...]</a></small>
+    </div>
+  </div>
+</div>

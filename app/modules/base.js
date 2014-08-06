@@ -12,8 +12,8 @@
       // Progress viewers are tied to a count. Only when
       // all operations are done will the progress indicator
       // actually be removed.
-      loadingViews = 0,
-      $loader = $(".about .loader");
+      loadingViews = 0;
+      //$loader = $(".about .loader");
 
   B.Views.Progressify = function() {
     loadingViews += 1;

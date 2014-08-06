@@ -125,11 +125,11 @@
             }
 
             // if this is the last page, call the done callback if we have one
-            if ((model.page - 1) == model.pages && options.done) {
+            if ((model.page - 1) === model.pages && options.done) {
               options.done(model);
             }
-
           };
+
           $.ajax(extended);
         }
       };
@@ -142,26 +142,26 @@
         // we are getting total number of pages from the first call
         // and then going to fetch everything
 
-        success = function(fetch) {
-          return function(data) {
+        success = (function(fetch) {
+                  return function(data) {
 
-            if (model.page === 1) {
-              model.pages = Math.min(model.page_max, data[model.pages_attribute]);
-              model.total_pages = data[model.pages_attribute];
-            }
+                    if (model.page === 1) {
+                      model.pages = Math.min(model.page_max, data[model.pages_attribute]);
+                      model.total_pages = data[model.pages_attribute];
+                    }
 
-            // process first page
-            options.success(data);
-            model.page += 1;
+                    // process first page
+                    options.success(data);
+                    model.page += 1;
 
-            // if this is the last page, call the done callback if we have one
-            if ((model.page - 1) == model.pages && options.done) {
-              options.done(model);
-            }
+                    // if this is the last page, call the done callback if we have one
+                    if ((model.page - 1) === model.pages && options.done) {
+                      options.done(model);
+                    }
 
-            fetch(model.page, model.pages);
-          };
-        }(fetch);
+                    fetch(model.page, model.pages);
+                  };
+                }(fetch));
 
         params.success = success;
         $.ajax(params);
@@ -210,15 +210,15 @@
 
       // get all numeric values
       var vals = this.pluck(attribute),
-          min = _.min(vals),
+          // min = _.min(vals),
           max = _.max(vals),
           // compute step
           step = Math.ceil(max / buckets),
           // bins
           bins = [],
-          bin = 0,
-          range = [min, min + step],
-          val, i;
+          bin = 0,i;
+          // range = [min, min + step],
+          // val,
 
       for (i = 0; i < vals.length; i++) {
         bin = Math.floor(vals[i]/step);
@@ -610,7 +610,7 @@
           ALT.app.startupPanel.renderEmpty();
         }
       }
-      
+
       this.assignHeights();
 
       //  get time series data

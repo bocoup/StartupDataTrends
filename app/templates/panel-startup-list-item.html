@@ -1,0 +1,32 @@
+<div class="banner c100">
+
+  <div class="infowrapper">
+    <div class="info">
+      <h2><%= startup.name %></h2>
+
+      <div class="counts follower_count">
+        <h2>
+          <%= startup.follower_count %>
+          <div class="follower_count_trend"></div>
+        </h2>
+        <div class="decay_score"></div>
+        <i>
+          <small class="small">Followers</small>
+        </i>
+      </div>
+
+      <div class="counts screenshot_count" style="display:none">
+        <h2><%= startup.screenshot_count %></h2>
+        <i>
+          <small class="small">Screenshots</small>
+        </i>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="logowrapper">
+    <img align="left" class="logo" src="<%= startup.thumb_url %>" />
+  </div>
+
+</div>

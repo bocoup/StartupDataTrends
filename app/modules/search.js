@@ -38,13 +38,13 @@
       } else {
         data.raising.amount = "Not Enough Data";
       }
-      
+
       if (data.pre_money.amount) {
         data.pre_money.amount = U.formatDollarAmount(data.pre_money.amount);
       } else {
         data.pre_money.amount = "Not Enough Data";
       }
-      
+
       return data;
     }
   });
@@ -78,7 +78,7 @@
    */
   S.Views.SearchView = Backbone.View.extend({
     id: "#search-container",
-    template: "search-container-tmpl",
+    template: "search-container",
 
     initialize: function(attributes) {
       this.el = $(this.id);
@@ -146,7 +146,7 @@
    * autocomplete dropdown
    */
   S.Views.SearchSelectedComponentItem = Backbone.View.extend({
-    template: "single-search-item-tmpl",
+    template: "single-search-item",
     events: {
       "click .close": "onClose"
     },
@@ -177,16 +177,16 @@
   });
 
   // Declare handler for: clear, blur
-  function clearFocus(event) {
-    $(event.target).val(" ").focus();
-  }
+  // function clearFocus(event) {
+  //   $(event.target).val(" ").focus();
+  // }
 
   /**
    * An individual search component.
    */
   S.Views.SearchComponentView = Backbone.View.extend({
     className: "c25 single-search-container",
-    template: "single-search-container-tmpl",
+    template: "single-search-container",
 
     initialize: function(attributes, options) {
 

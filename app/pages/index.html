@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="stylesheet" href="/css/jquery-ui-1.8.16.custom.css">
+  <link rel="stylesheet" href="/css/colorbox.css">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <meta http-equiv="x-dns-prefetch-control" content="off">
+  <title>Startup Data Trends</title>
+</head>
+
+<body>
+
+  <!-- Main container -->
+  <div role="main" id="main">
+
+    <div id="header" class="c100">
+      <div class="c100">
+        <h1 class="c70 fleft">
+          <a href="/">
+            <span class="regular">StartupData</span>Trends
+            <br />
+            <div class="subheader">
+              (alpha) A fast way to browse startups on AngelList.
+            </div>
+          </a>
+        </h1>
+        <nav class="c20">
+          <ul>
+            <li><a href="http://angellist.com">AngelList</a></li>
+            <li><a href="/">About</a></li>
+          </ul>
+        </nav>
+
+      </div>
+
+    </div>
+
+    <!-- Contains the three side-by-side panels -->
+    <div id="panel-container">
+
+      <div id="column-container">
+
+        <!-- Contains metadata about the search -->
+        <div id="left-container">
+          <div class="about">
+              <div class="info">
+                <h3>
+                  &darr; Start by searching for a location, market, or both!
+                </h3>
+              </div>
+              <div class="loader">
+                <img src="/assets/img/ajax-loader.gif" /> Loading...
+              </div>
+          </div>
+          <!-- Contains search interface for entire app -->
+          <div id="search-container" class="c100">
+            <div class="search-blocker"><span><img src="/assets/img/ajax-loader.gif" /> Searching startups...</span></div>
+          </div>
+
+          <!-- Contains tag list -->
+          <div id="tag-container">
+          </div>
+
+        </div>
+
+
+        <div id="right-container">
+
+          <div class="c100 clearfix" id="metadata-container">
+            <div class="inner">
+              <div id="metadata-startup-container" class="c47 fleft">
+              </div>
+
+              <div id="metadata-valuation-container" class="c50 fright">
+              </div>
+            </div>
+          </div>
+
+          <div class="c100 clearfix" id="startup-data-container">
+            <div class="about">
+              <h2> What is Startup Data <span class="satisfy">Trends</span></h2>
+              <p>
+                Startup Data Trends is a way to browse the publicly visible startups on
+                <a href="http://angel.co">AngelList</a>. Here, you can search for startups
+                in a specific location and/or market.
+              </p>
+
+              <p>
+                <strong> Filtering </strong>
+                The returned startups can be filtered by their follower counts, screenshot counts, alphabetic order and a
+                ranking function based on followers over time.
+              </p>
+
+              <p>
+                <strong> Metadata </strong>
+                Alongside the startups, you can see some key metadata about the
+                search itself, such as the average amount being raised by startups that match it, and
+                the average public valuation.
+              </p>
+
+              <p>
+                <strong> Try it out! </strong>
+                Start searching by typing your desired location and/or market above or try one of
+                the following searches:
+              </p>
+              <p>
+                All Startups in <a href="/?tags=2390">Cambridge, MA</a> <br />
+                All Startups in the <a href="/?tags=52">Analytics</a> Market.
+              </p>
+              <p>
+                <strong> Code? </strong>
+                Yes please! We've open sourced this application, so fork
+                <a href="https://github.com/bocoup/StartupDataTrends">StartupDataTrends on Github</a>!
+                Pull requests and tickets are welcome.
+              </p>
+              <h3> Bugs? Questions? Suggestions? Complaints?</h3>
+              <p>
+                Please join the <a href="https://github.com/bocoup/StartupDataTrends/issues">conversation on github</a> &rarr;
+              </p>
+            </div>
+            <!-- Contains the list of startups that matches the search. -->
+            <div class="c50 fleft panel clearfix" id="startup-list-container">
+
+            </div>
+
+            <!-- Contains the information about the selected startup -->
+            <div class="c30 fleft panel last clearfix" id="startup-info-container">
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div id="footer">
+    Brought to you jointly by <a href="http://www.atlasventure.com/">Atlas Venture</a>, <a href="http://www.angel.co/">AngelList</a> and <a href="http://bocoup.com">Bocoup</a>
+  </div>
+
+  <!-- production-->
+  <script type="text/javascript" src="/templates.js"></script>
+  <script type="text/javascript" src="/alt.min.js"></script>
+
+  <script type="text/javascript">
+      var GoSquared={};
+      GoSquared.acct = "GSN-444768-M";
+      (function(w){
+          function gs(){
+              w._gstc_lt=+(new Date); var d=document;
+              var g = d.createElement("script"); g.type = "text/javascript"; g.async = true; g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js";
+              var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s);
+          }
+          w.addEventListener?w.addEventListener("load",gs,false):w.attachEvent("onload",gs);
+      })(window);
+  </script>
+</body>
+</html>

@@ -4,16 +4,6 @@
  */
 (function(U) {
 
-  U.precompileTemplates = function() {
-    ALT.app.templates = {};
-
-    // Select, compile and cache all templates
-    // Provides significant performance benefits when rendering views
-    $("script[type='text/template']").each(function() {
-      var $this = $(this);
-      ALT.app.templates[$this.attr("id")] = _.template($this.html());
-    });
-  };
   /**
    * Formats a number into an actual dollar amount.
    * @param val The value to convert.
@@ -24,7 +14,7 @@
         // remove decimals
         amountStr = val.split(".", 2),
         // save decimal point
-        decimals = amountStr[1] || 0,
+        // decimals = amountStr[1] || 0,
         // parse amount to int
         amount = parseInt(amountStr[0], 10),
         // Initialize, no assign
@@ -130,8 +120,8 @@
     render: function() {
 
       this.el = $(this.template({
-        message : this.tags.length ? 
-          "Matching startups also tagged with..." : 
+        message : this.tags.length ?
+          "Matching startups also tagged with..." :
           "No startups found"
       }));
 

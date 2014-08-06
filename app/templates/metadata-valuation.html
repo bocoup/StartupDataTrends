@@ -1,0 +1,43 @@
+<!-- Contains money stats data:
+   data required:
+   { stats : {
+     raising : {
+       amount : N,
+       data_points : M
+     },
+     pre_money : {
+       amount : N,
+       data_points : M
+     }
+   }}
+-->
+<table>
+  <tbody>
+    <tr>
+      <td class="metadata-section">
+        <h3> Average Amount Raised: </h3>
+      </td>
+      <td class="metadata-section">
+        <h3> Average Valuation: </h3>
+      </td>
+    </tr>
+    <tr>
+      <td class="metadata-section">
+        <div>
+          <h2><%= stats.raising.amount %></h2>
+        </div>
+        <small>
+          <i>Based on <b><%= stats.raising.data_points || 0 %></b> data points.</i>
+        </small>
+      </td>
+      <td class="metadata-section">
+        <div>
+          <h2><%= stats.pre_money.amount %></h2>
+        </div>
+        <small>
+          <i>Based on <b><%= stats.pre_money.data_points || 0 %></b> data points.</i>
+        </small>
+      </td>
+    </tr>
+  </tbody>
+</table>

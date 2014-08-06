@@ -1,0 +1,60 @@
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">About</a></li>
+    <li><a href="#tabs-2">Screenshots</a></li>
+  </ul>
+  <div id="tabs-1">
+    <div class="banner c100">
+
+      <div class="infowrapper">
+        <div class="info">
+          <h3><%= startup.name %></h3>
+          <h4><%= startup.high_concept %></h4>
+
+          <div class="small">
+            <% if (startup.twitter_url) { %>
+              <a  href=""><img src="/assets/img/follow_twitter_gray.png" /></a>
+            <% } %>
+            <a href="<%= startup.company_url %>" target="_blank">Website</a>
+            <a href="<%= startup.angellist_url %>" target="_blank">Profile</a>
+            <br />
+          </div>
+
+          <div class="c100 smallest">
+            <% _.each(_.union(startup.locations, startup.markets), function(tag) { %>
+              <div class="tag"><a href="?tags=<%=tag.id%>"><%= tag.name %></a> · </div>
+            <% }); %>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="logowrapper">
+        <img align="left" class="logo" src="<%= startup.logo_url %>" />
+      </div>
+
+    </div>
+    <hr>
+    <div class="info c100">
+      <%= startup.product_desc %>
+    </div>
+  </div>
+  <div id="tabs-2">
+    <% if (startup.screenshots.length) { %>
+      <strong> Showing <%= startup.screenshots.length %> screenshots: </strong>
+      <br />
+      <small><i>Click an image to see a larger version</i></small>
+
+      <div id="screenshot-list">
+        <% _.each(startup.screenshots, function(screenshot) { %>
+        <a class="screenshot" href="<%= screenshot.original %>">
+          <img src="<%= screenshot.original %>" />
+        </a>
+        <br>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <h3> This startup has posted no screenshots </h3>
+    <% } %>
+  </div>
+</div>

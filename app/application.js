@@ -3,31 +3,29 @@
  * Author Irene Ros (Bocoup)
  */
 // Namespace: ALT - AngelListTrends.
-var ALT = {
-  module: (function() {
-    var modules = {};
 
-    return function(name) {
-      if (modules[name]) {
-        return modules[name];
-      }
 
-      return (modules[name] = { Views: {} });
-    };
-  })(),
+ALT.module = (function() {
+  var modules = {};
 
-  app: _.extend({}, Backbone.Events)
-};
+  return function(name) {
+    if (modules[name]) {
+      return modules[name];
+    }
+
+    return (modules[name] = { Views: {} });
+  };
+})();
+
+ALT.app = _.extend(ALT.app, Backbone.Events);
 
 jQuery(function($) {
   var app = ALT.app,
       Router,
-      U = ALT.module("utils"),
-      S = ALT.module("search"),
+      // U = ALT.module("utils"),
+      // S = ALT.module("search"),
       B = ALT.module("base"),
       ST = ALT.module("startup");
-
-  U.precompileTemplates();
 
   // Only need this for pushState enabled browsers
   if (Backbone.history && Backbone.history._hasPushState) {
@@ -110,7 +108,6 @@ jQuery(function($) {
 
         // reset collection
         ALT.app.startupCollection.clear();
-        console.log("callbacks", _.keys(ALT.app.startupCollection._callbacks).length);
 
         // redo the search
         ALT.app.mainView.rightView.cleanup();
