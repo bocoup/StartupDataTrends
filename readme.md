@@ -13,23 +13,13 @@ Setting up dev environment
 
 Run `npm install` from your application root.
 
-**In the case that `npm install` fails on `stats` module.  Use `npm install -f` instead.  This command will force "incompatible" modules to still install.**
-
 Build
 -----
 
-The application is built using jake. You can start the build from the `build` folder. Just call `jake` on the command line. 
+The application is built using grunt. Run `grunt build` to build the source, and `grunt dev` during development to watch
+files and recompile on changes.
 
 Server
 ------
 
-Run with `node dev`
-
-The development server runs on a privileged port `80` which needs superuser privileges to run correctly.  The easiest work-around is to run the development
-server under a `sudo` (elevated) user.  The command may look something like this:
-
-``` bash
-sudo node dev
-```
-
-Alternatively you may investigate running the server using something similar to [authbind](http://en.wikipedia.org/wiki/Authbind)
+Run with `grunt connect`. It will run on port `8082`

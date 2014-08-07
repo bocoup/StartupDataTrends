@@ -10,9 +10,13 @@ module.exports = function(grunt) {
   // Load Grunt plugins.
   grunt.loadTasks('tasks');
 
+  grunt.registerTask('build',
+    'Builds prod version',
+    ['jshint', 'clean:prod', 'jst', 'copy', 'uglify', 'concat', 'clean:postbuild']);
+
   grunt.registerTask('dev',
     'Compile and start a dev webserver.',
-    ['jshint', 'clean:prod', 'jst', 'copy', 'uglify', 'concat', 'clean:postbuild', 'watch']);
+    ['build', 'watch']);
 
   grunt.registerTask('default', ['dev']);
 
