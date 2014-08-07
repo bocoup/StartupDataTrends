@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     options: {
       accessKeyId: "<%= aws.accessKeyId %>",
       secretAccessKey: "<%= aws.secretAccessKey %>",
-      bucket: "startupdatatrends.com"
+      bucket: "www.startupdatatrends.com"
     },
     prod: {
       cwd: "prod/",
