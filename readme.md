@@ -1,4 +1,4 @@
-#Startup Data Trends
+# Startup Data Trends
 
 This repo contains the code that was written to build http://startupdatatrends.com, a visual browser of startup data from AngelList (http://angel.com.)
 
